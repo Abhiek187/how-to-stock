@@ -1,1 +1,7 @@
-console.log("%c$tonks!", "color: green; font-size: 2em");
+const flashcards = document.querySelectorAll(".flashcard");
+
+for (const card of flashcards) {
+    card.addEventListener("click", event => {
+        console.log(`You clicked on ${event.target.textContent}`);
+    });
+}
