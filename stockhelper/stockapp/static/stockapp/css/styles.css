@@ -14,4 +14,33 @@ body {
     margin: 1%;
     width: 200px;
     height: 300px;
+    cursor: pointer; /* appear clickable */
+}
+
+.card-body {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* center horizontally */
+    align-items: center; /* center vertically */
+}
+
+.card-body > * {
+    position: absolute;
+    margin: 0 5%;
+}
+
+.word {
+    font-weight: bold;
+}
+
+.fade-out {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s linear 500ms, opacity 500ms;
+}
+
+.fade-in {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s linear 0s, opacity 500ms;
 }
