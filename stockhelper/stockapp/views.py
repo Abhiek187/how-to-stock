@@ -14,3 +14,36 @@ class IndexView(generic.ListView):
     #     Return all the people in the database
     #     """
     #     return Person.objects.order_by('name')
+
+class ScreenerView(generic.ListView):
+    model = Stocks
+    template_name = "stockapp/screener.html"
+    # context_object_name = 'people'
+
+    # def get_queryset(self):
+    #     """
+    #     Return all the people in the database
+    #     """
+    #     return Person.objects.order_by('name')
+
+class FlashCardsView(generic.ListView):
+    model = Stocks
+    template_name = "stockapp/flashcards.html"
+    # context_object_name = 'people'
+
+    # def get_queryset(self):
+    #     """
+    #     Return all the people in the database
+    #     """
+    #     return Person.objects.order_by('name')
+
+class PortfolioView(generic.ListView):
+    model = Stocks
+    template_name = "stockapp/portfolio.html"
+    # context_object_name = 'people'
+
+    # def get_queryset(self):
+    #     """
+    #     Return all the people in the database
+    #     """
+    #     return Person.objects.order_by('name')
