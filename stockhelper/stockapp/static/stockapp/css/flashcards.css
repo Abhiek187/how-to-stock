@@ -1,12 +1,3 @@
-body {
-    font-family: Verdana, Courier New, Arial, Sans-serif; /* Font that distinguishes 1ijlIJ5SoO0 */
-    text-align: center;
-}
-
-.home-nav-list {
-    list-style-type: none; /* remove the bullet points in an unordered list */
-}
-
 .description {
     margin-top: 1%;
 }
