@@ -36,25 +36,25 @@
                 </div>
             </div>
         </nav>
-        <main>
+        <main class="main-content">
             <!-- Main content to be overriden with each page -->
             {% block content %}
-            <h1>Welcome!</h1>
-            <h2>Please select an option from the top.</h2>
-            <li>
-                <ul>
+            <h1 class="home-title">Welcome!</h1>
+            <h3 class="home-subtitle mb-4">Please select an option from the top.</h3>
+            <ul class="home-nav-list list-group list-group-flush mx-3">
+                <li class="list-group-item">
                     <strong>Home</strong> - this page!
-                </ul>
-                <ul>
+                </li>
+                <li class="list-group-item">
                     <strong>Screener</strong> - select different stocks by filters
-                </ul>
-                <ul>
+                </li>
+                <li class="list-group-item">
                     <strong>Flashcards</strong> - learn more about various financial terms
-                </ul>
-                <ul>
+                </li>
+                <li class="list-group-item">
                     <strong>Portfolio</strong> - view details about your investments
-                </ul>
-            </li>
+                </li>
+            </ul>
             {% endblock %}
         </main>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>

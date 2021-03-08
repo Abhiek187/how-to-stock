@@ -3,6 +3,10 @@ body {
     text-align: center;
 }
 
+.home-nav-list {
+    list-style-type: none; /* remove the bullet points in an unordered list */
+}
+
 .description {
     margin-top: 1%;
 }
