@@ -1,49 +1,28 @@
 from django.shortcuts import render
 from django.views import generic
 
-from .models import Stocks
+from .models import Card, Stock
 
 
 class IndexView(generic.ListView):
-    model = Stocks
+    model = Stock
     template_name = "stockapp/index.html"
-    # context_object_name = 'people'
-
-    # def get_queryset(self):
-    #     """
-    #     Return all the people in the database
-    #     """
-    #     return Person.objects.order_by('name')
 
 class ScreenerView(generic.ListView):
-    model = Stocks
+    model = Stock
     template_name = "stockapp/screener.html"
-    # context_object_name = 'people'
-
-    # def get_queryset(self):
-    #     """
-    #     Return all the people in the database
-    #     """
-    #     return Person.objects.order_by('name')
 
 class FlashCardsView(generic.ListView):
-    model = Stocks
+    model = Card
     template_name = "stockapp/flashcards.html"
-    # context_object_name = 'people'
+    context_object_name = "cards"
 
-    # def get_queryset(self):
-    #     """
-    #     Return all the people in the database
-    #     """
-    #     return Person.objects.order_by('name')
+    def get_queryset(self):
+        """
+        Sort the cards alphabetically
+        """
+        return Card.objects.order_by("word")
 
 class PortfolioView(generic.ListView):
-    model = Stocks
+    model = Stock
     template_name = "stockapp/portfolio.html"
-    # context_object_name = 'people'
-
-    # def get_queryset(self):
-    #     """
-    #     Return all the people in the database
-    #     """
-    #     return Person.objects.order_by('name')
