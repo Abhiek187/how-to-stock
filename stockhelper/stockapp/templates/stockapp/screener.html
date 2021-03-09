@@ -3,5 +3,47 @@
 {% block title %}Screener{% endblock %}
 
 {% block content %}
-<p class="fs-4">Bob the Builder is currently at work. Check back later! &#x1f477; &#x1f6a7; &#x1f3d7;</p>
+<!-- Screener Form -->
+<form class="stock-form bg-info rounded p-3 m-3">
+    <div class="container">
+        <h3 class="mb-3">Filter Stock Options</h3>
+        <div class="row mb-3">
+            <label for="region" class="col-auto form-label m-auto">Region:</label>
+            <select class="region-select col form-select" aria-label="Select a region">
+                <option disabled selected>Select Region...</option>
+                <option value="United States">United States</option>
+            </select>
+        </div>
+        <div class="row mb-3">
+            <label for="price" class="col-auto form-label m-auto">Price:</label>
+            <select class="price-relation-select col form-select me-3" aria-label="Select a relationship">
+                <option disabled selected>= / < / >...</option>
+                <option value="equal">=</option>
+                <option value="less than"><</option>
+                <option value="greater than">></option>
+            </select>
+            <input type="number" min="0" step="0.01" class="price-num-input col form-control" id="price">
+        </div>
+        <div class="row mb-3">
+            <label for="sector" class="col-auto form-label m-auto">Sector:</label>
+            <select class="sector-select col form-select" aria-label="Select a sector">
+                <option disabled selected>Select Sector...</option>
+                <option value="Basic Materials">Basic Materials</option>
+                <option value="Financial Services">Financial Services</option>
+                <option value="Consumer Defensive">Consumer Defensive</option>
+                <option value="Utilities">Utilities</option>
+                <option value="Energy">Energy</option>
+                <option value="Technology">Technology</option>
+                <option value="Consumer Cyclical">Consumer Cyclical</option>
+                <option value="Real Estate">Real Estate</option>
+                <option value="Health Care">Health Care</option>
+                <option value="Communication Services">Communication Services</option>
+                <option value="Industrials">Industrials</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-warning">Search</button>
+    </div>
+</form>
+<!-- Results -->
+<div class="results">Results will show up here...</div>
 {% endblock %}
