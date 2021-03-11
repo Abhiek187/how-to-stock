@@ -20,14 +20,18 @@ def get_stocks(request):
         if form.is_valid() and form.is_bound:
             # Query the dataset
             ticker_list = get_stock_data(form.cleaned_data)
-            print(ticker_list)
+            request.session["results"] = ticker_list.to_html(index=False, justify="center",
+                classes="table table-striped table-hover table-bordered mx-3"
+            )
             # Return an HttpResponseRedirect to prevent the data from being posted twice
             return HttpResponseRedirect(reverse("stockapp:screener"))
-    else:
-        # Show an empty form when entering the screener page
-        form = ScreenerForm()
 
-    return render(request, "stockapp/screener.html", {"form": form})
+    # Show an empty form when entering the screener page
+    form = ScreenerForm()
+    # Display the results after a POST request
+    results = request.session.get("results")  # results will be None if there aren't any results
+    request.session.pop("results", None)  # don't throw an error if the key isn't present
+    return render(request, "stockapp/screener.html", {"form": form, "results": results})
 
 class FlashCardsView(generic.ListView):
     model = Card
