@@ -97,8 +97,16 @@ class ScreenerForm(forms.Form):
     ]
 
     # Fields (widgets specify the classes to put in)
-    region = forms.ChoiceField(label="Region", choices=REGIONS, widget=forms.Select(attrs={"class": "region-select col form-select"}))
+    region = forms.ChoiceField(label="Region", choices=REGIONS, widget=forms.Select(
+        attrs={"class": "region-select col form-select"}
+    ))
     # Put the two fields on the same lines
-    price_relation = forms.ChoiceField(choices=RELATIONS, widget=forms.Select(attrs={"class": "price-relation-select col form-select me-3"}))
-    price_value = forms.DecimalField(min_value=0, decimal_places=2, widget=forms.NumberInput(attrs={"class": "price-num-input col form-control"}))
-    sector = forms.ChoiceField(label="Sector", choices=SECTORS, widget=forms.Select(attrs={"class": "sector-select col form-select"}))
+    price_relation = forms.ChoiceField(choices=RELATIONS, widget=forms.Select(
+        attrs={"class": "price-relation-select col form-select me-3"}
+    ))
+    price_value = forms.DecimalField(min_value=0, decimal_places=2, widget=forms.NumberInput(
+        attrs={"class": "price-num-input col form-control"}
+    ))
+    sector = forms.ChoiceField(label="Sector", choices=SECTORS, widget=forms.Select(
+        attrs={"class": "sector-select col form-select"}
+    ))
