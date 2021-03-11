@@ -4,113 +4,27 @@
 
 {% block content %}
 <!-- Screener Form -->
-<form class="stock-form bg-info rounded p-3 m-3">
+<form class="stock-form bg-info rounded p-3 m-3" action="{% url 'stockapp:screener' %}" method="post">
+    <!-- csrf_token is required for POST requests to prevent Cross-Site Request Forgery -->
+    {% csrf_token %}
+    {{ form.non_field_errors }}
     <div class="container">
         <h3 class="mb-3">Filter Stock Options</h3>
         <div class="row mb-3">
-            <label for="region" class="col-auto form-label m-auto">Region:</label>
-            <select class="region-select col form-select" aria-label="Select a region">
-                <!-- Credit: http://investexcel.net/all-yahoo-finance-stock-tickers/ -->
-                <option disabled selected>Select Region...</option>
-                <option value="Argentina">Argentina</option>
-                <option value="Australia">Australia</option>
-                <option value="Austria">Austria</option>
-                <option value="Belgium">Belgium</option>
-                <option value="Brazil">Brazil</option>
-                <option value="Canada">Canada</option>
-                <option value="China">China</option>
-                <option value="Denmark">Denmark</option>
-                <option value="Estonia">Estonia</option>
-                <option value="Finland">Finland</option>
-                <option value="France">France</option>
-                <option value="Germany">Germany</option>
-                <option value="Greece">Greece</option>
-                <option value="Hong Kong">Hong Kong</option>
-                <option value="Iceland">Iceland</option>
-                <option value="India">India</option>
-                <option value="Indonesia">Indonesia</option>
-                <option value="Ireland">Ireland</option>
-                <option value="Israel">Israel</option>
-                <option value="Italy">Italy</option>
-                <option value="Latvia">Latvia</option>
-                <option value="Lithuania">Lithuania</option>
-                <option value="Malaysia">Malaysia</option>
-                <option value="Mexico">Mexico</option>
-                <option value="Netherlands">Netherlands</option>
-                <option value="New Zealand">New Zealand</option>
-                <option value="Norway">Norway</option>
-                <option value="Portugal">Portugal</option>
-                <option value="Qatar">Qatar</option>
-                <option value="Russia">Russia</option>
-                <option value="Singapore">Singapore</option>
-                <option value="South Korea">South Korea</option>
-                <option value="Spain">Spain</option>
-                <option value="Sweden">Sweden</option>
-                <option value="Switzerland">Switzerland</option>
-                <option value="Taiwan">Taiwan</option>
-                <option value="Thailand">Thailand</option>
-                <option value="Turkey">Turkey</option>
-                <option value="United Kingdom">United Kingdom</option>
-                <option value="USA">USA</option>
-                <option value="Venezuela">Venezuela</option>
-            </select>
+            {{ form.region.errors }}
+            <label for="{{ form.region.id_for_label }}" class="col-auto form-label m-auto">Region:</label>
+            {{ form.region }}
         </div>
         <div class="row mb-3">
-            <label for="price" class="col-auto form-label m-auto">Price:</label>
-            <select class="price-relation-select col form-select me-3" aria-label="Select a relationship">
-                <option disabled selected>= / < / >...</option>
-                <option value="equal to">=</option>
-                <option value="less than"><</option>
-                <option value="greater than">></option>
-            </select>
-            <input type="number" min="0" step="0.01" class="price-num-input col form-control" id="price">
+            {{ form.price_value.errors }}
+            <label for="{{ form.price_value.id_for_label }}" class="col-auto form-label m-auto">Price:</label>
+            {{ form.price_relation }}
+            {{ form.price_value }}
         </div>
         <div class="row mb-3">
-            <label for="sector" class="col-auto form-label m-auto">Sector:</label>
-            <select class="sector-select col form-select" aria-label="Select a sector">
-                <option disabled selected>Select Sector...</option>
-                <option value="Advertising">Advertising</option>
-                <option value="Agricultural">Agricultural</option>
-                <option value="Air">Air</option>
-                <option value="Auto">Auto</option>
-                <option value="Bank">Bank</option>
-                <option value="Broadcasting">Broadcasting</option>
-                <option value="Business">Business</option>
-                <option value="Communication">Communication</option>
-                <option value="Computer">Computer</option>
-                <option value="Defense">Defense</option>
-                <option value="Diversified">Diversified</option>
-                <option value="Drug">Drug</option>
-                <option value="Education">Education</option>
-                <option value="Electric">Electric</option>
-                <option value="Farm">Farm</option>
-                <option value="Food">Food</option>
-                <option value="Foreign">Foreign</option>
-                <option value="Gaming">Gaming</option>
-                <option value="General">General</option>
-                <option value="Health">Health</option>
-                <option value="Home">Home</option>
-                <option value="Industrial">Industrial</option>
-                <option value="Information">Information</option>
-                <option value="Insurance">Insurance</option>
-                <option value="Internet">Internet</option>
-                <option value="Investment">Investment</option>
-                <option value="Management">Management</option>
-                <option value="Marketing">Marketing</option>
-                <option value="Medical">Medical</option>
-                <option value="Movie">Movie</option>
-                <option value="Music">Music</option>
-                <option value="Oil">Oil</option>
-                <option value="Property">Property</option>
-                <option value="Publishing">Publishing</option>
-                <option value="Security">Security</option>
-                <option value="Semiconductor">Semiconductor</option>
-                <option value="Services">Services</option>
-                <option value="Software">Software</option>
-                <option value="Specialty">Specialty</option>
-                <option value="Sporting">Sporting</option>
-                <option value="Textile">Textile</option>
-            </select>
+            {{ form.sector.errors }}
+            <label for="{{ form.sector.id_for_label }}" class="col-auto form-label m-auto">Sector:</label>
+            {{ form.sector }}
         </div>
         <button type="submit" class="btn btn-warning">Search</button>
     </div>
