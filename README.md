@@ -6,8 +6,11 @@ A web app that can teach users how the stock market works, trade virtual stocks,
 
 After cloning this repo and installing [Django](https://docs.djangoproject.com/en/3.1/), run the following commands:
 
-1. `cd stockhelper`
-2. `python3 manage.py migrate`
-3. `python3 manage.py runserver`
-
-Then open `localhost:8000/stockapp` in your browser.
+1. Create a folder for the virtual environment: `python3 -m venv <folder-name>`
+2. Activate the virtual environment: `source <folder-name>/bin/activate`
+3. Install all python dependencies: `pip3 install -r requirements.txt`
+4. Head into the stockhelper directory: `cd stockhelper`
+5. Create the SQLite databases: `python3 manage.py migrate`
+6. Run the Django server: `python3 manage.py runserver`
+7. Open `localhost:8000/stockapp` in your browser.
+8. When done, press `CTRL/CMD-C` and deactivate the virtual environment: `deactivate`
