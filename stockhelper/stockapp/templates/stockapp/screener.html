@@ -1,7 +1,16 @@
 {% extends "stockapp/index.html" %}
+{% load static %}
 {% load custom_tags %}
 
 {% block title %}Screener{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'stockapp/css/screener.css' %}">
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'stockapp/js/screener.js' %}"></script>
+{% endblock %}
 
 {% block content %}
 <!-- Screener Form -->

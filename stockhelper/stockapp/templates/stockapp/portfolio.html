@@ -1,6 +1,15 @@
 {% extends "stockapp/index.html" %}
+{% load static %}
 
 {% block title %}Portfolio{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'stockapp/css/portfolio.css' %}">
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'stockapp/js/portfolio.js' %}"></script>
+{% endblock %}
 
 {% block content %}
 <h1>Balance</h1>

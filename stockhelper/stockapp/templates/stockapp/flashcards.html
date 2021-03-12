@@ -1,6 +1,15 @@
 {% extends "stockapp/index.html" %}
+{% load static %}
 
 {% block title %}Flashcards{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'stockapp/css/flashcards.css' %}">
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'stockapp/js/flashcards.js' %}"></script>
+{% endblock %}
 
 {% block content %}
 <h1 class="description text-center">Click on a card to learn each term.</h1>
