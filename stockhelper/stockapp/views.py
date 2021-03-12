@@ -7,7 +7,6 @@ from .api import get_stock_data
 from .forms import ScreenerForm
 from .models import Card, Stock
 
-
 class IndexView(generic.ListView):
     model = Stock
     template_name = "stockapp/index.html"
@@ -19,10 +18,8 @@ def get_stocks(request):
 
         if form.is_valid() and form.is_bound:
             # Query the dataset
-            ticker_list = get_stock_data(form.cleaned_data)
-            request.session["results"] = ticker_list.to_html(index=False, justify="center",
-                classes="table table-striped table-hover table-bordered mx-3"
-            )
+            stock_data = get_stock_data(form.cleaned_data)
+            request.session["results"] = stock_data
             # Return an HttpResponseRedirect to prevent the data from being posted twice
             return HttpResponseRedirect(reverse("stockapp:screener"))
 

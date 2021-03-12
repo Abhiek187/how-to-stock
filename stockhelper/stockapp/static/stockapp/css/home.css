@@ -6,3 +6,10 @@ body {
 .home-nav-list {
     list-style-type: none; /* remove the bullet points in an unordered list */
 }
+
+.credit {
+    /* Place at the bottom of the page */
+    left: 1%;
+    bottom: 1%;
+    width: 100%;
+}

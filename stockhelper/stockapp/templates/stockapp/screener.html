@@ -1,4 +1,5 @@
 {% extends "stockapp/index.html" %}
+{% load custom_tags %}
 
 {% block title %}Screener{% endblock %}
 
@@ -11,9 +12,9 @@
     <div class="container">
         <h3 class="mb-3">Filter Stock Options</h3>
         <div class="row mb-3">
-            {{ form.region.errors }}
-            <label for="{{ form.region.id_for_label }}" class="col-auto form-label m-auto">Region:</label>
-            {{ form.region }}
+            {{ form.country.errors }}
+            <label for="{{ form.country.id_for_label }}" class="col-auto form-label m-auto">Country:</label>
+            {{ form.country }}
         </div>
         <div class="row mb-3">
             {{ form.price_value.errors }}
@@ -26,16 +27,47 @@
             <label for="{{ form.sector.id_for_label }}" class="col-auto form-label m-auto">Sector:</label>
             {{ form.sector }}
         </div>
+        <div class="row mb-3">
+            {{ form.industry.errors }}
+            <label for="{{ form.industry.id_for_label }}" class="col-auto form-label m-auto">Industry:</label>
+            {{ form.industry }}
+        </div>
         <button type="submit" class="btn btn-warning">Search</button>
     </div>
 </form>
 <!-- Results -->
 <div class="results table-responsive">
     {% if results %}
-    <!-- Render the HTML as is -->
-    {% autoescape off %}
-    {{ results }}
-    {% endautoescape %}
+    <table class="results-table table table-striped table-hover table-bordered mx-3">
+        <thead class="table-dark">
+            <tr>
+                <th>Symbol</th>
+                <th>Company Name</th>
+                <th>Market Cap</th>
+                <th>Sector</th>
+                <th>Beta</th>
+                <th>Price</th>
+                <th>Last Annual Dividend</th>
+                <th>Volume</th>
+                <th>Exchange</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results %}
+            <tr>
+                <td>{{ result.symbol }}</td>
+                <td>{{ result.companyName }}</td>
+                <td>${{ result.marketCap|commas }}</td>
+                <td>{{ result.sector }}</td>
+                <td>{{ result.beta }}</td>
+                <td>${{ result.price|money }}</td>
+                <td>{{ result.lastAnnualDividend }}%</td>
+                <td>{{ result.volume|commas }}</td>
+                <td>{{ result.exchangeShortName }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     {% else %}
     <p>Results will show up here...</p>
     {% endif %}
