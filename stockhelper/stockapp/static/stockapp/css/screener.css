@@ -3,3 +3,7 @@
     color: darkred;
     list-style-type: none;
 }
+
+tr {
+    cursor: pointer; /* have each table row appear clickable */
+}

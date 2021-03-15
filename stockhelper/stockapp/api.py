@@ -14,3 +14,7 @@ def get_stock_data(form_data):
     req = requests.get(f"{FMP}/api/v3/stock-screener?apikey={API_KEY}&{price_relation}={price_value}"
         f"&isActivelyTrading=true&sector={sector}&industry={industry}&country={country}&limit=10")
     return req.json()
+
+def get_company_profile(ticker):
+    req = requests.get(f"{FMP}/api/v3/profile/{ticker}?apikey={API_KEY}")
+    return req.json()

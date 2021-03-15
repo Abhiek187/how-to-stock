@@ -15,3 +15,10 @@ const results = document.querySelector(".results");
 //     const sector = sectorSelect.value;
 //     results.textContent = `Searching for stocks in the ${region} ${priceRelation} $${priceNum} in the ${sector} sector...`;
 // });
+
+const tableRows = document.querySelectorAll(".table-row");
+
+for (const row of tableRows) {
+    const symbol = row.firstElementChild.textContent;
+    row.onclick = () => window.open(`${window.location.origin}/stockapp/screener/${symbol}`, "_blank", rel="noopener noreferrer");
+}

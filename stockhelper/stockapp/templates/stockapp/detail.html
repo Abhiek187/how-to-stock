@@ -1,0 +1,30 @@
+{% extends "stockapp/index.html" %}
+{% load static %}
+{% load custom_tags %}
+
+{% block title %}Details - {{ profile.companyName }}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'stockapp/css/detail.css' %}">
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'stockapp/js/detail.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<h1>Symbol: {{ profile.symbol }}</h1>
+<h2>Company Name: {{ profile.companyName }}</h2>
+<h3>Current Price: ${{ profile.price|money }}</h3>
+<img src="{{ profile.image }}" alt="{{ profile.companyName }} logo">
+<p>Beta: {{ profile.beta }}</p>
+<p>Average Volume: {{ profile.volAvg|commas }}</p>
+<p>Market Cap: {{ profile.mktCap|commas }}</p>
+<p>Last Dividend Yield: {{ profile.lastDiv }}</p>
+<p>Range: {{ profile.range }}</p>
+<p>Exchange: {{ profile.exchangeShortName }}</p>
+<p>Industry: {{ profile.industry }}</p>
+<p>Sector: {{ profile.sector }}</p>
+<a href="{{ profile.website }}" target="_blank" rel="noopener noreferrer">Website: {{ profile.website }}</a>
+<p>Description: {{ profile.description }}</p>
+{% endblock %}

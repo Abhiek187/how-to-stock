@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views import generic
 
-from .api import get_stock_data
+from . import api
 from .forms import ScreenerForm
 from .models import Card, Stock
 
@@ -18,7 +18,7 @@ def get_stocks(request):
 
         if form.is_valid() and form.is_bound:
             # Query the dataset
-            stock_data = get_stock_data(form.cleaned_data)
+            stock_data = api.get_stock_data(form.cleaned_data)
             request.session["results"] = stock_data
             # Return an HttpResponseRedirect to prevent the data from being posted twice
             return HttpResponseRedirect(reverse("stockapp:screener"))
@@ -29,6 +29,11 @@ def get_stocks(request):
     results = request.session.get("results")  # results will be None if there aren't any results
     request.session.pop("results", None)  # don't throw an error if the key isn't present
     return render(request, "stockapp/screener.html", {"form": form, "results": results})
+
+def get_stock_details(request, ticker):
+    # Fetch details about a company and display it to the user
+    profile = api.get_company_profile(ticker) # returns a list of dicts
+    return render(request, "stockapp/detail.html", {"profile": profile[0]})
 
 class FlashCardsView(generic.ListView):
     model = Card
