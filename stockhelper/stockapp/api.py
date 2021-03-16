@@ -18,3 +18,7 @@ def get_stock_data(form_data):
 def get_company_profile(ticker):
     req = requests.get(f"{FMP}/api/v3/profile/{ticker}?apikey={API_KEY}")
     return req.json()
+
+def get_stock_history(ticker):
+    req = requests.get(f"{FMP}/api/v3/historical-price-full/{ticker}?apikey={API_KEY}&serietype=line")
+    return req.json()

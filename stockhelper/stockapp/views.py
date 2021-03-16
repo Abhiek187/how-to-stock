@@ -33,7 +33,10 @@ def get_stocks(request):
 def get_stock_details(request, ticker):
     # Fetch details about a company and display it to the user
     profile = api.get_company_profile(ticker) # returns a list of dicts
-    return render(request, "stockapp/detail.html", {"profile": profile[0]})
+    history = api.get_stock_history(ticker)  # returns a dict with symbol and historical list
+    return render(request, "stockapp/detail.html",
+        {"profile": profile[0], "history": history["historical"]}
+    )
 
 class FlashCardsView(generic.ListView):
     model = Card

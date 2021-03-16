@@ -9,6 +9,9 @@
 {% endblock %}
 
 {% block js %}
+<!-- Safely output the history data as JSON so it can be processed by JS -->
+{{ history|json_script:"history-data" }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script src="{% static 'stockapp/js/detail.js' %}"></script>
 {% endblock %}
 
@@ -17,6 +20,9 @@
 <h2>Company Name: {{ profile.companyName }}</h2>
 <h3>Current Price: ${{ profile.price|money }}</h3>
 <img src="{{ profile.image }}" alt="{{ profile.companyName }} logo">
+<button type="button" class="btn-success">Add to Portfolio</button>
+<canvas id="short-chart"></canvas>
+<canvas id="long-chart"></canvas>
 <p>Beta: {{ profile.beta }}</p>
 <p>Average Volume: {{ profile.volAvg|commas }}</p>
 <p>Market Cap: {{ profile.mktCap|commas }}</p>
