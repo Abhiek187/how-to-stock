@@ -99,7 +99,8 @@ const predictPrice = y => {
      */
     const m = (n * sum(xy) - sum(x) * sum(y)) / (n * sum(x2) - sum(x) ** 2);
     const b = (sum(y) * sum(x2) - sum(x) * sum(xy)) / (n * sum(x2) - sum(x) ** 2);
-    return [m, b];
+    const line = x.map(p => m * p + b);
+    return [m, b, line];
 };
 
 const displayPred = (m, n, b, dom) => {
@@ -128,9 +129,9 @@ displayStats(longTermStats, longStatsDom);
 // const longTermProb = bayesProb(longTermStats.mean, longTermPrices, longTermStats);
 // displayProb(longTermProb, longTermStats, longPredictDom);
 
-const [shortM, shortB] = predictPrice(shortTermPrices);
+const [shortM, shortB, shortLine] = predictPrice(shortTermPrices);
 displayPred(shortM, shortTermLength, shortB, shortPredictDom);
-const [longM, longB] = predictPrice(longTermPrices);
+const [longM, longB, longLine] = predictPrice(longTermPrices);
 displayPred(longM, longTermLength, longB, longPredictDom);
 
 // for (let i = -1; i < 1; i+=0.1) {
@@ -138,57 +139,102 @@ displayPred(longM, longTermLength, longB, longPredictDom);
 //     console.log(`mu + ${i}: ${bayesProb(longTermStats.mean + i, longTermPrices, longTermStats)}`);
 // }
 
-// const chart = new Chart(ctx, {
-//     // The type of chart we want to create
-//     type: "line",
-
-//     // The data for our dataset
-//     data: {
-//         labels: ["January", "February", "March", "April", "May", "June", "July"],
-//         datasets: [{
-//             label: "My First dataset",
-//             backgroundColor: "rgb(255, 99, 132)",
-//             borderColor: "rgb(255, 99, 132)",
-//             data: [0, 10, 5, 2, 20, 30, 45]
-//         }]
-//     },
-
-//     // Configuration options go here
-//     options: {}
-// });
-
+// Chart for the short-term data
 const shortChart = new Chart(shortCtx, {
-    // The type of chart we want to create
     type: "line",
 
-    // The data for our dataset
     data: {
         labels: shortTermDates,
-        datasets: [{
-            label: "Short-term Prices",
-            borderColor: "#00f",
-            data: shortTermPrices
-        }]
+        datasets: [
+            {
+                // Draw the trend line on top of the price graph
+                label: "Trend Line",
+                backgroundColor: "#000", // black
+                borderColor: "#333",
+                fill: false, // just show a line
+                data: shortLine
+            },
+            {
+                label: "Stock Price",
+                backgroundColor: "#00bfff", // deepskyblue
+                borderColor: "#00f",
+                data: shortTermPrices
+            }
+        ]
+
     },
 
-    // Configuration options go here
-    options: {}
+    options: {
+        aspectRatio: window.innerWidth < 1200 ? 1.25 : 1.5, // width / height
+        scales: {
+            xAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: "Date"
+                }
+            }],
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: "Price ($)"
+                }
+            }]
+        },
+        title: {
+            display: true,
+            fontSize: 18,
+            text: "Short-Term Historical Data"
+        }
+    }
 });
 
+// Chart for the long-term data
 const longChart = new Chart(longCtx, {
-    // The type of chart we want to create
     type: "line",
 
-    // The data for our dataset
     data: {
-        labels: longTermDates,
-        datasets: [{
-            label: "Long-term Prices",
-            borderColor: "#00f",
-            data: longTermPrices
-        }]
+        labels: longTermDates, // x-axis labels
+        datasets: [
+            {
+                // Draw the trend line on top of the price graph
+                label: "Trend Line",
+                backgroundColor: "#000", // black
+                borderColor: "#333",
+                fill: false, // just show a line
+                data: longLine
+            },
+            {
+                label: "Stock Price",
+                backgroundColor: "#00bfff", // deepskyblue
+                borderColor: "#00f",
+                data: longTermPrices
+            }
+        ]
     },
 
-    // Configuration options go here
-    options: {}
+    options: {
+        aspectRatio: window.innerWidth < 1200 ? 1.25 : 1.5, // width / height
+        scales: {
+            xAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: "Date"
+                },
+                ticks: {
+                    autoSkipPadding: 5
+                }
+            }],
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: "Price ($)"
+                }
+            }]
+        },
+        title: {
+            display: true,
+            fontSize: 18,
+            text: "Long-Term Historical Data"
+        }
+    }
 });
