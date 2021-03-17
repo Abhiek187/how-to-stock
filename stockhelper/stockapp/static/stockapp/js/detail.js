@@ -1,5 +1,10 @@
+const change = document.querySelector(".change");
 const shortCtx = document.getElementById("short-chart").getContext("2d");
+const shortStatsDom = document.querySelector(".short-stats");
+const shortPredictDom = document.querySelector(".short-predict");
 const longCtx = document.getElementById("long-chart").getContext("2d");
+const longStatsDom = document.querySelector(".long-stats");
+const longPredictDom = document.querySelector(".long-predict");
 const historyData = JSON.parse(document.getElementById("history-data").textContent);
 
 const shortTermLength = (52 / 12 * 5) >> 0; // average # of weekdays per month
@@ -11,6 +16,15 @@ const longTermLength = 52 * 5; // average # of weekdays per year
 const longTermData = historyData.slice(0, longTermLength).reverse();
 const longTermDates = longTermData.map(data => data.date);
 const longTermPrices = longTermData.map(data => data.close);
+
+// Make the change text green or red depending on its sign
+if (parseFloat(change.textContent) > 0) {
+    change.innerHTML = `&#x25b2; ${change.textContent}`;
+    change.classList.add("text-success");
+} else {
+    change.innerHTML = `&#x25bc; ${change.textContent}`;
+    change.classList.add("text-danger");
+}
 
 const getStats = prices => {
     // Get the statistical properties of the price array
@@ -39,6 +53,12 @@ const getStats = prices => {
     };
 };
 
+const displayStats = (stats, dom) => {
+    dom.textContent = `Mean: ${stats.mean}, Variance: ${stats.variance},
+    Standard Deviation: ${stats.standardDeviation}, Standard Error: ${stats.standardError},
+    Min: ${stats.min}, Max: ${stats.max}, IQR: ${stats.iqr}`;
+};
+
 // https://stackoverflow.com/a/11832950
 const round = (number, places) =>
     Math.round((number + Number.EPSILON) * (10 ** places)) / (10 ** places);
@@ -62,14 +82,21 @@ const bayesProb = (predictedPrice, pastPrices, stats) => {
     return total;
 };
 
+const displayProb = (prob, stats, dom) => {
+    dom.textContent = `Predicted Price: $${round(stats.mean, 2)} (Probability: ${prob})`;
+};
+
+// Compute and display the stats for the short-term and long-term
 const shortTermStats = getStats(shortTermPrices);
+displayStats(shortTermStats, shortStatsDom);
 const longTermStats = getStats(longTermPrices);
-console.log(shortTermStats);
-console.log(longTermStats);
+displayStats(longTermStats, longStatsDom);
+
+// Calculate the most likely price the next day
 const shortTermProb = bayesProb(shortTermStats.mean, shortTermPrices, shortTermStats);
+displayProb(shortTermProb, shortTermStats, shortPredictDom);
 const longTermProb = bayesProb(longTermStats.mean, longTermPrices, longTermStats);
-console.log(`The probability the short-term price will be $${round(shortTermStats.mean, 2)} is ${shortTermProb}`);
-console.log(`The probability the long-term price will be $${round(longTermStats.mean, 2)} is ${longTermProb}`);
+displayProb(longTermProb, longTermStats, longPredictDom);
 
 // for (let i = -1; i < 1; i+=0.1) {
 //     console.log(`mu + ${i}: ${bayesProb(shortTermStats.mean + i, shortTermPrices, shortTermStats)}`);

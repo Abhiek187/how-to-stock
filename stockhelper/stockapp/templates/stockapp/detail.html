@@ -16,21 +16,38 @@
 {% endblock %}
 
 {% block content %}
-<h1>Symbol: {{ profile.symbol }}</h1>
-<h2>Company Name: {{ profile.companyName }}</h2>
-<h3>Current Price: ${{ profile.price|money }}</h3>
-<img src="{{ profile.image }}" alt="{{ profile.companyName }} logo">
-<button type="button" class="btn-success">Add to Portfolio</button>
-<canvas id="short-chart"></canvas>
-<canvas id="long-chart"></canvas>
-<p>Beta: {{ profile.beta }}</p>
-<p>Average Volume: {{ profile.volAvg|commas }}</p>
-<p>Market Cap: {{ profile.mktCap|commas }}</p>
-<p>Last Dividend Yield: {{ profile.lastDiv }}</p>
-<p>Range: {{ profile.range }}</p>
-<p>Exchange: {{ profile.exchangeShortName }}</p>
-<p>Industry: {{ profile.industry }}</p>
-<p>Sector: {{ profile.sector }}</p>
-<a href="{{ profile.website }}" target="_blank" rel="noopener noreferrer">Website: {{ profile.website }}</a>
-<p>Description: {{ profile.description }}</p>
+<div class="main-info-container">
+    <h1>{{ profile.symbol }}</h1>
+    <h2>{{ profile.companyName }}</h2>
+    <h3>Current Price: ${{ profile.price|money }}</h3>
+    <h4 class="change">{{ profile.changes }}</h4>
+    <img src="{{ profile.image }}" alt="{{ profile.companyName }} logo">
+    <button type="button" class="btn-success">Add to Portfolio</button>
+</div>
+<div class="short-container">
+    <div class="short-chart-container">
+        <canvas id="short-chart"></canvas>
+    </div>
+    <p class="short-stats"></p>
+    <p class="short-predict"></p>
+</div>
+<div class="long-container">
+    <div class="long-chart-container">
+        <canvas id="long-chart"></canvas>
+    </div>
+        <p class="long-stats"></p>
+        <p class="long-predict"></p>
+</div>
+<div class="other-info-container">
+    <p>Beta: {{ profile.beta }}</p>
+    <p>Average Volume: {{ profile.volAvg|commas }}</p>
+    <p>Market Cap: {{ profile.mktCap|commas }}</p>
+    <p>Last Dividend Yield: {{ profile.lastDiv }}%</p>
+    <p>Range: {{ profile.range }}</p>
+    <p>Exchange: {{ profile.exchangeShortName }}</p>
+    <p>Industry: {{ profile.industry }}</p>
+    <p>Sector: {{ profile.sector }}</p>
+    <a href="{{ profile.website }}" target="_blank" rel="noopener noreferrer">{{ profile.website }}</a>
+    <p>{{ profile.description }}</p>
+</div>
 {% endblock %}

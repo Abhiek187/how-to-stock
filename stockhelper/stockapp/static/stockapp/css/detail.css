@@ -1,0 +1,6 @@
+.short-chart-container,
+.long-chart-container {
+    position: relative;
+    width: 80vw; /* make the graphs 80% of the view width */
+    margin: 0 auto; /* center the graphs */
+}
