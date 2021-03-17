@@ -4,3 +4,10 @@
     width: 80vw; /* make the graphs 80% of the view width */
     margin: 0 auto; /* center the graphs */
 }
+
+.short-predict,
+.long-predict {
+    /* Appear hoverable like with the <abbr> tag */
+    text-decoration: underline dotted;
+    cursor: help;
+}
