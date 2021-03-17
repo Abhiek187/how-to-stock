@@ -1,8 +1,33 @@
+@media screen and (min-width: 750px) {
+    .main-info-container,
+    .price-container,
+    .chart-container {
+        /* Place the content side-by-side for wide screens */
+        display: flex;
+    }
+}
+
+.main-info-container {
+    justify-content: space-around;
+    align-items: center; /* center vertically */
+}
+
+.price-container {
+    justify-content: center; /* center horizontally */
+}
+
 .short-chart-container,
 .long-chart-container {
     position: relative;
-    width: 80vw; /* make the graphs 80% of the view width */
+    width: 45vw; /* show the graphs side-by-side on wide screens */
     margin: 0 auto; /* center the graphs */
+}
+
+@media screen and (max-width: 749px) {
+    .short-chart-container,
+    .long-chart-container {
+        width: 90vw;
+    }
 }
 
 .short-predict,

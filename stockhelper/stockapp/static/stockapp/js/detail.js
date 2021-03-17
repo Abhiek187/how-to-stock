@@ -94,6 +94,9 @@ const predictPrice = y => {
     const xy = x.map((e, i) => e * y[i]);
     const x2 = x.map(e => e ** 2);
     const y2 = y.map(e => e ** 2);
+    /* Formulas from: https://www.statisticshowto.com/probability-and-statistics/regression-analysis
+     * /find-a-linear-regression-equation/#FindaLinear
+     */
     const m = (n * sum(xy) - sum(x) * sum(y)) / (n * sum(x2) - sum(x) ** 2);
     const b = (sum(y) * sum(x2) - sum(x) * sum(xy)) / (n * sum(x2) - sum(x) ** 2);
     return [m, b];

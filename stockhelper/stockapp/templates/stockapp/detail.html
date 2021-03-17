@@ -16,38 +16,47 @@
 {% endblock %}
 
 {% block content %}
-<div class="main-info-container">
-    <h1>{{ profile.symbol }}</h1>
-    <h2>{{ profile.companyName }}</h2>
-    <h3>Current Price: ${{ profile.price|money }}</h3>
-    <h4 class="change">{{ profile.changes }}</h4>
-    <img src="{{ profile.image }}" alt="{{ profile.companyName }} logo">
-    <button type="button" class="btn-success">Add to Portfolio</button>
-</div>
-<div class="short-container">
-    <div class="short-chart-container">
-        <canvas id="short-chart"></canvas>
+<div class="main-info-container mt-3">
+    <div class="company-container">
+        <img class="logo" src="{{ profile.image }}" alt="{{ profile.companyName }} logo">
+        <h1 class="symbol">{{ profile.symbol }}</h1>
+        <h2 class="company-name">{{ profile.companyName }}</h2>
+        <div class="price-container">
+            <h3 class="current-price me-3">${{ profile.price|money }}</h3>
+            <h4 class="change">{{ profile.changes }}</h4>
+        </div>
     </div>
-    <p class="short-stats"></p>
-    <p class="short-predict"></p>
-</div>
-<div class="long-container">
-    <div class="long-chart-container">
-        <canvas id="long-chart"></canvas>
+    <div class="logistics-container">
+        <ul class="list-group">
+            <li class="list-group-item"><strong>Beta:</strong> {{ profile.beta }}</li>
+            <li class="list-group-item"><strong>Average Volume:</strong> {{ profile.volAvg|commas }}</li>
+            <li class="list-group-item"><strong>Market Cap:</strong> {{ profile.mktCap|commas }}</li>
+            <li class="list-group-item"><strong>Last Dividend Yield:</strong> {{ profile.lastDiv }}%</li>
+            <li class="list-group-item"><strong>Range:</strong> {{ profile.range }}</li>
+            <li class="list-group-item"><strong>Exchange:</strong> {{ profile.exchangeShortName }}</li>
+            <li class="list-group-item"><strong>Industry:</strong> {{ profile.industry }}</li>
+            <li class="list-group-item"><strong>Sector:</strong> {{ profile.sector }}</li>
+            <li class="list-group-item"><strong>URL:</strong> <a href="{{ profile.website }}" target="_blank" rel="noopener noreferrer">{{ profile.website }}</a></li>
+        </ul>
     </div>
-        <p class="long-stats"></p>
+</div>
+<div class="chart-container">
+    <div class="short-container">
+        <div class="short-chart-container">
+            <canvas id="short-chart"></canvas>
+        </div>
+        <p class="short-stats mx-3"></p>
+        <p class="short-predict"></p>
+    </div>
+    <div class="long-container">
+        <div class="long-chart-container">
+            <canvas id="long-chart"></canvas>
+        </div>
+        <p class="long-stats mx-3"></p>
         <p class="long-predict"></p>
+    </div>
 </div>
-<div class="other-info-container">
-    <p>Beta: {{ profile.beta }}</p>
-    <p>Average Volume: {{ profile.volAvg|commas }}</p>
-    <p>Market Cap: {{ profile.mktCap|commas }}</p>
-    <p>Last Dividend Yield: {{ profile.lastDiv }}%</p>
-    <p>Range: {{ profile.range }}</p>
-    <p>Exchange: {{ profile.exchangeShortName }}</p>
-    <p>Industry: {{ profile.industry }}</p>
-    <p>Sector: {{ profile.sector }}</p>
-    <a href="{{ profile.website }}" target="_blank" rel="noopener noreferrer">{{ profile.website }}</a>
-    <p>{{ profile.description }}</p>
-</div>
+<button type="button" class="add-portfolio-button btn-success">Add to Portfolio</button>
+<hr>
+<p class="description mx-3"><strong>About:</strong> {{ profile.description }}</p>
 {% endblock %}
