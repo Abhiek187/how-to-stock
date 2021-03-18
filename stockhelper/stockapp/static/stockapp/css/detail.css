@@ -1,7 +1,8 @@
 @media screen and (min-width: 750px) {
     .main-info-container,
     .price-container,
-    .chart-container {
+    .left-container,
+    .right-container {
         /* Place the content side-by-side for wide screens */
         display: flex;
     }
@@ -9,16 +10,22 @@
 
 .main-info-container {
     justify-content: space-around;
-    align-items: center; /* center vertically */
+}
+
+.left-container,
+.right-container {
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.company-container,
+.logistics-container {
+    margin: auto; /* center the top containers */
 }
 
 .price-container {
     justify-content: center; /* center horizontally */
-    align-items: center;
-}
-
-.chart-container {
-    justify-content: space-around;
+    align-items: center; /* center vertically */
 }
 
 .short-chart-container,
