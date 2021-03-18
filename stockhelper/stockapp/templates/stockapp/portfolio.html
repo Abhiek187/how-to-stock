@@ -17,5 +17,16 @@
 <h2 class="balance text-success">$10,000 &#x25b2; 100%</h2>
 <hr>
 <h1>Stocks</h1>
-<p class="stocks text-muted">Nothing yet...start investing!</p>
+<ul class="list-group">
+    {% for stock in stocks.all %}
+    <li class="stock-list list-group-item">
+        <p class="stock-ticker">{{ stock.ticker }}</p>
+        <p class="stock-name">{{ stock.name }}</p>
+        <p class="stock-price">{{ stock.price }}</p>
+        <p class="stock-change">{{ stock.change }}</p>
+    </li>
+    {% empty %}
+    <p class="stocks text-muted">Nothing yet...start investing!</p>
+    {% endfor %}
+</ul>
 {% endblock %}

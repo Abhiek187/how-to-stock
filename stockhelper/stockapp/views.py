@@ -5,10 +5,10 @@ from django.views import generic
 
 from . import api
 from .forms import ScreenerForm
-from .models import Card, Stock
+from .models import Card, Dummy, Stock
 
 class IndexView(generic.ListView):
-    model = Stock
+    model = Dummy
     template_name = "stockapp/index.html"
 
 def get_stocks(request):
@@ -52,3 +52,4 @@ class FlashCardsView(generic.ListView):
 class PortfolioView(generic.ListView):
     model = Stock
     template_name = "stockapp/portfolio.html"
+    context_object_name = "stocks"
