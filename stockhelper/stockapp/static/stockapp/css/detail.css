@@ -17,6 +17,10 @@
     align-items: center;
 }
 
+.chart-container {
+    justify-content: space-around;
+}
+
 .short-chart-container,
 .long-chart-container {
     position: relative;
@@ -29,6 +33,12 @@
     .long-chart-container {
         width: 90vw;
     }
+}
+
+/* Select all except the last child */
+.short-stats-container > *:not(:last-child),
+.long-stats-container > *:not(:last-child) {
+    margin-bottom: 0.5rem;
 }
 
 .short-predict,

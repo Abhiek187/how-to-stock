@@ -1,9 +1,9 @@
 const change = document.querySelector(".change");
 const shortCtx = document.getElementById("short-chart").getContext("2d");
-const shortStatsDom = document.querySelector(".short-stats");
+const shortStatsDom = document.querySelector(".short-stats-container");
 const shortPredictDom = document.querySelector(".short-predict");
 const longCtx = document.getElementById("long-chart").getContext("2d");
-const longStatsDom = document.querySelector(".long-stats");
+const longStatsDom = document.querySelector(".long-stats-container");
 const longPredictDom = document.querySelector(".long-predict");
 const historyData = JSON.parse(document.getElementById("history-data").textContent);
 
@@ -55,9 +55,15 @@ const getStats = prices => {
 };
 
 const displayStats = (stats, dom) => {
-    dom.textContent = `Mean: ${stats.mean}, Variance: ${stats.variance},
-    Standard Deviation: ${stats.standardDeviation}, Standard Error: ${stats.standardError},
-    Min: ${stats.min}, Max: ${stats.max}, IQR: ${stats.iqr}`;
+    // dom[0] is for predictions
+    const [_, mean, variance, std, err, min, max, iqr] = dom.children;
+    mean.innerHTML = `<strong>Mean:</strong> ${stats.mean}`;
+    variance.innerHTML = `<strong>Variance:</strong> ${stats.variance}`;
+    std.innerHTML = `<strong>Standard Deviation:</strong> ${stats.standardDeviation}`;
+    err.innerHTML = `<strong>Standard Error:</strong> ${stats.standardError}`;
+    min.innerHTML = `<strong>Min:</strong> ${stats.min}`;
+    max.innerHTML = `<strong>Max:</strong> ${stats.max}`;
+    iqr.innerHTML = `<strong>IQR:</strong> ${stats.iqr}`;
 };
 
 // https://stackoverflow.com/a/11832950 & https://stackoverflow.com/a/6134070
@@ -84,7 +90,7 @@ const bayesProb = (predictedPrice, pastPrices, stats) => {
 };
 
 const displayProb = (prob, stats, dom) => {
-    dom.textContent = `Predicted Price: $${round(stats.mean, 2)} (Probability: ${prob})`;
+    dom.innerHTML = `<strong>Predicted Price:</strong> $${round(stats.mean, 2)} (Probability: ${prob})`;
 };
 
 const predictPrice = y => {
