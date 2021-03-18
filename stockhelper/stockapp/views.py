@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import generic
@@ -6,6 +6,7 @@ from django.views import generic
 from . import api
 from .forms import ScreenerForm
 from .models import Card, Dummy, Stock
+import json
 
 class IndexView(generic.ListView):
     model = Dummy
@@ -31,6 +32,19 @@ def get_stocks(request):
     return render(request, "stockapp/screener.html", {"form": form, "results": results})
 
 def get_stock_details(request, ticker):
+    if request.method == "POST":
+        # Add the stock to the Stocks object
+        # Since this isn't form data, the request body needs to be decoded
+        stock_info = json.loads(request.body)
+        symbol = stock_info.get("ticker")
+        name = stock_info.get("name")
+        price = stock_info.get("price")
+        change = stock_info.get("change")
+
+        new_stock = Stock(ticker=symbol, name=name, price=price, change=change)
+        new_stock.save()
+        return HttpResponse(json.dumps({"message": "success"}))
+
     # Fetch details about a company and display it to the user
     profile = api.get_company_profile(ticker) # returns a list of dicts
     history = api.get_stock_history(ticker)  # returns a dict with symbol and historical list

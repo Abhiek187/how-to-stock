@@ -54,3 +54,7 @@
     text-decoration: underline dotted;
     cursor: help;
 }
+
+.toast-container {
+    z-index: 5;
+}

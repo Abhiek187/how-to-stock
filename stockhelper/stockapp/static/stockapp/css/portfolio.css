@@ -1,0 +1,10 @@
+.stock-list {
+    display: flex;
+    justify-content: space-around;
+}
+
+.stock-list > * {
+    /* Align each list item together */
+    flex: 1;
+    margin: auto;
+}

@@ -1,10 +1,16 @@
-const change = document.querySelector(".change");
+const tickerDom = document.querySelector(".symbol");
+const nameDom = document.querySelector(".company-name");
+const priceDom = document.querySelector(".current-price");
+const changeDom = document.querySelector(".change");
+
 const shortCtx = document.getElementById("short-chart").getContext("2d");
 const shortStatsDom = document.querySelector(".short-stats-container");
 const shortPredictDom = document.querySelector(".short-predict");
 const longCtx = document.getElementById("long-chart").getContext("2d");
 const longStatsDom = document.querySelector(".long-stats-container");
 const longPredictDom = document.querySelector(".long-predict");
+const portfolioButton = document.querySelector(".portfolio-button");
+
 const historyData = JSON.parse(document.getElementById("history-data").textContent);
 
 const shortTermLength = (52 / 12 * 5) >> 0; // average # of weekdays per month
@@ -18,13 +24,59 @@ const longTermDates = longTermData.map(data => data.date);
 const longTermPrices = longTermData.map(data => data.close);
 
 // Make the change text green or red depending on its sign
-if (parseFloat(change.textContent) > 0) {
-    change.innerHTML = `&#x25b2; ${change.textContent}`;
-    change.classList.add("text-success");
+if (parseFloat(changeDom.textContent) < 0) {
+    changeDom.innerHTML = `&#x25bc; ${changeDom.textContent}`;
+    changeDom.classList.add("text-danger");
 } else {
-    change.innerHTML = `&#x25bc; ${change.textContent}`;
-    change.classList.add("text-danger");
+    changeDom.innerHTML = `&#x25b2; ${changeDom.textContent}`;
+    changeDom.classList.add("text-success");
 }
+
+portfolioButton.addEventListener("click", async () => {
+    const ticker = tickerDom.textContent;
+    const name = nameDom.textContent;
+    const price = parseFloat(priceDom.textContent.split("$")[1]);
+    const change = parseFloat(changeDom.textContent.split(" ")[1]);
+    const token = document.querySelector("input[name='csrfmiddlewaretoken']").value;
+    const stockData = {
+        ticker,
+        name,
+        price,
+        change,
+        csrfmiddlewaretoken: token
+    };
+
+    try {
+        // Make a POST request to add the stock to the Stocks object
+        const req = await fetch(window.location.pathname, {
+            method: "POST",
+            credentials: "same-origin",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": token
+            },
+            body: JSON.stringify(stockData)
+        });
+
+        // Wait for a response, then show a toast that confirms if the stock was added
+        const resp = await req.json();
+
+        if (resp.message === "success") {
+            const toast = document.querySelector(".toast");
+            toast.classList.add("show");
+            const toastBody = toast.querySelector(".toast-body");
+            toastBody.textContent = `Successfully added ${ticker} to your portfolio!`;
+
+            // Activate the event listener for closing the toast
+            const toastClose = toast.querySelector(".toast-close");
+            toastClose.addEventListener("click", () => {
+                toast.classList.remove("show");
+            });
+        }
+    } catch (error) {
+        console.error(`Error: ${error}`);
+    }
+});
 
 const sum = arr => arr.reduce((e1, e2) => e1 + e2, 0);
 
