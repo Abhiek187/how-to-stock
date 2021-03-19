@@ -1,3 +1,3 @@
-tr {
+.table-row {
     cursor: pointer; /* have each table row appear clickable */
 }
