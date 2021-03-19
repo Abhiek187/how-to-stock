@@ -55,6 +55,20 @@
     cursor: help;
 }
 
+.stock-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media screen and (max-width: 1000px) {
+    #select-transaction,
+    #input-shares {
+        width: 80%;
+        margin: auto;
+    }
+}
+
 .toast-container {
     z-index: 5;
 }

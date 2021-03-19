@@ -38,10 +38,12 @@ def get_stock_details(request, ticker):
         stock_info = json.loads(request.body)
         symbol = stock_info.get("ticker")
         name = stock_info.get("name")
+        is_buying = stock_info.get("is_buying")
+        shares = stock_info.get("shares")
         price = stock_info.get("price")
         change = stock_info.get("change")
 
-        new_stock = Stock(ticker=symbol, name=name, price=price, change=change)
+        new_stock = Stock(ticker=symbol, name=name, shares=shares, price=price, change=change)
         new_stock.save()
         return HttpResponse(json.dumps({"message": "success"}))
 

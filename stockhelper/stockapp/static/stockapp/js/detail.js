@@ -1,7 +1,9 @@
-const tickerDom = document.querySelector(".symbol");
-const nameDom = document.querySelector(".company-name");
+const ticker = document.querySelector(".symbol").textContent;
+const name = document.querySelector(".company-name").textContent;
 const priceDom = document.querySelector(".current-price");
+const sharePrice = parseFloat(priceDom.textContent.split("$")[1]);
 const changeDom = document.querySelector(".change");
+const change = parseFloat(changeDom.textContent);
 
 const shortCtx = document.getElementById("short-chart").getContext("2d");
 const shortStatsDom = document.querySelector(".short-stats-container");
@@ -9,7 +11,12 @@ const shortPredictDom = document.querySelector(".short-predict");
 const longCtx = document.getElementById("long-chart").getContext("2d");
 const longStatsDom = document.querySelector(".long-stats-container");
 const longPredictDom = document.querySelector(".long-predict");
-const portfolioButton = document.querySelector(".portfolio-button");
+
+const stockForm = document.querySelector(".stock-form");
+const transaction = document.querySelector("#select-transaction");
+const shares = document.querySelector("#input-shares");
+const balanceResult = document.querySelector(".balance-result");
+const balanceDiff = document.querySelector(".balance-diff");
 
 const historyData = JSON.parse(document.getElementById("history-data").textContent);
 
@@ -23,6 +30,10 @@ const longTermData = historyData.slice(0, longTermLength).reverse();
 const longTermDates = longTermData.map(data => data.date);
 const longTermPrices = longTermData.map(data => data.close);
 
+// https://stackoverflow.com/a/11832950 & https://stackoverflow.com/a/6134070
+const round = (number, places) =>
+    (Math.round((number + Number.EPSILON) * (10 ** places)) / (10 ** places)).toFixed(places);
+
 // Make the change text green or red depending on its sign
 if (parseFloat(changeDom.textContent) < 0) {
     changeDom.innerHTML = `&#x25bc; ${changeDom.textContent}`;
@@ -32,16 +43,81 @@ if (parseFloat(changeDom.textContent) < 0) {
     changeDom.classList.add("text-success");
 }
 
-portfolioButton.addEventListener("click", async () => {
-    const ticker = tickerDom.textContent;
-    const name = nameDom.textContent;
-    const price = parseFloat(priceDom.textContent.split("$")[1]);
-    const change = parseFloat(changeDom.textContent.split(" ")[1]);
+const checkShares = () => {
+    // Show the user's new balance and how much they would be earning or losing
+    const isBuying = transaction.value === "buy";
+    const numShares = parseInt(shares.value);
+    const diff = sharePrice * numShares;
+    let newBalance;
+
+    if (isBuying) {
+        balanceDiff.textContent = `-$${round(diff, 2)}`;
+        balanceDiff.classList.remove("text-success");
+        balanceDiff.classList.add("text-danger");
+        newBalance = 10000 - diff;
+    } else {
+        balanceDiff.textContent = `+$${round(diff, 2)}`;
+        balanceDiff.classList.remove("text-danger");
+        balanceDiff.classList.add("text-success");
+        newBalance = 10000 + diff;
+    }
+
+    balanceResult.textContent = `New Balance: $${round(newBalance, 2)}`;
+
+    if (newBalance < 0) {
+        shares.setCustomValidity("You don't have enough money to buy that many shares.");
+    } else if (!isBuying && numShares > 100) {
+        shares.setCustomValidity("You can only sell up to 100 shares");
+    } else {
+        shares.setCustomValidity("");
+    }
+
+    return [isBuying, numShares];
+};
+
+const showToastMessage = (isError, isBuying, numShares, symbol) => {
+    const toast = document.querySelector(".toast");
+    toast.classList.add("show");
+    const toastBody = toast.querySelector(".toast-body");
+
+    if (isError) {
+        toast.classList.remove("bg-success");
+        toast.classList.remove("text-light");
+        toast.classList.add("bg-danger");
+        toast.classList.add("text-dark");
+        toastBody.textContent = `Server Error: Couldn't ${isBuying ? "buy" : "sell"} shares`;
+    } else {
+        toast.classList.remove("bg-danger");
+        toast.classList.remove("text-dark");
+        toast.classList.add("bg-success");
+        toast.classList.add("text-light");
+        toastBody.textContent =
+            `Successfully ${isBuying ? "bought" : "sold"} ${numShares} shares from ${symbol}!`;
+    }
+
+    // Activate the event listener for closing the toast
+    const toastClose = toast.querySelector(".toast-close");
+    toastClose.addEventListener("click", () => {
+        toast.classList.remove("show");
+    });
+};
+
+// Show the validation messages as soon as the fields are edited
+shares.oninput = checkShares;
+
+stockForm.addEventListener("submit", async event => {
+    event.preventDefault(); // don't reload the page
     const token = document.querySelector("input[name='csrfmiddlewaretoken']").value;
+    // Make sure the form input is valid
+    const [isBuying, numShares] = checkShares();
+
+    // The input is valid, so collect all the data to send to Django
     const stockData = {
         ticker,
         name,
-        price,
+        isBuying,
+        shares: numShares,
+        price: sharePrice,
         change,
         csrfmiddlewaretoken: token
     };
@@ -62,19 +138,13 @@ portfolioButton.addEventListener("click", async () => {
         const resp = await req.json();
 
         if (resp.message === "success") {
-            const toast = document.querySelector(".toast");
-            toast.classList.add("show");
-            const toastBody = toast.querySelector(".toast-body");
-            toastBody.textContent = `Successfully added ${ticker} to your portfolio!`;
-
-            // Activate the event listener for closing the toast
-            const toastClose = toast.querySelector(".toast-close");
-            toastClose.addEventListener("click", () => {
-                toast.classList.remove("show");
-            });
+            showToastMessage(false, isBuying, numShares, ticker);
+        } else {
+            showToastMessage(true, isBuying, numShares, ticker);
         }
     } catch (error) {
         console.error(`Error: ${error}`);
+        showToastMessage(true, isBuying, numShares, ticker);
     }
 });
 
@@ -117,10 +187,6 @@ const displayStats = (stats, dom) => {
     max.innerHTML = `<strong>Max:</strong> ${stats.max}`;
     iqr.innerHTML = `<strong>IQR:</strong> ${stats.iqr}`;
 };
-
-// https://stackoverflow.com/a/11832950 & https://stackoverflow.com/a/6134070
-const round = (number, places) =>
-    (Math.round((number + Number.EPSILON) * (10 ** places)) / (10 ** places)).toFixed(places);
 
 // Calculate the x value of a normal curve given the mean and standard deviation
 const normalProb = (x, mu, sigma) =>

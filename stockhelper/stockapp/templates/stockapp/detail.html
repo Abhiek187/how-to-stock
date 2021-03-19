@@ -75,10 +75,32 @@
     </div>
 </div>
 {% csrf_token %}
-<button type="button" class="portfolio-button btn-success">Add to Portfolio</button>
+<!-- Form to buy or sell stocks -->
+<form class="stock-form row row-cols-lg-auto g-3">
+    <div class="form-transaction col-12">
+        <label class="visually-hidden" for="select-transaction">Transaction</label>
+        <select class="form-select" id="select-transaction" required>
+            <option value="buy" selected>Buy</option>
+            <option value="sell">Sell</option>
+        </select>
+    </div>
+    <div class="form-shares col-12">
+        <label class="visually-hidden" for="input-shares">Shares</label>
+        <input type="number" class="form-control" id="input-shares" min="1" step="1" placeholder="Shares" required>
+    </div>
+    <div class="form-submit col-12">
+        <button type="submit" class="btn btn-primary">Complete Transaction</button>
+    </div>
+    <div class="balance-result col-12">
+        New Balance: $9000
+    </div>
+    <div class="balance-diff col-12 text-danger">
+        -$1000
+    </div>
+</form>
 <!-- Toast message after clicking the portfolio button -->
 <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3">
-    <div id="liveToast" class="toast border-3 border-success fade" data-bs-autohide="false" role="alert" aria-live="assertive" aria-atomic="true">
+    <div id="liveToast" class="toast fade" data-bs-autohide="false" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="d-flex">
             <div class="toast-body">
                 Stock successfully added to portfolio.
