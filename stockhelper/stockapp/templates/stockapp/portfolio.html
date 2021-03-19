@@ -15,7 +15,7 @@
 {% block content %}
 <h1>Balance</h1>
 <!-- Show 25b2 for up arrow and 25bc for down arrow -->
-<h2 class="balance text-success">${{ balance|commas }} &#x25b2; 100%</h2>
+<h2 class="balance text-success">${{ balance|money_commas }} &#x25b2; 100%</h2>
 <hr>
 <h1>Stocks</h1>
 {% if not stocks %}

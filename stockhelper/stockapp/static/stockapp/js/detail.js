@@ -43,7 +43,13 @@ if (parseFloat(changeDom.textContent) < 0) {
     changeDom.classList.add("text-success");
 }
 
-const checkShares = () => {
+const getBalance = async () => {
+    const req = await fetch("/stockapp/session/balance");
+    const balance = await req.text();
+    return parseFloat(balance);
+};
+
+const checkShares = async () => {
     // Show the user's new balance and how much they would be earning or losing
     const isBuying = transaction.value === "buy";
     const numShares = parseInt(shares.value);
@@ -54,20 +60,18 @@ const checkShares = () => {
         balanceDiff.textContent = `-$${round(diff, 2)}`;
         balanceDiff.classList.remove("text-success");
         balanceDiff.classList.add("text-danger");
-        newBalance = 10000 - diff;
+        newBalance = await getBalance() - diff;
     } else {
         balanceDiff.textContent = `+$${round(diff, 2)}`;
         balanceDiff.classList.remove("text-danger");
         balanceDiff.classList.add("text-success");
-        newBalance = 10000 + diff;
+        newBalance = await getBalance() + diff;
     }
 
     balanceResult.textContent = `New Balance: $${round(newBalance, 2)}`;
 
     if (newBalance < 0) {
         shares.setCustomValidity("You don't have enough money to buy that many shares.");
-    } else if (!isBuying && numShares > 100) {
-        shares.setCustomValidity("You can only sell up to 100 shares");
     } else {
         shares.setCustomValidity("");
     }
@@ -75,20 +79,19 @@ const checkShares = () => {
     return [isBuying, numShares];
 };
 
-const showToastMessage = (isError, isBuying, numShares, symbol) => {
+const showToastMessage = (isError, message) => {
+    // Make the toast div visible with the correct formatting
     const toast = document.querySelector(".toast");
     toast.classList.add("show");
     const toastBody = toast.querySelector(".toast-body");
+    toastBody.textContent = message;
 
     if (isError) {
         toast.classList.remove("bg-success", "text-light");
         toast.classList.add("bg-danger", "text-dark");
-        toastBody.textContent = `Server Error: Couldn't ${isBuying ? "buy" : "sell"} shares`;
     } else {
         toast.classList.remove("bg-danger", "text-dark");
         toast.classList.add("bg-success", "text-light");
-        toastBody.textContent =
-            `Successfully ${isBuying ? "bought" : "sold"} ${numShares} shares from ${symbol}!`;
     }
 
     // Activate the event listener for closing the toast
@@ -99,13 +102,14 @@ const showToastMessage = (isError, isBuying, numShares, symbol) => {
 };
 
 // Show the validation messages as soon as the fields are edited
+transaction.onchange = checkShares;
 shares.oninput = checkShares;
 
 stockForm.addEventListener("submit", async event => {
     event.preventDefault(); // don't reload the page
     const token = document.querySelector("input[name='csrfmiddlewaretoken']").value;
     // Make sure the form input is valid
-    const [isBuying, numShares] = checkShares();
+    const [isBuying, numShares] = await checkShares();
 
     // The input is valid, so collect all the data to send to Django
     const stockData = {
@@ -133,14 +137,20 @@ stockForm.addEventListener("submit", async event => {
         // Wait for a response, then show a toast that confirms if the stock was added
         const resp = await req.json();
 
-        if (resp.message === "success") {
-            showToastMessage(false, isBuying, numShares, ticker);
+        if (resp.status === "success") {
+            showToastMessage(false,
+                `Successfully ${isBuying ? "bought" : "sold"} ${numShares} shares from ${ticker}!`
+            );
+        } else if (resp.maxShares === 0) {
+            showToastMessage(true, `Error: You don't own any stocks from ${ticker}.`);
         } else {
-            showToastMessage(true, isBuying, numShares, ticker);
+            showToastMessage(true,
+                `Error: You can only sell up to ${resp.maxShares} shares from ${ticker}.`
+            );
         }
     } catch (error) {
         console.error(`Error: ${error}`);
-        showToastMessage(true, isBuying, numShares, ticker);
+        showToastMessage(true, `Server Error: Couldn't ${isBuying ? "buy" : "sell"} shares.`);
     }
 });
 

@@ -29,7 +29,10 @@ def get_stocks(request):
     # Display the results after a POST request
     results = request.session.get("results")  # results will be None if there aren't any results
     request.session.pop("results", None)  # don't throw an error if the key isn't present
-    return render(request, "stockapp/screener.html", {"form": form, "results": results})
+    return render(request, "stockapp/screener.html", {
+        "form": form,
+        "results": results
+    })
 
 def get_stock_details(request, ticker):
     if request.method == "POST":
@@ -38,21 +41,58 @@ def get_stock_details(request, ticker):
         stock_info = json.loads(request.body)
         symbol = stock_info.get("ticker")
         name = stock_info.get("name")
-        is_buying = stock_info.get("is_buying")
+        is_buying = stock_info.get("isBuying")
         shares = stock_info.get("shares")
         price = stock_info.get("price")
         change = stock_info.get("change")
 
-        new_stock = Stock(ticker=symbol, name=name, shares=shares, price=price, change=change)
-        new_stock.save()
-        return HttpResponse(json.dumps({"message": "success"}))
+        # Read: show all the stocks the user bought (done in the portfolio view)
+        existing_stock = Stock.objects.get(pk=symbol)  # the ticker is the primary key
+
+        if not existing_stock and is_buying:
+            # Create: a new stock is bought --> create the object and add it to the user's portfolio
+            new_stock = Stock(ticker=symbol, name=name, shares=shares, price=price, change=change)
+            new_stock.save()
+        elif not existing_stock:
+            # Error: the user can't sell any shares
+            return HttpResponse(json.dumps({"status": "failure", "maxShares": 0}))
+        else:
+            # Update: buy or sell an existing stock --> update the number of shares
+            if is_buying:
+                existing_stock.shares += shares
+                existing_stock.save()
+            elif shares == existing_stock.shares:
+                # Delete: sell all the shares of a stock --> delete it from the portfolio
+                existing_stock.delete()
+            elif shares > existing_stock.shares:
+                # Error: the user sold too many shares
+                return HttpResponse(
+                    json.dumps({"status": "failure", "maxShares": existing_stock.shares})
+                )
+            else:
+                existing_stock.shares -= shares
+                existing_stock.save()
+
+        # Update the balance (it should already be defined from the GET request)
+        if is_buying:
+            request.session["balance"] -= shares * price
+        else:
+            request.session["balance"] += shares * price
+
+        return HttpResponse(json.dumps({"status": "success"}))
 
     # Fetch details about a company and display it to the user
     profile = api.get_company_profile(ticker) # returns a list of dicts
     history = api.get_stock_history(ticker)  # returns a dict with symbol and historical list
-    return render(request, "stockapp/detail.html",
-        {"profile": profile[0], "history": history["historical"]}
-    )
+
+    if "balance" not in request.session:
+        request.session["balance"] = 10000
+
+    return render(request, "stockapp/detail.html", {
+        "profile": profile[0],
+        "history": history["historical"],
+        "balance": request.session["balance"]
+    })
 
 class FlashCardsView(generic.ListView):
     model = Card
@@ -70,6 +110,13 @@ def get_portfolio(request):
     if "balance" not in request.session:
         request.session["balance"] = 10000
 
-    return render(request, "stockapp/portfolio.html",
-        {"balance": request.session["balance"], "stocks": Stock.objects.all()}
-    )
+    return render(request, "stockapp/portfolio.html", {
+        "balance": request.session["balance"],
+        "stocks": Stock.objects.all()
+    })
+
+# A view only meant to retrieve the balance through a GET request
+# https://stackoverflow.com/a/36073883
+class SessionBalanceView(generic.base.TemplateView):
+    def get(self, request):
+        return HttpResponse(request.session["balance"])
