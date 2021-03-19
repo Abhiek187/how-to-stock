@@ -8,5 +8,5 @@ urlpatterns = [
     path("screener", views.get_stocks, name="screener"),
     path("screener/<ticker>", views.get_stock_details, name="detail"),
     path("flashcards", views.FlashCardsView.as_view(), name="flashcards"),
-    path("portfolio", views.PortfolioView.as_view(), name="portfolio")
+    path("portfolio", views.get_portfolio, name="portfolio")
 ]

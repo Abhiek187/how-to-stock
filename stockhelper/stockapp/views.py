@@ -65,7 +65,11 @@ class FlashCardsView(generic.ListView):
         """
         return Card.objects.order_by("word")
 
-class PortfolioView(generic.ListView):
-    model = Stock
-    template_name = "stockapp/portfolio.html"
-    context_object_name = "stocks"
+def get_portfolio(request):
+    # The starting balance is $10,000
+    if "balance" not in request.session:
+        request.session["balance"] = 10000
+
+    return render(request, "stockapp/portfolio.html",
+        {"balance": request.session["balance"], "stocks": Stock.objects.all()}
+    )

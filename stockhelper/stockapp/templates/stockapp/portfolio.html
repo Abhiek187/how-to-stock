@@ -1,5 +1,6 @@
 {% extends "stockapp/index.html" %}
 {% load static %}
+{% load custom_tags %}
 
 {% block title %}Portfolio{% endblock %}
 
@@ -14,7 +15,7 @@
 {% block content %}
 <h1>Balance</h1>
 <!-- Show 25b2 for up arrow and 25bc for down arrow -->
-<h2 class="balance text-success">$10,000 &#x25b2; 100%</h2>
+<h2 class="balance text-success">${{ balance|commas }} &#x25b2; 100%</h2>
 <hr>
 <h1>Stocks</h1>
 {% if not stocks %}
@@ -31,7 +32,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for stock in stocks.all %}
+        {% for stock in stocks %}
         <tr class="table-row">
             <td class="stock-ticker">{{ stock.ticker }}</td>
             <td class="stock-name">{{ stock.name }}</td>
