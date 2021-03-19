@@ -81,16 +81,12 @@ const showToastMessage = (isError, isBuying, numShares, symbol) => {
     const toastBody = toast.querySelector(".toast-body");
 
     if (isError) {
-        toast.classList.remove("bg-success");
-        toast.classList.remove("text-light");
-        toast.classList.add("bg-danger");
-        toast.classList.add("text-dark");
+        toast.classList.remove("bg-success", "text-light");
+        toast.classList.add("bg-danger", "text-dark");
         toastBody.textContent = `Server Error: Couldn't ${isBuying ? "buy" : "sell"} shares`;
     } else {
-        toast.classList.remove("bg-danger");
-        toast.classList.remove("text-dark");
-        toast.classList.add("bg-success");
-        toast.classList.add("text-light");
+        toast.classList.remove("bg-danger", "text-dark");
+        toast.classList.add("bg-success", "text-light");
         toastBody.textContent =
             `Successfully ${isBuying ? "bought" : "sold"} ${numShares} shares from ${symbol}!`;
     }
