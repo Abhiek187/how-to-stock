@@ -11,6 +11,7 @@ class Dummy(models.Model):
 class Stock(models.Model):
     ticker = models.CharField(max_length=10, primary_key=True, default="")
     name = models.CharField(max_length=100, default="")
+    shares = models.PositiveIntegerField(default=0)
     price = models.DecimalField(max_digits=7, decimal_places=2, default=0)
     change = models.FloatField(default=0)
 
