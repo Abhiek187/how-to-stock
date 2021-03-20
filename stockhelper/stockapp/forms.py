@@ -123,17 +123,6 @@ class ScreenerForm(forms.Form):
         ("Utilities",) * 2
     ]
 
-    INDUSTRIES = [
-        ("Autos",) * 2,
-        ("Banks",) * 2,
-        ("Banks Diversified",) * 2,
-        ("Banks Regional",) * 2,
-        ("Beverages Alcoholic",) * 2,
-        ("Beverages Brewers",) * 2,
-        ("Beverages Non-Alcoholic",) * 2,
-        ("Software",) * 2
-    ]
-
     # Fields (widgets specify the classes to put in)
     country = forms.ChoiceField(label="Country", choices=COUNTRIES, widget=forms.Select(
         attrs={"class": "country-select col form-select"}
@@ -147,7 +136,4 @@ class ScreenerForm(forms.Form):
     ))
     sector = forms.ChoiceField(label="Sector", choices=SECTORS, widget=forms.Select(
         attrs={"class": "sector-select col form-select"}
-    ))
-    industry = forms.ChoiceField(label="Industry", choices=INDUSTRIES, widget=forms.Select(
-        attrs={"class": "industry-select col form-select"}
     ))

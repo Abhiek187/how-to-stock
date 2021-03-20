@@ -21,27 +21,29 @@
 {% if not stocks %}
 <p class="stocks text-muted">Nothing yet...start investing!</p>
 {% else %}
-<table class="table table-striped table-hover">
-    <thead>
-        <tr>
-            <th>Ticker</th>
-            <th>Company Name</th>
-            <th>Shares</th>
-            <th>Share Price</th>
-            <th>Price Change</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for stock in stocks %}
-        <tr class="table-row">
-            <td class="stock-ticker">{{ stock.ticker }}</td>
-            <td class="stock-name">{{ stock.name }}</td>
-            <td class="stock-shares">{{ stock.shares }}</td>
-            <td class="stock-price">${{ stock.price }}</td>
-            <td class="stock-change">{{ stock.change }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Ticker</th>
+                <th>Company Name</th>
+                <th>Shares</th>
+                <th>Share Price</th>
+                <th>Price Change</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in stocks %}
+            <tr class="table-row">
+                <td class="stock-ticker">{{ stock.ticker }}</td>
+                <td class="stock-name">{{ stock.name }}</td>
+                <td class="stock-shares">{{ stock.shares }}</td>
+                <td class="stock-price">${{ stock.price }}</td>
+                <td class="stock-change">{{ stock.change }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endif %}
 {% endblock %}
