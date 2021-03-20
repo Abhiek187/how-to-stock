@@ -1,3 +1,4 @@
+// Company container elements
 const ticker = document.querySelector(".symbol").textContent;
 const name = document.querySelector(".company-name").textContent;
 const priceDom = document.querySelector(".current-price");
@@ -5,44 +6,18 @@ const sharePrice = parseFloat(priceDom.textContent.split("$")[1]);
 const changeDom = document.querySelector(".change");
 const change = parseFloat(changeDom.textContent);
 
-const shortCtx = document.getElementById("short-chart").getContext("2d");
-const shortStatsDom = document.querySelector(".short-stats-container");
-const shortPredictDom = document.querySelector(".short-predict");
-const longCtx = document.getElementById("long-chart").getContext("2d");
-const longStatsDom = document.querySelector(".long-stats-container");
-const longPredictDom = document.querySelector(".long-predict");
-
+// Stock form elements
 const stockForm = document.querySelector(".stock-form");
 const transaction = document.querySelector("#select-transaction");
 const shares = document.querySelector("#input-shares");
 const balanceResult = document.querySelector(".balance-result");
 const balanceDiff = document.querySelector(".balance-diff");
 
-const historyData = JSON.parse(document.getElementById("history-data").textContent);
-
-const shortTermLength = (52 / 12 * 5) >> 0; // average # of weekdays per month
-const shortTermData = historyData.slice(0, shortTermLength).reverse();
-const shortTermDates = shortTermData.map(data => data.date);
-const shortTermPrices = shortTermData.map(data => data.close);
-
-const longTermLength = 52 * 5; // average # of weekdays per year
-const longTermData = historyData.slice(0, longTermLength).reverse();
-const longTermDates = longTermData.map(data => data.date);
-const longTermPrices = longTermData.map(data => data.close);
-
 // https://stackoverflow.com/a/11832950 & https://stackoverflow.com/a/6134070
 const round = (number, places) =>
     (Math.round((number + Number.EPSILON) * (10 ** places)) / (10 ** places)).toFixed(places);
 
-// Make the change text green or red depending on its sign
-if (parseFloat(changeDom.textContent) < 0) {
-    changeDom.innerHTML = `&#x25bc; ${changeDom.textContent}`;
-    changeDom.classList.add("text-danger");
-} else {
-    changeDom.innerHTML = `&#x25b2; ${changeDom.textContent}`;
-    changeDom.classList.add("text-success");
-}
-
+// Get the session balance from the front-end
 const getBalance = async () => {
     const req = await fetch("/stockapp/session/balance");
     const balance = await req.text();
@@ -101,6 +76,15 @@ const showToastMessage = (isError, message) => {
     });
 };
 
+// Make the change text green or red depending on its sign
+if (parseFloat(changeDom.textContent) < 0) {
+    changeDom.innerHTML = `&#x25bc; ${changeDom.textContent}`;
+    changeDom.classList.add("text-danger");
+} else {
+    changeDom.innerHTML = `&#x25b2; ${changeDom.textContent}`;
+    changeDom.classList.add("text-success");
+}
+
 // Show the validation messages as soon as the fields are edited
 transaction.onchange = checkShares;
 shares.oninput = checkShares;
@@ -154,6 +138,28 @@ stockForm.addEventListener("submit", async event => {
     }
 });
 
+// Graph elements
+const shortCtx = document.getElementById("short-chart").getContext("2d");
+const shortStatsDom = document.querySelector(".short-stats-container");
+const shortPredictDom = document.querySelector(".short-predict");
+const longCtx = document.getElementById("long-chart").getContext("2d");
+const longStatsDom = document.querySelector(".long-stats-container");
+const longPredictDom = document.querySelector(".long-predict");
+
+// Short and Long-Term stock history data
+const historyData = JSON.parse(document.getElementById("history-data").textContent);
+
+const shortTermLength = (52 / 12 * 5) >> 0; // average # of weekdays per month
+const shortTermData = historyData.slice(0, shortTermLength).reverse();
+const shortTermDates = shortTermData.map(data => data.date);
+const shortTermPrices = shortTermData.map(data => data.close);
+
+const longTermLength = 52 * 5; // average # of weekdays per year
+const longTermData = historyData.slice(0, longTermLength).reverse();
+const longTermDates = longTermData.map(data => data.date);
+const longTermPrices = longTermData.map(data => data.close);
+
+// Analytical functions and calculations
 const sum = arr => arr.reduce((e1, e2) => e1 + e2, 0);
 
 const getStats = prices => {
@@ -214,7 +220,8 @@ const bayesProb = (predictedPrice, pastPrices, stats) => {
 };
 
 const displayProb = (prob, stats, dom) => {
-    dom.innerHTML = `<strong>Predicted Price:</strong> $${round(stats.mean, 2)} (Probability: ${prob})`;
+    dom.innerHTML =
+        `<strong>Predicted Price:</strong> $${round(stats.mean, 2)} (Probability: ${prob})`;
 };
 
 const predictPrice = y => {
@@ -245,7 +252,7 @@ const displayPred = (m, n, b, dom) => {
         dom.title = `On average, the stock price is increasing by $${round(m, 2)} each day.`;
         dom.classList.add("text-success");
     }
-}
+};
 
 // Compute and display the stats for the short-term and long-term
 const shortTermStats = getStats(shortTermPrices);
@@ -263,11 +270,6 @@ const [shortM, shortB, shortLine] = predictPrice(shortTermPrices);
 displayPred(shortM, shortTermLength, shortB, shortPredictDom);
 const [longM, longB, longLine] = predictPrice(longTermPrices);
 displayPred(longM, longTermLength, longB, longPredictDom);
-
-// for (let i = -1; i < 1; i+=0.1) {
-//     console.log(`mu + ${i}: ${bayesProb(shortTermStats.mean + i, shortTermPrices, shortTermStats)}`);
-//     console.log(`mu + ${i}: ${bayesProb(longTermStats.mean + i, longTermPrices, longTermStats)}`);
-// }
 
 // Chart for the short-term data
 const shortChart = new Chart(shortCtx, {

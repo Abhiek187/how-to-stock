@@ -69,7 +69,7 @@ def get_stock_details(request, ticker):
         except ObjectDoesNotExist:
             # If .get() throws an error
             if is_buying:
-                # Create: a new stock is bought --> create the object and add it to the user's portfolio
+                # Create: a new stock is bought --> create the object and add it to the portfolio
                 new_stock = Stock(ticker=symbol, name=name, shares=shares, price=price, change=change)
                 new_stock.save()
             else:
@@ -122,4 +122,4 @@ def get_portfolio(request):
 # https://stackoverflow.com/a/36073883
 class SessionBalanceView(generic.base.TemplateView):
     def get(self, request):
-        return HttpResponse(request.session["balance"])
+        return HttpResponse(request.session.get("balance", 10000))
