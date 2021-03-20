@@ -15,7 +15,7 @@
 {% block content %}
 <h1>Balance</h1>
 <!-- Show 25b2 for up arrow and 25bc for down arrow -->
-<h2 class="balance text-success">${{ balance|money_commas }} &#x25b2; 100%</h2>
+<h2 class="balance text-success" aria-label="{{ balance|money }} changed by 100%">${{ balance|money_commas }} &#x25b2; 100%</h2>
 <hr>
 <h1>Stocks</h1>
 {% if not stocks %}
@@ -34,7 +34,7 @@
         </thead>
         <tbody>
             {% for stock in stocks %}
-            <tr class="table-row">
+            <tr class="table-row" role="link" tabindex="0">
                 <td class="stock-ticker">{{ stock.ticker }}</td>
                 <td class="stock-name">{{ stock.name }}</td>
                 <td class="stock-shares">{{ stock.shares }}</td>

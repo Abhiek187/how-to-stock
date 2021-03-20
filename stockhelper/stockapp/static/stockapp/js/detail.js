@@ -58,6 +58,7 @@ const showToastMessage = (isError, message) => {
     // Make the toast div visible with the correct formatting
     const toast = document.querySelector(".toast");
     toast.classList.add("show");
+    toast.ariaHidden = false;
     const toastBody = toast.querySelector(".toast-body");
     toastBody.textContent = message;
 
@@ -71,8 +72,12 @@ const showToastMessage = (isError, message) => {
 
     // Activate the event listener for closing the toast
     const toastClose = toast.querySelector(".toast-close");
+    toastClose.tabIndex = 0;
+
     toastClose.addEventListener("click", () => {
         toast.classList.remove("show");
+        toast.ariaHidden = true;
+        toastClose.tabIndex = -1;
     });
 };
 
@@ -191,13 +196,13 @@ const getStats = prices => {
 const displayStats = (stats, dom) => {
     // dom[0] is for predictions
     const [_, mean, variance, std, err, min, max, iqr] = dom.children;
-    mean.innerHTML = `<strong>Mean:</strong> ${stats.mean}`;
-    variance.innerHTML = `<strong>Variance:</strong> ${stats.variance}`;
-    std.innerHTML = `<strong>Standard Deviation:</strong> ${stats.standardDeviation}`;
-    err.innerHTML = `<strong>Standard Error:</strong> ${stats.standardError}`;
-    min.innerHTML = `<strong>Min:</strong> ${stats.min}`;
-    max.innerHTML = `<strong>Max:</strong> ${stats.max}`;
-    iqr.innerHTML = `<strong>IQR:</strong> ${stats.iqr}`;
+    mean.innerHTML = `<strong>Mean:</strong> ${round(stats.mean, 2)}`;
+    variance.innerHTML = `<strong>Variance:</strong> ${round(stats.variance, 2)}`;
+    std.innerHTML = `<strong>Standard Deviation:</strong> ${round(stats.standardDeviation, 2)}`;
+    err.innerHTML = `<strong>Standard Error:</strong> ${round(stats.standardError, 2)}`;
+    min.innerHTML = `<strong>Min:</strong> ${round(stats.min, 2)}`;
+    max.innerHTML = `<strong>Max:</strong> ${round(stats.max, 2)}`;
+    iqr.innerHTML = `<strong>IQR:</strong> ${round(stats.iqr, 2)}`;
 };
 
 // Calculate the x value of a normal curve given the mean and standard deviation
@@ -252,6 +257,8 @@ const displayPred = (m, n, b, dom) => {
         dom.title = `On average, the stock price is increasing by $${round(m, 2)} each day.`;
         dom.classList.add("text-success");
     }
+
+    dom.ariaLabel = dom.textContent + dom.title;
 };
 
 // Compute and display the stats for the short-term and long-term

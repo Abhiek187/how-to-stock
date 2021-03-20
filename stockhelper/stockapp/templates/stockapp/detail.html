@@ -29,7 +29,7 @@
         </div>
         <div class="short-container">
             <div class="short-chart-container">
-                <canvas id="short-chart"></canvas>
+                <canvas id="short-chart" role="img" aria-label="Short-Term Stock Price Graph"></canvas>
             </div>
             <div class="short-stats-container">
                 <p class="short-predict fs-5"></p>
@@ -59,7 +59,7 @@
         </div>
         <div class="long-container">
             <div class="long-chart-container">
-                <canvas id="long-chart"></canvas>
+                <canvas id="long-chart" role="img" aria-label="Long-Term Stock Price Graph"></canvas>
             </div>
             <div class="long-stats-container">
                 <p class="long-predict fs-5"></p>
@@ -91,21 +91,21 @@
     <div class="form-submit col-12">
         <button type="submit" class="btn btn-primary">Complete Transaction</button>
     </div>
-    <div class="balance-result col-12">
+    <div class="balance-result col-12" tabindex="0">
         New Balance: ${{ balance|money }}
     </div>
-    <div class="balance-diff col-12 text-danger">
+    <div class="balance-diff col-12 text-danger" tabindex="0">
         -$0
     </div>
 </form>
 <!-- Toast message after clicking the portfolio button -->
 <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3">
-    <div id="liveToast" class="toast fade" data-bs-autohide="false" role="alert" aria-live="assertive" aria-atomic="true">
+    <div id="liveToast" class="toast fade" data-bs-autohide="false" role="alert" aria-live="assertive" aria-atomic="true" aria-hidden="true">
         <div class="d-flex">
             <div class="toast-body">
                 Stock successfully added to portfolio.
             </div>
-            <button type="button" class="toast-close btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            <button type="button" class="toast-close btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close" tabindex="-1"></button>
         </div>
     </div>
 </div>
