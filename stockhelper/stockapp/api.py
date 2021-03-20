@@ -4,7 +4,7 @@ import requests
 API_KEY = "174c8948d0e48bad0418e1fe49d72e15"
 FMP = "https://financialmodelingprep.com"
 
-def get_stock_data(form_data):
+def get_stocks(form_data):
     country = form_data["country"]
     price_relation = "priceMoreThan" if form_data["price_relation"] == ">" else "priceLowerThan"
     price_value = form_data["price_value"]

@@ -20,7 +20,7 @@ def get_stocks(request):
 
         if form.is_valid() and form.is_bound:
             # Query the dataset
-            stock_data = api.get_stock_data(form.cleaned_data)
+            stock_data = api.get_stocks(form.cleaned_data)
             request.session["results"] = stock_data
             # Return an HttpResponseRedirect to prevent the data from being posted twice
             return HttpResponseRedirect(reverse("stockapp:screener"))
