@@ -14,7 +14,7 @@
 {% block content %}
 <h1 class="description text-center">Click on a card to learn each term.</h1>
 {% for card in cards.all %}
-<div class="flashcard card shadow bg-light">
+<div class="flashcard card shadow bg-light" tabindex="0" aria-label="{{ card.word }}">
     <div class="card-body">
         <h4 class="word card-title fade-in">{{ card.word }}</h4>
         <p class="definition card-text fade-out hidden">{{ card.definition }}</p>
