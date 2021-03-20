@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -47,16 +48,9 @@ def get_stock_details(request, ticker):
         change = stock_info.get("change")
 
         # Read: show all the stocks the user bought (done in the portfolio view)
-        existing_stock = Stock.objects.get(pk=symbol)  # the ticker is the primary key
+        try:
+            existing_stock = Stock.objects.get(pk=symbol)  # the ticker is the primary key
 
-        if not existing_stock and is_buying:
-            # Create: a new stock is bought --> create the object and add it to the user's portfolio
-            new_stock = Stock(ticker=symbol, name=name, shares=shares, price=price, change=change)
-            new_stock.save()
-        elif not existing_stock:
-            # Error: the user can't sell any shares
-            return HttpResponse(json.dumps({"status": "failure", "maxShares": 0}))
-        else:
             # Update: buy or sell an existing stock --> update the number of shares
             if is_buying:
                 existing_stock.shares += shares
@@ -72,6 +66,15 @@ def get_stock_details(request, ticker):
             else:
                 existing_stock.shares -= shares
                 existing_stock.save()
+        except ObjectDoesNotExist:
+            # If .get() throws an error
+            if is_buying:
+                # Create: a new stock is bought --> create the object and add it to the user's portfolio
+                new_stock = Stock(ticker=symbol, name=name, shares=shares, price=price, change=change)
+                new_stock.save()
+            else:
+                # Error: the user can't sell any shares
+                return HttpResponse(json.dumps({"status": "failure", "maxShares": 0}))
 
         # Update the balance (it should already be defined from the GET request)
         if is_buying:
