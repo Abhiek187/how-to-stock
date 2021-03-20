@@ -32,7 +32,8 @@
                 <canvas id="short-chart" role="img" aria-label="Short-Term Stock Price Graph"></canvas>
             </div>
             <div class="short-stats-container">
-                <p class="short-predict fs-5"></p>
+                <!-- Show a tooltip that's accessible on both desktop and mobile devices -->
+                <a href="#short-predict" id="short-predict" class="fs-5" data-bs-toggle="tooltip"></a>
                 <p class="short-mean"></p>
                 <p class="short-var"></p>
                 <p class="short-std"></p>
@@ -62,7 +63,7 @@
                 <canvas id="long-chart" role="img" aria-label="Long-Term Stock Price Graph"></canvas>
             </div>
             <div class="long-stats-container">
-                <p class="long-predict fs-5"></p>
+                <a href="#long-predict" id="long-predict" class="fs-5" data-bs-toggle="tooltip"></a>
                 <p class="long-mean"></p>
                 <p class="long-var"></p>
                 <p class="long-std"></p>

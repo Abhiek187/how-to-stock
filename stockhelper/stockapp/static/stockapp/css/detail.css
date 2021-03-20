@@ -48,8 +48,8 @@
     margin-bottom: 0.5rem;
 }
 
-.short-predict,
-.long-predict {
+#short-predict,
+#long-predict {
     /* Appear hoverable like with the <abbr> tag */
     text-decoration: underline dotted;
     cursor: help;

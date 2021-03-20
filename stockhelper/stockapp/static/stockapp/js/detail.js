@@ -146,10 +146,10 @@ stockForm.addEventListener("submit", async event => {
 // Graph elements
 const shortCtx = document.getElementById("short-chart").getContext("2d");
 const shortStatsDom = document.querySelector(".short-stats-container");
-const shortPredictDom = document.querySelector(".short-predict");
+const shortPredictDom = document.querySelector("#short-predict");
 const longCtx = document.getElementById("long-chart").getContext("2d");
 const longStatsDom = document.querySelector(".long-stats-container");
-const longPredictDom = document.querySelector(".long-predict");
+const longPredictDom = document.querySelector("#long-predict");
 
 // Short and Long-Term stock history data
 const historyData = JSON.parse(document.getElementById("history-data").textContent);
@@ -251,10 +251,15 @@ const displayPred = (m, n, b, dom) => {
 
     // Show more info about how the price will change while hovering over the price
     if (m < 0) {
-        dom.title = `On average, the stock price is decreasing by $${round(-m, 2)} each day.`;
+        // Initialize the prediction tooltips
+        new bootstrap.Tooltip(shortPredictDom, {
+            title: `In the short-term, the stock price is decreasing by $${round(-m, 2)} each day.`
+        });
         dom.classList.add("text-danger");
     } else {
-        dom.title = `On average, the stock price is increasing by $${round(m, 2)} each day.`;
+        new bootstrap.Tooltip(longPredictDom, {
+            title: `In the long-term, the stock price is increasing by $${round(m, 2)} each day.`
+        });
         dom.classList.add("text-success");
     }
 
