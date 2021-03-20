@@ -108,10 +108,20 @@ class FlashCardsView(generic.ListView):
         """
         return Card.objects.order_by("word")
 
+def update_price_and_change(stock):
+    profile = api.get_company_profile(stock.ticker)[0]
+    stock.price = profile["price"]
+    stock.change = profile["changes"]
+    stock.save()
+
 def get_portfolio(request):
     # The starting balance is $10,000
     if "balance" not in request.session:
         request.session["balance"] = 10000
+
+    # Keep each stock price and change up-to-date
+    for stock in Stock.objects.all():
+        update_price_and_change(stock)
 
     return render(request, "stockapp/portfolio.html", {
         "balance": request.session["balance"],
