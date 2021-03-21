@@ -2,18 +2,22 @@ const netWorthDom = document.querySelector(".net-worth");
 const tableRows = document.querySelectorAll(".table-row");
 const stockChanges = document.querySelectorAll(".stock-change");
 
+// https://stackoverflow.com/a/11832950 & https://stackoverflow.com/a/6134070
+const round = (number, places) =>
+    (Math.round((number + Number.EPSILON) * (10 ** places)) / (10 ** places)).toFixed(places);
+
 const startingBalance = 10000;
 // Remove the $ and commas before parsing the net worth
 const netWorth = parseFloat(netWorthDom.textContent.replace(/[,\$]/g, ""));
 const netWorthChange = netWorth - startingBalance;
 
 // Show 25b2 for up arrow and 25bc for down arrow
-if (netWorthDom < startingBalance) {
+if (netWorth < startingBalance) {
     netWorthDom.classList.add("text-danger");
-    netWorthDom.innerHTML += ` &#x25bc; $${-netWorthChange}`;
+    netWorthDom.innerHTML += ` &#x25bc; $${-round(netWorthChange, 2)}`;
 } else {
     netWorthDom.classList.add("text-success");
-    netWorthDom.innerHTML += ` &#x25b2; $${netWorthChange}`;
+    netWorthDom.innerHTML += ` &#x25b2; $${round(netWorthChange, 2)}`;
 }
 
 for (const row of tableRows) {
