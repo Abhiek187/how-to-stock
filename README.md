@@ -1,5 +1,7 @@
 # How to Stock
 
+<img src="graphs.png" alt="stock graphs" width="1000">
+
 A web app that can teach users how the stock market works, trade virtual stocks, and view predictions of stocks
 
 ## How to Run
