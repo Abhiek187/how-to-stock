@@ -251,14 +251,20 @@ const displayPred = (m, n, b, dom) => {
 
     // Show more info about how the price will change while hovering over the price
     if (m < 0) {
-        // Initialize the prediction tooltips
-        new bootstrap.Tooltip(shortPredictDom, {
-            title: `In the short-term, the stock price is decreasing by $${round(-m, 2)} each day.`
+        // Initialize the prediction popovers
+        new bootstrap.Popover(dom, {
+            container: "body",
+            content: `On average, the stock price is decreasing by $${round(-m, 2)} each day.`,
+            placement: "top",
+            title: `${dom === shortPredictDom ? "Short" : "Long"}-Term Prediction`
         });
         dom.classList.add("text-danger");
     } else {
-        new bootstrap.Tooltip(longPredictDom, {
-            title: `In the long-term, the stock price is increasing by $${round(m, 2)} each day.`
+        new bootstrap.Popover(dom, {
+            container: "body",
+            content: `On average, the stock price is increasing by $${round(m, 2)} each day.`,
+            placement: "top",
+            title: `${dom === shortPredictDom ? "Short" : "Long"}-Term Prediction`
         });
         dom.classList.add("text-success");
     }
