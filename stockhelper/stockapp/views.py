@@ -119,12 +119,17 @@ def get_portfolio(request):
     if "balance" not in request.session:
         request.session["balance"] = 10000
 
+    # Add the current balance with the value of each stock to calculate the user's net worth
+    net_worth = request.session["balance"]
+
     # Keep each stock price and change up-to-date
     for stock in Stock.objects.all():
         update_price_and_change(stock)
+        net_worth += stock.shares * stock.price
 
     return render(request, "stockapp/portfolio.html", {
         "balance": request.session["balance"],
+        "net_worth": net_worth,
         "stocks": Stock.objects.all()
     })
 

@@ -1,3 +1,8 @@
+.money-container {
+    display: flex;
+    justify-content: space-around;
+}
+
 .table-row {
     cursor: pointer; /* have each table row appear clickable */
 }

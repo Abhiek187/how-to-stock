@@ -13,9 +13,16 @@
 {% endblock %}
 
 {% block content %}
-<h1>Balance</h1>
-<!-- Show 25b2 for up arrow and 25bc for down arrow -->
-<h2 class="balance text-success" aria-label="{{ balance|money }} changed by 100%">${{ balance|money_commas }} &#x25b2; 100%</h2>
+<div class="money-container">
+    <div class="balance-container">
+        <h1>Balance</h1>
+        <h2 class="balance">${{ balance|money_commas }}</h2>
+    </div>
+    <div class="net-worth-container">
+        <h1>Net Worth</h1>
+        <h2 class="net-worth">${{ net_worth|money_commas }}</h2>
+    </div>
+</div>
 <hr>
 <h1>Stocks</h1>
 {% if not stocks %}

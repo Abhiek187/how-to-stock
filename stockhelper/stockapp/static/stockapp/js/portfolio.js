@@ -1,5 +1,20 @@
+const netWorthDom = document.querySelector(".net-worth");
 const tableRows = document.querySelectorAll(".table-row");
 const stockChanges = document.querySelectorAll(".stock-change");
+
+const startingBalance = 10000;
+// Remove the $ and commas before parsing the net worth
+const netWorth = parseFloat(netWorthDom.textContent.replace(/[,\$]/g, ""));
+const netWorthChange = netWorth - startingBalance;
+
+// Show 25b2 for up arrow and 25bc for down arrow
+if (netWorthDom < startingBalance) {
+    netWorthDom.classList.add("text-danger");
+    netWorthDom.innerHTML += ` &#x25bc; $${-netWorthChange}`;
+} else {
+    netWorthDom.classList.add("text-success");
+    netWorthDom.innerHTML += ` &#x25b2; $${netWorthChange}`;
+}
 
 for (const row of tableRows) {
     // Allow each row to be clickable
