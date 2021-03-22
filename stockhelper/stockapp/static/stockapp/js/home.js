@@ -1,7 +1,7 @@
 const title = document.title;
 
 // Make the clicked link active and remove the active class from the previous link
-if (title !== "How to Stocks") {
+if (title !== "How to Stock") {
     const homeLink = document.querySelector(".link-home");
     homeLink.classList.remove("active");
     homeLink.removeAttribute("aria-current");
