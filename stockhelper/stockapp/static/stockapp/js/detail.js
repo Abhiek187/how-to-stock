@@ -177,7 +177,8 @@ const getStats = prices => {
     const min = Math.min(...prices);
     const max = Math.max(...prices);
     // Sort the array and find the first and third quartiles
-    const sortedArr = [...prices].sort();
+    // (Need to specify the sorting algorithm for numeric sorts)
+    const sortedArr = [...prices].sort((p1, p2) => p1 - p2);
     const q1 = sortedArr[Math.floor(sortedArr.length / 4)];
     const q3 = sortedArr[Math.ceil(sortedArr.length * 3 / 4)];
     const iqr = q3 - q1;

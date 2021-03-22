@@ -111,5 +111,6 @@
     </div>
 </div>
 <hr>
-<p class="description mx-3"><strong>About:</strong> {{ profile.description }}</p>
+<!-- Don't escape the content -->
+<p class="description mx-3"><strong>About:</strong> {{ profile.description|safe }}</p>
 {% endblock %}
