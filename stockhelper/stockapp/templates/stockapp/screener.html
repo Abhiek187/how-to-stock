@@ -36,6 +36,11 @@
             <label for="{{ form.sector.id_for_label }}" class="col-auto form-label m-auto">Sector:</label>
             {{ form.sector }}
         </div>
+        <div class="row mb-3">
+            {{ form.exchange.errors }}
+            <label for="{{ form.exchange.id_for_label }}" class="col-auto form-label m-auto">Exchange:</label>
+            {{ form.exchange }}
+        </div>
         <button type="submit" class="btn btn-warning">Search</button>
     </div>
 </form>

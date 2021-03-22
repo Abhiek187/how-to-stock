@@ -106,6 +106,7 @@ class ScreenerForm(forms.Form):
     ]
 
     SECTORS = [
+        ("Any",) * 2, # if the user doesn't want to filter by sector
         ("Basic Materials",) * 2,
         ("Communication Services",) * 2,
         ("Conglomerates",) * 2,
@@ -123,6 +124,17 @@ class ScreenerForm(forms.Form):
         ("Utilities",) * 2
     ]
 
+    EXCHANGES = [
+        ("Any",) * 2, # if the user doesn't want to filter by exchange
+        ("nyse", "NYSE"),
+        ("nasdaq", "NASDAQ"),
+        ("amex", "AMEX"),
+        ("euronex", "EURONEX"),
+        ("tsx", "TSX"),
+        ("etf", "ETF"),
+        ("mutual_fund", "Mutual Fund")
+    ]
+
     # Fields (widgets specify the classes to put in)
     country = forms.ChoiceField(label="Country", choices=COUNTRIES, widget=forms.Select(
         attrs={"class": "country-select col form-select"}
@@ -136,4 +148,8 @@ class ScreenerForm(forms.Form):
     ))
     sector = forms.ChoiceField(label="Sector", choices=SECTORS, widget=forms.Select(
         attrs={"class": "sector-select col form-select"}
+    ))
+
+    exchange = forms.ChoiceField(label="Exchange", choices=EXCHANGES, widget=forms.Select(
+        attrs={"class": "exchange-select col form-select"}
     ))
