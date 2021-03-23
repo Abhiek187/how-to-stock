@@ -7,6 +7,7 @@ from django.views import generic
 from . import api
 from .forms import ScreenerForm
 from .models import Card, Dummy, Stock
+from http import HTTPStatus
 import json
 
 class IndexView(generic.ListView):
@@ -62,7 +63,7 @@ def get_stock_details(request, ticker):
                 # Error: the user sold too many shares
                 return HttpResponse(
                     json.dumps({"status": "failure", "maxShares": existing_stock.shares}),
-                    status=400 # 400 = bad request (client-side error)
+                    status=HTTPStatus.BAD_REQUEST # status code 400 = client-side error
                 )
             else:
                 existing_stock.shares -= shares
@@ -75,7 +76,8 @@ def get_stock_details(request, ticker):
                 new_stock.save()
             else:
                 # Error: the user can't sell any shares
-                return HttpResponse(json.dumps({"status": "failure", "maxShares": 0}), status=400)
+                return HttpResponse(json.dumps({"status": "failure", "maxShares": 0}),
+                    status=HTTPStatus.BAD_REQUEST)
 
         # Update the balance (it should already be defined from the GET request)
         if is_buying:
