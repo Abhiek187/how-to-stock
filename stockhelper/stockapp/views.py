@@ -6,13 +6,17 @@ from django.views import generic
 
 from . import api
 from .forms import ScreenerForm
-from .models import Card, Dummy, Stock
+from .models import Card, Stock
 from http import HTTPStatus
 import json
 
-class IndexView(generic.ListView):
-    model = Dummy
-    template_name = "stockapp/index.html"
+def get_index(request):
+    # Aggregate all the terms needed for each page
+    terms = {
+        "equity": Card.objects.get(word="Equity")
+    }
+
+    return render(request, "stockapp/index.html", {"terms": terms})
 
 def get_stocks(request):
     if request.method == "POST":
@@ -90,7 +94,7 @@ def get_stock_details(request, ticker):
     # Fetch details about a company and display it to the user
     profile = api.get_company_profile(ticker) # returns a list of dicts
     history = api.get_stock_history(ticker)  # returns a dict with symbol and historical list
-    # Aggregate all the terms needed for this page
+
     terms = {
         "beta": Card.objects.get(word="Beta"),
         "volume": Card.objects.get(word="Volume"),

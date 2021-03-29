@@ -2,11 +2,6 @@ from django.db import models
 import uuid
 
 
-# Placeholder model for generic views
-class Dummy(models.Model):
-    pass
-
-
 # The user's stock portfolio
 class Stock(models.Model):
     ticker = models.CharField(max_length=10, primary_key=True, default="")

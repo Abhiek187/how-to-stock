@@ -11,6 +11,12 @@ body {
     flex: 1;
 }
 
+.help {
+    /* Appear hoverable like with the <abbr> tag */
+    text-decoration: underline dotted;
+    cursor: help;
+}
+
 .home-nav-list {
     list-style-type: none; /* remove the bullet points in an unordered list */
 }

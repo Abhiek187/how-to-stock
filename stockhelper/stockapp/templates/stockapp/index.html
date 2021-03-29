@@ -43,8 +43,18 @@
         <main class="main-content">
             <!-- Main content to be overriden with each page -->
             {% block content %}
-            <h1 class="home-title">Welcome!</h1>
-            <h2 class="home-subtitle mb-4 fs-3">Please select an option from the top.</h2>
+            <h1 class="home-title mt-3 mx-3">Welcome to How to Stock!</h1>
+            <p class="home-subtitle mb-4 mx-3 fs-5">
+                You start off with a balance of $10,000. Your goal is to invest in enough
+                <a href="javascript:" class="equity help fw-bold" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="top" title="{{ terms.equity.word }}" data-bs-content="{{ terms.equity.definition }}"> equity </a>
+                to gain a profit. &#x25b2;
+            </p>
+            <p class="home-subtitle mb-4 mx-3 fs-5">
+                As you explore this app, you'll learn more about various financial terms and get first-hand experience at trading in the stock market. Not sure what each term means? Click on the dotted words to see their definition.
+            </p>
+            <p class="home-subtitle mb-4 mx-3 fs-5">
+                Click on one the links above to get started!
+            </p>
             <ul class="home-nav-list list-group list-group-flush mx-3">
                 <li class="list-group-item">
                     <strong>Home</strong> - this page!

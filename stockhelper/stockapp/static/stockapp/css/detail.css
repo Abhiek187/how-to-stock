@@ -28,12 +28,6 @@
     align-items: center; /* center vertically */
 }
 
-.help {
-    /* Appear hoverable like with the <abbr> tag */
-    text-decoration: underline dotted;
-    cursor: help;
-}
-
 .short-chart-container,
 .long-chart-container {
     position: relative;

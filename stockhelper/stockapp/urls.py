@@ -4,7 +4,7 @@ from . import views
 
 app_name = "stockapp"
 urlpatterns = [
-    path("", views.IndexView.as_view(), name="index"),
+    path("", views.get_index, name="index"),
     path("screener", views.get_stocks, name="screener"),
     path("details/<ticker>", views.get_stock_details, name="detail"),
     path("flashcards", views.FlashCardsView.as_view(), name="flashcards"),

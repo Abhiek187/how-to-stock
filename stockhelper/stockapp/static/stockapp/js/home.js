@@ -1,4 +1,8 @@
 const title = document.title;
+const equity = document.querySelector(".equity");
+
+// Initialize the popovers
+new bootstrap.Popover(equity);
 
 // Make the clicked link active and remove the active class from the previous link
 if (title !== "How to Stock") {
