@@ -90,6 +90,14 @@ def get_stock_details(request, ticker):
     # Fetch details about a company and display it to the user
     profile = api.get_company_profile(ticker) # returns a list of dicts
     history = api.get_stock_history(ticker)  # returns a dict with symbol and historical list
+    # Aggregate all the terms needed for this page
+    terms = {
+        "beta": Card.objects.get(word="Beta"),
+        "volume": Card.objects.get(word="Volume"),
+        "marketCap": Card.objects.get(word="Market Cap"),
+        "dividendYield": Card.objects.get(word="Dividend Yield"),
+        "exchange": Card.objects.get(word="Market Exchange")
+    }
 
     if "balance" not in request.session:
         request.session["balance"] = 10000
@@ -97,7 +105,8 @@ def get_stock_details(request, ticker):
     return render(request, "stockapp/detail.html", {
         "profile": profile[0],
         "history": history["historical"],
-        "balance": request.session["balance"]
+        "balance": request.session["balance"],
+        "terms": terms
     })
 
 class FlashCardsView(generic.ListView):

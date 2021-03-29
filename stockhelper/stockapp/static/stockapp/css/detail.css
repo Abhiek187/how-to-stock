@@ -28,6 +28,12 @@
     align-items: center; /* center vertically */
 }
 
+.help {
+    /* Appear hoverable like with the <abbr> tag */
+    text-decoration: underline dotted;
+    cursor: help;
+}
+
 .short-chart-container,
 .long-chart-container {
     position: relative;
@@ -46,13 +52,6 @@
 .short-stats-container > *:not(:last-child),
 .long-stats-container > *:not(:last-child) {
     margin-bottom: 0.5rem;
-}
-
-#short-predict,
-#long-predict {
-    /* Appear hoverable like with the <abbr> tag */
-    text-decoration: underline dotted;
-    cursor: help;
 }
 
 .stock-form {

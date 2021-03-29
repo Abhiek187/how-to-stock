@@ -33,7 +33,7 @@
             </div>
             <div class="short-stats-container">
                 <!-- Show a popover that's accessible on both desktop and mobile devices -->
-                <a href="javascript:" id="short-predict" class="fs-5" data-bs-toggle="popover" data-bs-trigger="focus"></a>
+                <a href="javascript:" id="short-predict" class="help fs-5" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="top" title="Short-Term Prediction"></a>
                 <p class="short-mean"></p>
                 <p class="short-var"></p>
                 <p class="short-std"></p>
@@ -47,15 +47,43 @@
     <div class="right-container">
         <div class="logistics-container">
             <ul class="list-group">
-                <li class="list-group-item"><strong>Beta:</strong> {{ profile.beta }}</li>
-                <li class="list-group-item"><strong>Average Volume:</strong> {{ profile.volAvg|commas }}</li>
-                <li class="list-group-item"><strong>Market Cap:</strong> {{ profile.mktCap|commas }}</li>
-                <li class="list-group-item"><strong>Last Dividend Yield:</strong> {{ profile.lastDiv }}%</li>
-                <li class="list-group-item"><strong>Range:</strong> {{ profile.range }}</li>
-                <li class="list-group-item"><strong>Exchange:</strong> {{ profile.exchangeShortName }}</li>
-                <li class="list-group-item"><strong>Industry:</strong> {{ profile.industry }}</li>
-                <li class="list-group-item"><strong>Sector:</strong> {{ profile.sector }}</li>
-                <li class="list-group-item"><strong>URL:</strong> <a href="{{ profile.website }}" target="_blank" rel="noopener noreferrer">{{ profile.website }}</a></li>
+                <!-- Show helpful hints about each word -->
+                <li class="list-group-item">
+                    <a href="javascript:" class="beta help fw-bold" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="left" title="{{ terms.beta.word }}" data-bs-content="{{ terms.beta.definition }}">Beta: </a>
+                    {{ profile.beta }}
+                </li>
+                <li class="list-group-item">
+                    <a href="javascript:" class="volume help fw-bold" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="left" title="{{ terms.volume.word }}" data-bs-content="{{ terms.volume.definition }}">Average Volume: </a>
+                    {{ profile.volAvg|commas }}
+                </li>
+                <li class="list-group-item">
+                    <a href="javascript:" class="market-cap help fw-bold" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="left" title="{{ terms.marketCap.word }}" data-bs-content="{{ terms.marketCap.definition }}">Market Cap: </a>
+                    {{ profile.mktCap|commas }}
+                </li>
+                <li class="list-group-item">
+                    <a href="javascript:" class="dividend-yield help fw-bold" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="left" title="{{ terms.dividendYield.word }}" data-bs-content="{{ terms.dividendYield.definition }}">Last Dividend Yield: </a>
+                    {{ profile.lastDiv }}%
+                </li>
+                <li class="list-group-item">
+                    <strong>Range: </strong>
+                    {{ profile.range }}
+                </li>
+                <li class="list-group-item">
+                    <a href="javascript:" class="exchange help fw-bold" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="left" title="{{ terms.exchange.word }}" data-bs-content="{{ terms.exchange.definition }}">Exchange: </a>
+                    {{ profile.exchangeShortName }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Industry: </strong>
+                    {{ profile.industry }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Sector: </strong>
+                    {{ profile.sector }}
+                </li>
+                <li class="list-group-item">
+                    <strong>URL: </strong>
+                    <a href="{{ profile.website }}" target="_blank" rel="noopener noreferrer">{{ profile.website }}</a>
+                </li>
             </ul>
         </div>
         <div class="long-container">
@@ -63,7 +91,7 @@
                 <canvas id="long-chart" role="img" aria-label="Long-Term Stock Price Graph"></canvas>
             </div>
             <div class="long-stats-container">
-                <a href="javascript:" id="long-predict" class="fs-5" data-bs-toggle="popover" data-bs-trigger="focus"></a>
+                <a href="javascript:" id="long-predict" class="help fs-5" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="top" title="Long-Term Prediction"></a>
                 <p class="long-mean"></p>
                 <p class="long-var"></p>
                 <p class="long-std"></p>

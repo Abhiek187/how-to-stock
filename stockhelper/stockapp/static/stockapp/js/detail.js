@@ -6,6 +6,20 @@ const sharePrice = parseFloat(priceDom.textContent.split("$")[1]);
 const changeDom = document.querySelector(".change");
 const change = parseFloat(changeDom.textContent);
 
+// Logistics container elements
+const beta = document.querySelector(".beta");
+const volume = document.querySelector(".volume");
+const marketCap = document.querySelector(".market-cap");
+const dividendYield = document.querySelector(".dividend-yield");
+const exchange = document.querySelector(".exchange");
+
+// Initialize the term popovers
+new bootstrap.Popover(beta);
+new bootstrap.Popover(volume);
+new bootstrap.Popover(marketCap);
+new bootstrap.Popover(dividendYield);
+new bootstrap.Popover(exchange);
+
 // Stock form elements
 const stockForm = document.querySelector(".stock-form");
 const transaction = document.querySelector("#select-transaction");
@@ -254,18 +268,12 @@ const displayPred = (m, n, b, dom) => {
     if (m < 0) {
         // Initialize the prediction popovers
         new bootstrap.Popover(dom, {
-            container: "body",
-            content: `On average, the stock price is decreasing by $${round(-m, 2)} each day.`,
-            placement: "top",
-            title: `${dom === shortPredictDom ? "Short" : "Long"}-Term Prediction`
+            content: `On average, the stock price is decreasing by $${round(-m, 2)} each day.`
         });
         dom.classList.add("text-danger");
     } else {
         new bootstrap.Popover(dom, {
-            container: "body",
-            content: `On average, the stock price is increasing by $${round(m, 2)} each day.`,
-            placement: "top",
-            title: `${dom === shortPredictDom ? "Short" : "Long"}-Term Prediction`
+            content: `On average, the stock price is increasing by $${round(m, 2)} each day.`
         });
         dom.classList.add("text-success");
     }
