@@ -35,9 +35,24 @@ def get_stocks(request):
     # Display the results after a POST request
     results = request.session.get("results")  # results will be None if there aren't any results
     request.session.pop("results", None)  # don't throw an error if the key isn't present
+
+    terms = {
+        "beta": Card.objects.get(word="Beta"),
+        "dividendYield": Card.objects.get(word="Dividend Yield"),
+        "etf": Card.objects.get(word="ETF"),
+        "index": Card.objects.get(word="Index"),
+        "indexFund": Card.objects.get(word="Index Fund"),
+        "marketCap": Card.objects.get(word="Market Cap"),
+        "marketExchange": Card.objects.get(word="Market Exchange"),
+        "mutualFund": Card.objects.get(word="Mutual Fund"),
+        "sharePrice": Card.objects.get(word="Share Price"),
+        "volume": Card.objects.get(word="Volume")
+    }
+
     return render(request, "stockapp/screener.html", {
         "form": form,
-        "results": results
+        "results": results,
+        "terms": terms
     })
 
 def get_stock_details(request, ticker):
@@ -97,10 +112,16 @@ def get_stock_details(request, ticker):
 
     terms = {
         "beta": Card.objects.get(word="Beta"),
-        "volume": Card.objects.get(word="Volume"),
-        "marketCap": Card.objects.get(word="Market Cap"),
+        "broker": Card.objects.get(word="Broker"),
         "dividendYield": Card.objects.get(word="Dividend Yield"),
-        "exchange": Card.objects.get(word="Market Exchange")
+        "marketCap": Card.objects.get(word="Market Cap"),
+        "marketExchange": Card.objects.get(word="Market Exchange"),
+        "marketOrder": Card.objects.get(word="Market Order"),
+        "risk": Card.objects.get(word="Risk"),
+        "sharePrice": Card.objects.get(word="Share Price"),
+        "trader": Card.objects.get(word="Trader"),
+        "volatility": Card.objects.get(word="Volatility"),
+        "volume": Card.objects.get(word="Volume")
     }
 
     if "balance" not in request.session:
@@ -143,10 +164,17 @@ def get_portfolio(request):
         update_price_and_change(stock)
         net_worth += stock.shares * stock.price
 
+    terms = {
+        "portfolio": Card.objects.get(word="Portfolio"),
+        "roi": Card.objects.get(word="ROI"),
+        "sharePrice": Card.objects.get(word="Share Price")
+    }
+
     return render(request, "stockapp/portfolio.html", {
         "balance": request.session["balance"],
         "net_worth": net_worth,
-        "stocks": Stock.objects.all()
+        "stocks": Stock.objects.all(),
+        "terms": terms
     })
 
 # A view only meant to retrieve the balance through a GET request

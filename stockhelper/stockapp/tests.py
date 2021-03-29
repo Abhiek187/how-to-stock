@@ -32,6 +32,9 @@ class HomeViewTests(TestCase):
 
 
 class ScreenerViewTests(TestCase):
+    # Load all the card data
+    fixtures = ["cards.json"]
+
     def test_view_renders(self):
         # Check that the view renders properly
         response = self.client.get(reverse("stockapp:screener"))
@@ -46,7 +49,7 @@ class ScreenerViewTests(TestCase):
         self.assertEqual(response.context["results"], None)
         self.assertEqual({
             "beta", "dividendYield", "etf", "index", "indexFund", "marketCap", "marketExchange",
-            "mutualFunds", "sharePrice", "volume"
+            "mutualFund", "sharePrice", "volume"
         }, response.context["terms"].keys())
 
     def test_post_form(self):
@@ -69,6 +72,9 @@ class ScreenerViewTests(TestCase):
 
 
 class DetailViewTests(TestCase):
+    # Load all the card data
+    fixtures = ["cards.json"]
+
     def setUp(self):
         # Initialize all the variables needed for most of the tests
         self.stock_purchase = {
@@ -231,6 +237,9 @@ class FlashcardsViewTests(TestCase):
 
 
 class PortfolioViewTests(TestCase):
+    # Load all the card data
+    fixtures = ["cards.json"]
+
     def test_view_renders(self):
         # Check that the view renders properly
         response = self.client.get(reverse("stockapp:portfolio"))
