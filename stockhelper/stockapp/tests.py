@@ -7,6 +7,9 @@ import json
 
 # Create tests for each view
 class HomeViewTests(TestCase):
+    # Load all the card data
+    fixtures = ["cards.json"]
+
     # All test functions must start with test*
     def test_view_renders(self):
         # Check that the view renders properly
@@ -18,14 +21,14 @@ class HomeViewTests(TestCase):
         self.assertContains(response, "navbar")
         self.assertContains(response, "<a class=\"link-home nav-link active\" aria-current=\"page\"")
         # Check that the relevant content on the home page is present
-        self.assertContains(response, "Welcome!")
+        self.assertContains(response, "Welcome to How to Stock!")
         self.assertContains(response, "<strong>Home</strong>")
         self.assertContains(response, "<strong>Screener</strong>")
         self.assertContains(response, "<strong>Flashcards</strong>")
         self.assertContains(response, "<strong>Portfolio</strong>")
         self.assertContains(response, "Data provided by Financial Modeling Prep")
         # Check that the correct context data is passed
-        self.assertQuerysetEqual(response.context["dummy_list"], [])
+        self.assertIn("equity", response.context["terms"])
 
 
 class ScreenerViewTests(TestCase):
@@ -41,6 +44,10 @@ class ScreenerViewTests(TestCase):
         # Check that the correct context data is passed
         self.assertIsNotNone(response.context["form"])
         self.assertEqual(response.context["results"], None)
+        self.assertEqual({
+            "beta", "dividendYield", "etf", "index", "indexFund", "marketCap", "marketExchange",
+            "mutualFunds", "sharePrice", "volume"
+        }, response.context["terms"].keys())
 
     def test_post_form(self):
         # Check that submitting the form produces results
@@ -112,6 +119,10 @@ class DetailViewTests(TestCase):
         self.assertIsNotNone(response.context["profile"])
         self.assertIsNotNone(response.context["history"])
         self.assertEqual(response.context["balance"], self.session["balance"])
+        self.assertEqual({
+            "beta", "broker", "dividendYield", "marketCap", "marketExchange", "marketOrder", "risk",
+            "sharePrice", "trader", "volatility", "volume"
+        }, response.context["terms"].keys())
 
     def test_buy_new_stock(self):
         # Check that buying a stock with 0 shares creates a new Stock object
@@ -235,6 +246,7 @@ class PortfolioViewTests(TestCase):
         self.assertEqual(response.context["balance"], session["balance"])
         self.assertEqual(response.context["net_worth"], response.context["balance"])
         self.assertQuerysetEqual(response.context["stocks"], [])
+        self.assertEqual({"portfolio", "roi", "sharePrice"}, response.context["terms"].keys())
 
     def test_stocks_show(self):
         # Check that the following Stock objects are rendered and the net worth changes
@@ -244,8 +256,11 @@ class PortfolioViewTests(TestCase):
             price=3000.00, change=-35.91)
         old_stock3 = Stock.objects.create(ticker="GOOGL", name="Alphabet Inc", shares=2,
             price=2000.00, change=-3.73)
+
         response = self.client.get(reverse("stockapp:portfolio"))
         session = self.client.session
+        session["balance"] = 10000
+        session.save()
         new_stock1 = Stock.objects.get(pk=old_stock1.ticker)
         new_stock2 = Stock.objects.get(pk=old_stock2.ticker)
         new_stock3 = Stock.objects.get(pk=old_stock3.ticker)
@@ -272,7 +287,7 @@ class PortfolioViewTests(TestCase):
         net_worth = (session["balance"] + old_stock1.shares * new_stock1.price + old_stock2.shares
             * new_stock2.price + old_stock3.shares * new_stock3.price)
         # Convert the Decimal to a float
-        self.assertEqual(response.context["net_worth"], float(net_worth))
+        self.assertAlmostEqual(response.context["net_worth"], float(net_worth))
         stock_list = [
             f"<Stock: {new_stock1.ticker} - {new_stock1.name}>",
             f"<Stock: {new_stock2.ticker} - {new_stock2.name}>",
