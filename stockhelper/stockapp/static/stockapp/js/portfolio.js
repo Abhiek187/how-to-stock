@@ -1,4 +1,9 @@
+const roiAlert = document.querySelector(".roi-alert");
+const portfolio = document.querySelector(".portfolio");
+const roi = document.querySelector(".roi");
+const portfolioStatus = document.querySelector(".portfolio-status");
 const netWorthDom = document.querySelector(".net-worth");
+const sharePrice = document.querySelector(".share-price");
 const tableRows = document.querySelectorAll(".table-row");
 const stockChanges = document.querySelectorAll(".stock-change");
 
@@ -11,13 +16,33 @@ const startingBalance = 10000;
 const netWorth = parseFloat(netWorthDom.textContent.replace(/[,\$]/g, ""));
 const netWorthChange = netWorth - startingBalance;
 
-// Show 25b2 for up arrow and 25bc for down arrow
-if (netWorth < startingBalance) {
+new bootstrap.Popover(portfolio);
+new bootstrap.Popover(roi);
+
+// Give the user feedback on how well their investment is going
+if (netWorthChange > 0) {
+    portfolioStatus.textContent = "Right now, you're making a profit. Keep up the good work!";
+    roiAlert.classList.remove("alert-info");
+    roiAlert.classList.add("alert-success");
+} else if (netWorthChange < 0) {
+    portfolioStatus.textContent = "Right now, you have a net loss. Consider selling stocks that are" +
+        " falling or buying stocks that are on the rise.";
+    roiAlert.classList.remove("alert-info");
+    roiAlert.classList.add("alert-danger");
+}
+
+// Show 25b2 for an up arrow and 25bc for a down arrow
+if (netWorthChange < 0) {
     netWorthDom.classList.add("text-danger");
     netWorthDom.innerHTML += ` &#x25bc; $${-round(netWorthChange, 2)}`;
 } else {
     netWorthDom.classList.add("text-success");
     netWorthDom.innerHTML += ` &#x25b2; $${round(netWorthChange, 2)}`;
+}
+
+// Initialize the popovers if the table is present
+if (tableRows.length > 0) {
+    new bootstrap.Popover(sharePrice);
 }
 
 for (const row of tableRows) {

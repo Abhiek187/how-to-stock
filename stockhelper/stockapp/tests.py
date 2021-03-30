@@ -248,6 +248,7 @@ class PortfolioViewTests(TestCase):
         # Check that the title is correct
         self.assertContains(response, "<title>Portfolio</title>")
         # Check that the relevant content on the portfolio page is present
+        self.assertContains(response, "alert-info")
         self.assertContains(response, "Balance")
         self.assertContains(response, "Net Worth")
         self.assertContains(response, "Nothing yet...start investing!")
