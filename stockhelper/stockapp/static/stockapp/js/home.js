@@ -1,9 +1,6 @@
 const title = document.title;
 const equity = document.querySelector(".equity");
 
-// Initialize the popovers
-new bootstrap.Popover(equity);
-
 // Make the clicked link active and remove the active class from the previous link
 if (title !== "How to Stock") {
     const homeLink = document.querySelector(".link-home");
@@ -21,4 +18,7 @@ if (title !== "How to Stock") {
     activeLink.classList.add("active");
     // Tell screen readers this is the current page
     activeLink.setAttribute("aria-current", "page");
+} else {
+    // Initialize the popovers (only on the home page)
+    new bootstrap.Popover(equity);
 }
