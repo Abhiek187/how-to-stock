@@ -129,7 +129,7 @@ class ScreenerForm(forms.Form):
         ("nyse", "NYSE"),
         ("nasdaq", "NASDAQ"),
         ("amex", "AMEX"),
-        ("euronex", "EURONEX"),
+        ("euronext", "EURONEXT"),
         ("tsx", "TSX"),
         ("etf", "ETF"),
         ("mutual_fund", "Mutual Fund")
