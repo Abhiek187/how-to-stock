@@ -41,6 +41,20 @@
             <label for="{{ form.exchange.id_for_label }}" class="col-auto form-label m-auto">Exchange:</label>
             {{ form.exchange }}
         </div>
+        <!-- Alerts that show whenever the appropriate exchange option is selected -->
+        <div class="index-alert alert alert-warning alert-dismissible fade show d-none" role="alert">
+            <p><strong>{{ terms.index.word }}:</strong> {{ terms.index.definition }}</p>
+            <p><strong>{{ terms.indexFund.word }}:</strong> {{ terms.indexFund.definition }}</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div class="mutual-alert alert alert-warning alert-dismissible fade show d-none" role="alert">
+            <strong>{{ terms.mutualFund.word }}:</strong> {{ terms.mutualFund.definition }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div class="etf-alert alert alert-warning alert-dismissible fade show d-none" role="alert">
+            <strong>{{ terms.etf.word }}:</strong> {{ terms.etf.definition }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         <button type="submit" class="btn btn-warning">Search</button>
     </div>
 </form>
@@ -52,13 +66,25 @@
             <tr>
                 <th>Symbol</th>
                 <th>Company Name</th>
-                <th>Market Cap</th>
+                <th>
+                    <a href="javascript:" class="market-cap help" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="top" title="{{ terms.marketCap.word }}" data-bs-content="{{ terms.marketCap.definition }}">Market Cap</a>
+                </th>
                 <th>Sector</th>
-                <th>Beta</th>
-                <th>Price</th>
-                <th>Last Annual Dividend</th>
-                <th>Volume</th>
-                <th>Exchange</th>
+                <th>
+                    <a href="javascript:" class="beta help" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="top" title="{{ terms.beta.word }}" data-bs-content="{{ terms.beta.definition }}">Beta</a>
+                </th>
+                <th>
+                    <a href="javascript:" class="share-price help" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="top" title="{{ terms.sharePrice.word }}" data-bs-content="{{ terms.sharePrice.definition }}">Price</a>
+                </th>
+                <th>
+                    <a href="javascript:" class="dividend-yield help" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="top" title="{{ terms.dividendYield.word }}" data-bs-content="{{ terms.dividendYield.definition }}">Last Annual Dividend</a>
+                </th>
+                <th>
+                    <a href="javascript:" class="volume help" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="top" title="{{ terms.volume.word }}" data-bs-content="{{ terms.volume.definition }}">Volume</a>
+                </th>
+                <th>
+                    <a href="javascript:" class="market-exchange help" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="top" title="{{ terms.marketExchange.word }}" data-bs-content="{{ terms.marketExchange.definition }}">Exchange</a>
+                </th>
             </tr>
         </thead>
         <tbody>
