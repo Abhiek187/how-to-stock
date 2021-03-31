@@ -80,8 +80,8 @@ def get_stock_details(request, ticker):
                 existing_stock.delete()
             elif shares > existing_stock.shares:
                 # Error: the user sold too many shares
-                return HttpResponse(
-                    json.dumps({"status": "failure", "maxShares": existing_stock.shares}),
+                return JsonResponse(
+                    {"status": "failure", "maxShares": existing_stock.shares},
                     status=HTTPStatus.BAD_REQUEST # status code 400 = client-side error
                 )
             else:
@@ -95,7 +95,7 @@ def get_stock_details(request, ticker):
                 new_stock.save()
             else:
                 # Error: the user can't sell any shares
-                return HttpResponse(json.dumps({"status": "failure", "maxShares": 0}),
+                return JsonResponse({"status": "failure", "maxShares": 0},
                     status=HTTPStatus.BAD_REQUEST)
 
         # Update the balance (it should already be defined from the GET request)
@@ -104,7 +104,7 @@ def get_stock_details(request, ticker):
         else:
             request.session["balance"] += shares * price
 
-        return HttpResponse(json.dumps({"status": "success"}))
+        return JsonResponse({"status": "success"})
 
     # Fetch details about a company and display it to the user
     profile = api.get_company_profile(ticker) # returns a list of dicts

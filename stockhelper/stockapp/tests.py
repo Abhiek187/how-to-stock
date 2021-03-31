@@ -252,57 +252,47 @@ class PortfolioViewTests(TestCase):
         self.assertContains(response, "alert-info")
         self.assertContains(response, "Balance")
         self.assertContains(response, "Net Worth")
+        self.assertContains(response, "net-worth-spinner")
         self.assertContains(response, "Nothing yet...start investing!")
         # Check that the correct context data is passed
         self.assertEqual(response.context["balance"], session["balance"])
-        self.assertEqual(response.context["net_worth"], response.context["balance"])
         self.assertQuerysetEqual(response.context["stocks"], [])
         self.assertEqual({"portfolio", "roi", "sharePrice"}, response.context["terms"].keys())
 
     def test_stocks_show(self):
-        # Check that the following Stock objects are rendered and the net worth changes
-        old_stock1 = Stock.objects.create(ticker="FB", name="Facebook Inc", shares=5,
+        # Check that the following Stock objects are rendered as a table
+        stock1 = Stock.objects.create(ticker="FB", name="Facebook Inc", shares=5,
             price=300.00, change=-3.43)
-        old_stock2 = Stock.objects.create(ticker="AMZN", name="Amazon.com Inc", shares=1,
+        stock2 = Stock.objects.create(ticker="AMZN", name="Amazon.com Inc", shares=1,
             price=3000.00, change=-35.91)
-        old_stock3 = Stock.objects.create(ticker="GOOGL", name="Alphabet Inc", shares=2,
+        stock3 = Stock.objects.create(ticker="GOOGL", name="Alphabet Inc", shares=2,
             price=2000.00, change=-3.73)
 
         response = self.client.get(reverse("stockapp:portfolio"))
         session = self.client.session
         session["balance"] = 10000
         session.save()
-        new_stock1 = Stock.objects.get(pk=old_stock1.ticker)
-        new_stock2 = Stock.objects.get(pk=old_stock2.ticker)
-        new_stock3 = Stock.objects.get(pk=old_stock3.ticker)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, old_stock1.ticker)
-        self.assertContains(response, old_stock1.name)
-        self.assertContains(response, old_stock1.shares)
-        # Price and change should be up-to-date
-        self.assertContains(response, new_stock1.price)
-        self.assertContains(response, new_stock1.change)
-        self.assertContains(response, old_stock2.ticker)
-        self.assertContains(response, old_stock2.name)
-        self.assertContains(response, old_stock2.shares)
-        self.assertContains(response, new_stock2.price)
-        self.assertContains(response, new_stock2.change)
-        self.assertContains(response, old_stock3.ticker)
-        self.assertContains(response, old_stock3.name)
-        self.assertContains(response, old_stock3.shares)
-        self.assertContains(response, new_stock3.price)
-        self.assertContains(response, new_stock3.change)
+        self.assertContains(response, stock1.ticker)
+        self.assertContains(response, stock1.name)
+        self.assertContains(response, stock1.shares)
+        self.assertContains(response, stock2.ticker)
+        self.assertContains(response, stock2.name)
+        self.assertContains(response, stock2.shares)
+        self.assertContains(response, stock3.ticker)
+        self.assertContains(response, stock3.name)
+        self.assertContains(response, stock3.shares)
+        # The price and change should be loading in the background
+        self.assertContains(response, "price-spinner")
+        self.assertContains(response, "change-spinner")
         self.assertContains(response, "</table>")
+
         self.assertEqual(response.context["balance"], session["balance"])
-        net_worth = (session["balance"] + old_stock1.shares * new_stock1.price + old_stock2.shares
-            * new_stock2.price + old_stock3.shares * new_stock3.price)
-        # Convert the Decimal to a float
-        self.assertAlmostEqual(response.context["net_worth"], float(net_worth))
         stock_list = [
-            f"<Stock: {new_stock1.ticker} - {new_stock1.name}>",
-            f"<Stock: {new_stock2.ticker} - {new_stock2.name}>",
-            f"<Stock: {new_stock3.ticker} - {new_stock3.name}>"
+            f"<Stock: {stock1.ticker} - {stock1.name}>",
+            f"<Stock: {stock2.ticker} - {stock2.name}>",
+            f"<Stock: {stock3.ticker} - {stock3.name}>"
         ]
         # Ignore the order of each list
         self.assertQuerysetEqual(response.context["stocks"], stock_list, ordered=False)
@@ -316,3 +306,48 @@ class BalanceViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         # Check that the relevant content on the balance page is present
         self.assertContains(response, session.get("balance", 10000))
+
+
+class PricesViewTests(TestCase):
+    def setUp(self):
+        # Initialize the balance before each test
+        self.session = self.client.session
+        self.session["balance"] = 10000
+        self.session.save()
+
+    def test_view_renders(self):
+        # Check that the view renders properly
+        response = self.client.get(reverse("stockapp:prices"))
+        self.assertEqual(response.status_code, 200)
+        # Check that the relevant content on the prices page is present
+        self.assertJSONEqual(response.content, {"netWorth": self.session["balance"], "prices": []})
+
+    def test_stocks_show(self):
+        # Check that the stock data defined below is present in the output
+        old_stock1 = Stock.objects.create(ticker="FB", name="Facebook Inc", shares=5,
+            price=300.00, change=-3.43)
+        old_stock2 = Stock.objects.create(ticker="AMZN", name="Amazon.com Inc", shares=1,
+            price=3000.00, change=-35.91)
+        old_stock3 = Stock.objects.create(ticker="GOOGL", name="Alphabet Inc", shares=2,
+            price=2000.00, change=-3.73)
+
+        response = self.client.get(reverse("stockapp:prices"))
+        new_stock1 = Stock.objects.get(pk=old_stock1.ticker)
+        new_stock2 = Stock.objects.get(pk=old_stock2.ticker)
+        new_stock3 = Stock.objects.get(pk=old_stock3.ticker)
+
+        self.assertEqual(response.status_code, 200)
+        net_worth = (self.session["balance"] + old_stock1.shares * new_stock1.price
+            + old_stock2.shares * new_stock2.price + old_stock3.shares * new_stock3.price)
+        # Convert the Decimals to strings
+        prices = [
+            {"price": str(new_stock1.price), "change": new_stock1.change},
+            {"price": str(new_stock2.price), "change": new_stock2.change},
+            {"price": str(new_stock3.price), "change": new_stock3.change}
+        ]
+        # Convert the Decimal to a float
+        self.assertJSONEqual(response.content, {"netWorth": float(net_worth), "prices": prices})
+
+    def tearDown(self):
+        # Remove the session variable after each test
+        del self.session["balance"]
