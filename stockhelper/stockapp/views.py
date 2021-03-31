@@ -1,5 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import generic
@@ -144,24 +144,10 @@ class FlashCardsView(generic.ListView):
         """
         return Card.objects.order_by("word")
 
-def update_price_and_change(stock):
-    profile = api.get_company_profile(stock.ticker)[0]
-    stock.price = profile["price"]
-    stock.change = profile["changes"]
-    stock.save()
-
 def get_portfolio(request):
     # The starting balance is $10,000
     if "balance" not in request.session:
         request.session["balance"] = 10000
-
-    # Add the current balance with the value of each stock to calculate the user's net worth
-    net_worth = request.session["balance"]
-
-    # Keep each stock price and change up-to-date
-    for stock in Stock.objects.all():
-        update_price_and_change(stock)
-        net_worth += stock.shares * stock.price
 
     terms = {
         "portfolio": Card.objects.get(word="Portfolio"),
@@ -171,7 +157,6 @@ def get_portfolio(request):
 
     return render(request, "stockapp/portfolio.html", {
         "balance": request.session["balance"],
-        "net_worth": net_worth,
         "stocks": Stock.objects.all(),
         "terms": terms
     })
@@ -181,3 +166,23 @@ def get_portfolio(request):
 class SessionBalanceView(generic.base.TemplateView):
     def get(self, request):
         return HttpResponse(request.session.get("balance", 10000))
+
+# Get the price and change of all the stocks in the portfolio
+class PricesView(generic.base.TemplateView):
+    def get(self, request):
+        # Add the current balance with the value of each stock to calculate the user's net worth
+        net_worth = request.session.get("balance", 10000)
+
+        # Keep each stock price and change up-to-date
+        for stock in Stock.objects.all():
+            profile = api.get_company_profile(stock.ticker)[0]
+            stock.price = profile["price"]
+            stock.change = profile["changes"]
+            stock.save()
+            net_worth += stock.shares * stock.price
+
+        return JsonResponse({
+            "netWorth": net_worth,
+            # Only retrieve the price and change column and convert the QuerySet to a list
+            "prices": list(Stock.objects.all().values("price", "change"))
+        })

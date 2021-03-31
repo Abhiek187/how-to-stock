@@ -31,7 +31,11 @@
     </div>
     <div class="net-worth-container">
         <h1>Net Worth</h1>
-        <h2 class="net-worth">${{ net_worth|money_commas }}</h2>
+        <!-- Show a spinner while the net worth is being calculated -->
+        <div class="net-worth-spinner spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <h2 class="net-worth"></h2>
     </div>
 </div>
 <hr>
@@ -58,8 +62,16 @@
                 <td class="stock-ticker">{{ stock.ticker }}</td>
                 <td class="stock-name">{{ stock.name }}</td>
                 <td class="stock-shares">{{ stock.shares }}</td>
-                <td class="stock-price">${{ stock.price }}</td>
-                <td class="stock-change">{{ stock.change }}</td>
+                <td class="stock-price">
+                    <div class="price-spinner spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </td>
+                <td class="stock-change">
+                    <div class="change-spinner spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

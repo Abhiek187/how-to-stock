@@ -9,5 +9,6 @@ urlpatterns = [
     path("details/<ticker>", views.get_stock_details, name="detail"),
     path("flashcards", views.FlashCardsView.as_view(), name="flashcards"),
     path("portfolio", views.get_portfolio, name="portfolio"),
-    path("session/balance", views.SessionBalanceView.as_view(), name="balance")
+    path("session/balance", views.SessionBalanceView.as_view(), name="balance"),
+    path("api/prices", views.PricesView.as_view(), name="prices")
 ]
