@@ -1,6 +1,5 @@
-.portfolio,
-.roi {
-    color: #00e; /* improve the contrast on the alert backgrounds */
+.roi-alert a {
+    color: #00e; /* improve the contrast of popovers on the alert background */
 }
 
 .money-container {

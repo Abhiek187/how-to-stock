@@ -48,6 +48,10 @@
     margin-bottom: 0.5rem;
 }
 
+.invest-alert a {
+    color: #00e; /* improve the contrast of popovers on the alert background */
+}
+
 .stock-form {
     display: flex;
     justify-content: center;
