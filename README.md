@@ -8,13 +8,13 @@ This is a web service that serves as an introduction to the stock market for use
 
 The app is split up into 4 sections:
 
-- Screener: This is where users can filter stocks by country, price, sector, and exchange.
+- **Screener:** This is where users can filter stocks by country, price, sector, and exchange.
 
-- Flashcards: Users can view a list of financial terms used throughout the app.
+- **Flashcards:** Users can view a list of financial terms used throughout the app.
 
-- Portfolio: Users can view a list of stocks they've invested in. They start off with $10,000 and can view how their net worth changes each day.
+- **Portfolio:** Users can view a list of stocks they've invested in. They start off with $10,000 and can view how their net worth changes each day.
 
-- Details: This page shows stock information about a company as well as a detailed analysis of the stock price for short and long-term investments. This is also where users can trade stocks.
+- **Details:** This page shows stock information about a company as well as a detailed analysis of the stock price for short and long-term investments. This is also where users can trade stocks.
 
 ## Dependencies
 
