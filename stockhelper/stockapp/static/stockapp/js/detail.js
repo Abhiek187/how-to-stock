@@ -178,6 +178,18 @@ const longTermData = historyData.slice(0, longTermLength).reverse();
 const longTermDates = longTermData.map(data => data.date);
 const longTermPrices = longTermData.map(data => data.close);
 
+// Alert elements
+const investAlert = document.querySelector(".invest-alert");
+const trader = document.querySelector(".trader");
+const broker = document.querySelector(".broker");
+const marketOrder = document.querySelector(".market-order");
+const investAdvice = document.querySelector(".invest-advice");
+
+// Initialize the term popovers
+new bootstrap.Popover(trader);
+new bootstrap.Popover(broker);
+new bootstrap.Popover(marketOrder);
+
 // Analytical functions and calculations
 const sum = arr => arr.reduce((e1, e2) => e1 + e2, 0);
 
@@ -240,8 +252,11 @@ const bayesProb = (predictedPrice, pastPrices, stats) => {
 };
 
 const displayProb = (prob, stats, dom) => {
-    dom.innerHTML =
-        `<strong>Predicted Price:</strong> $${round(stats.mean, 2)} (Probability: ${prob})`;
+    if (dom === shortPredictDom) {
+        console.log(`Short-Term Predicted Price: $${round(stats.mean, 2)} (Probability: ${prob})`);
+    } else {
+        console.log(`Long-Term Predicted Price: $${round(stats.mean, 2)} (Probability: ${prob})`);
+    }
 };
 
 const predictPrice = y => {
@@ -277,8 +292,6 @@ const displayPred = (m, n, b, dom) => {
         });
         dom.classList.add("text-success");
     }
-
-    dom.ariaLabel = dom.textContent + dom.title;
 };
 
 // Compute and display the stats for the short-term and long-term
@@ -288,15 +301,54 @@ const longTermStats = getStats(longTermPrices);
 displayStats(longTermStats, longStatsDom);
 
 // Calculate the most likely price the next day
-// const shortTermProb = bayesProb(shortTermStats.mean, shortTermPrices, shortTermStats);
-// displayProb(shortTermProb, shortTermStats, shortPredictDom);
-// const longTermProb = bayesProb(longTermStats.mean, longTermPrices, longTermStats);
-// displayProb(longTermProb, longTermStats, longPredictDom);
+const shortTermProb = bayesProb(shortTermStats.mean, shortTermPrices, shortTermStats);
+displayProb(shortTermProb, shortTermStats, shortPredictDom);
+const longTermProb = bayesProb(longTermStats.mean, longTermPrices, longTermStats);
+displayProb(longTermProb, longTermStats, longPredictDom);
 
 const [shortM, shortB, shortLine] = predictPrice(shortTermPrices);
 displayPred(shortM, shortTermLength, shortB, shortPredictDom);
 const [longM, longB, longLine] = predictPrice(longTermPrices);
 displayPred(longM, longTermLength, longB, longPredictDom);
+
+// Determine the risk based on the standard deviation in the short-term and long-term
+if (shortTermStats.standardDeviation <= 10 && longTermStats.standardDeviation <= 10) {
+    investAdvice.innerHTML = investAdvice.innerHTML.replace("[level]", "low");
+} else if (shortTermStats.standardDeviation > 10 && longTermStats.standardDeviation > 10) {
+    investAdvice.innerHTML = investAdvice.innerHTML.replace("[level]", "high");
+} else {
+    investAdvice.innerHTML = investAdvice.innerHTML.replace("[level]", "moderate");
+}
+
+// Give a recommendation based on where the stock price is trending (buy low, sell high)
+if (shortM <= 0 && longM > 0) {
+    // If the latest stock price is low but the trend line is positive --> buy
+    investAdvice.innerHTML = investAdvice.innerHTML.replace("[advice]", "The price is low now, " +
+        "but the general trend is positive, so I recommend buying these stocks.");
+    investAlert.classList.add("alert-success");
+} else if (shortM <= 0 && longM <= 0) {
+    // If the stock price is low and the trend line is negative --> ignore/sell everything
+    investAdvice.innerHTML = investAdvice.innerHTML.replace("[advice]",
+        "This stock is going down in value, so I recommend ignoring this stock or selling " +
+        "everything if you still have shares.");
+    investAlert.classList.add("alert-danger");
+} else if (shortM > 0 && longM <= 0) {
+    // If the stock price is high and the trend line is negative --> sell
+    investAdvice.innerHTML = investAdvice.innerHTML.replace("[advice]", "The price is high now, " +
+        "but the general trend is negative, so I recommend selling these stocks.");
+    investAlert.classList.add("alert-warning");
+} else {
+    // If the stock price is high and the trend line is positive --> buy/hold
+    investAdvice.innerHTML = investAdvice.innerHTML.replace("[advice]", "This stock is rising in " +
+        "value, so I recommend buying this stock or holding if you already own shares.");
+    investAlert.classList.add("alert-success");
+}
+
+// Access the volatility and risk now that the innerHTML has been updated
+const volatility = document.querySelector(".volatility");
+const risk = document.querySelector(".risk");
+new bootstrap.Popover(volatility);
+new bootstrap.Popover(risk);
 
 // Chart for the short-term data
 const shortChart = new Chart(shortCtx, {

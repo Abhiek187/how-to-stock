@@ -118,7 +118,6 @@ def get_stock_details(request, ticker):
         "marketExchange": Card.objects.get(word="Market Exchange"),
         "marketOrder": Card.objects.get(word="Market Order"),
         "risk": Card.objects.get(word="Risk"),
-        "sharePrice": Card.objects.get(word="Share Price"),
         "trader": Card.objects.get(word="Trader"),
         "volatility": Card.objects.get(word="Volatility"),
         "volume": Card.objects.get(word="Volume")

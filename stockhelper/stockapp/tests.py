@@ -116,6 +116,7 @@ class DetailViewTests(TestCase):
         self.assertContains(response, "long-chart")
         self.assertContains(response, "long-predict")
         self.assertContains(response, "long-mean")
+        self.assertContains(response, "market order")
         self.assertContains(response, "Transaction")
         self.assertContains(response, "Shares")
         self.assertContains(response, "New Balance:")
@@ -127,7 +128,7 @@ class DetailViewTests(TestCase):
         self.assertEqual(response.context["balance"], self.session["balance"])
         self.assertEqual({
             "beta", "broker", "dividendYield", "marketCap", "marketExchange", "marketOrder", "risk",
-            "sharePrice", "trader", "volatility", "volume"
+            "trader", "volatility", "volume"
         }, response.context["terms"].keys())
 
     def test_buy_new_stock(self):

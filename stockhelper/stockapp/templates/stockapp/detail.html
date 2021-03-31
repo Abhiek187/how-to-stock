@@ -103,6 +103,27 @@
         </div>
     </div>
 </div>
+<!-- Alert the user on whether they should trade stocks -->
+<div class="invest-alert alert alert-dismissible fade show mx-3" role="alert">
+    <p class="invest-info">
+        Now that you have looked at the details, you as the
+        <a href="javascript:" class="trader help" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="top" title="{{ terms.trader.word }}" data-bs-content="{{ terms.trader.definition }}"> trader </a>
+        can trade stocks through a
+        <a href="javascript:" class="broker help" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="top" title="{{ terms.broker.word }}" data-bs-content="{{ terms.broker.definition }}"> broker</a>
+        . To simplify things, this website is the broker and the exchange occurs immediately (making this a
+        <a href="javascript:" class="market-order help" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="top" title="{{ terms.marketOrder.word }}" data-bs-content="{{ terms.marketOrder.definition }}"> market order</a>
+        ).
+    </p>
+    <!-- The text in [] are placeholders and will be replaced in JS -->
+    <p class="invest-advice">
+        Based on the
+        <a href="javascript:" class="volatility help" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="top" title="{{ terms.volatility.word }}" data-bs-content="{{ terms.volatility.definition }}"> volatility </a>
+        of the stocks, investing would be a [level]
+        <a href="javascript:" class="risk help" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="top" title="{{ terms.risk.word }}" data-bs-content="{{ terms.risk.definition }}"> risk</a>
+        . [advice]
+    </p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 {% csrf_token %}
 <!-- Form to buy or sell stocks -->
 <form class="stock-form row row-cols-lg-auto g-3">
