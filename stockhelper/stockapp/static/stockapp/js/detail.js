@@ -307,9 +307,10 @@ const longTermProb = bayesProb(longTermStats.mean, longTermPrices, longTermStats
 displayProb(longTermProb, longTermStats, longPredictDom);
 
 const [shortM, shortB, shortLine] = predictPrice(shortTermPrices);
-displayPred(shortM, shortTermLength, shortB, shortPredictDom);
+displayPred(shortM, shortTermData.length, shortB, shortPredictDom);
 const [longM, longB, longLine] = predictPrice(longTermPrices);
-displayPred(longM, longTermLength, longB, longPredictDom);
+// longTermData.length may be less than longTermLength
+displayPred(longM, longTermData.length, longB, longPredictDom);
 
 // Determine the risk based on the standard deviation in the short-term and long-term
 if (shortTermStats.standardDeviation <= 10 && longTermStats.standardDeviation <= 10) {
