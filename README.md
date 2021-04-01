@@ -2,7 +2,7 @@
 
 <img src="graphs.png" alt="stock graphs" width="1000">
 
-This is a web service that serves as an introduction to the stock market for users new to finance. Users can learn about various financial terms, simulate trading stocks using a virtual balance, and view stock predictions based on probability and statistical data.
+This web service serves as an introduction to the stock market for users new to finance. Users can learn about various financial terms, simulate trading stocks using a virtual balance, and view stock predictions based on probability and statistical data.
 
 ## Features
 
