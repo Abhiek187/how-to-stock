@@ -10,6 +10,7 @@ from .models import Card, Stock
 from http import HTTPStatus
 import json
 
+# Home view
 def get_index(request):
     # Aggregate all the terms needed for each page
     terms = {
@@ -18,6 +19,7 @@ def get_index(request):
 
     return render(request, "stockapp/index.html", {"terms": terms})
 
+# Screener view
 def get_stocks(request):
     if request.method == "POST":
         # Keep the form as is after submitting
@@ -55,6 +57,7 @@ def get_stocks(request):
         "terms": terms
     })
 
+# Details view
 def get_stock_details(request, ticker):
     if request.method == "POST":
         # Add the stock to the Stocks object
@@ -133,6 +136,7 @@ def get_stock_details(request, ticker):
         "terms": terms
     })
 
+# Flashcards view
 class FlashCardsView(generic.ListView):
     model = Card
     template_name = "stockapp/flashcards.html"
@@ -144,6 +148,7 @@ class FlashCardsView(generic.ListView):
         """
         return Card.objects.order_by("word")
 
+# Portfolio view
 def get_portfolio(request):
     # The starting balance is $10,000
     if "balance" not in request.session:
