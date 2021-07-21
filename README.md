@@ -24,12 +24,6 @@ The front-end is created in HTML, CSS, & JS and the back-end is created in [Djan
 
 After cloning this repo, run the following commands:
 
-1. Create a folder for the virtual environment: `python3 -m venv <folder-name>`
-2. Activate the virtual environment: `source <folder-name>/bin/activate`
-3. Install all python dependencies: `pip3 install -r requirements.txt`
-4. Head into the stockhelper directory: `cd stockhelper`
-5. Create the SQLite databases: `python3 manage.py migrate`
-6. Load the flashcards data: `python3 manage.py loaddata cards.json`
-7. Run the Django server: `python3 manage.py runserver`
-8. Open `localhost:8000/stockapp` in your browser.
-9. When done, press `CTRL/CMD-C` and deactivate the virtual environment: `deactivate`
+1. Create a virtual environment, install all dependencies, and run the Django server: `./start.sh` or `source start.sh` (See step 3 for the differences.)
+2. Open `localhost:8000/stockapp` in your browser.
+3. When done, press `CTRL/CMD-C` to stop the Django server. If you used `./start.sh`, you will return to your current shell. But if you used `source start.sh`, you will need to deactivate the virtual environment: `deactivate`
