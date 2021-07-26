@@ -22,8 +22,18 @@ The front-end is created in HTML, CSS, & JS and the back-end is created in [Djan
 
 ## How to Run
 
-After cloning this repo, run the following commands:
+### Manual
+
+After cloning this repo, run the following:
 
 1. Create a virtual environment, install all dependencies, and run the Django server: `./start.sh` or `source start.sh` (See step 3 for the differences.)
 2. Open `localhost:8000/stockapp` in your browser.
 3. When done, press `CTRL/CMD-C` to stop the Django server. If you used `./start.sh`, you will return to your current shell. But if you used `source start.sh`, you will need to deactivate the virtual environment: `deactivate`
+
+### Docker
+
+Make sure [Docker](https://www.docker.com/products/docker-desktop) and [Docker Compose](https://docs.docker.com/compose/install/) are installed. Then run the following:
+
+1. Start up a container for this app: `docker-compose up -d`
+2. Once everything's installed, open `localhost:8000/stockapp` in your browser.
+3. When done, shut down and clean up the container: `docker-compose down`
