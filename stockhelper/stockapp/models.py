@@ -1,9 +1,21 @@
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 import uuid
 
 
+# The user (extends Django's existing User object)
+class User(AbstractUser):
+    # Start off with a default balance of $10,000
+    balance = models.DecimalField(
+        max_digits=7, decimal_places=2, default=10000)
+
+
 # The user's stock portfolio
 class Stock(models.Model):
+    # One user can own many stocks
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     ticker = models.CharField(max_length=10, primary_key=True, default="")
     name = models.CharField(max_length=100, default="")
     shares = models.PositiveIntegerField(default=0)
@@ -11,7 +23,7 @@ class Stock(models.Model):
     change = models.FloatField(default=0)
 
     def __str__(self):
-        return f"{self.ticker} - {self.name}"
+        return f"{self.user}: {self.ticker} - {self.name}"
 
 
 # Object representing the flashcards

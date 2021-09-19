@@ -1,0 +1,15 @@
+{% extends "stockapp/index.html" %}
+{% load static %}
+
+{% block title %}Logout | How to Stock{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block content %}
+<p>Logged out!</p>
+<a href="{% url 'login'%}">Click here to login again.</a>
+{% endblock %}
