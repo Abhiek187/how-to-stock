@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import User, Card, Stock
+from .models import Card, Stock, User
 
 
 class CustomUserAdmin(admin.ModelAdmin):

@@ -13,10 +13,12 @@ class User(AbstractUser):
 
 # The user's stock portfolio
 class Stock(models.Model):
+    # UUIDs are more secure than the default id
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # One user can own many stocks
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
-    ticker = models.CharField(max_length=10, primary_key=True, default="")
+    ticker = models.CharField(max_length=10, default="")
     name = models.CharField(max_length=100, default="")
     shares = models.PositiveIntegerField(default=0)
     price = models.DecimalField(max_digits=7, decimal_places=2, default=0)
@@ -28,7 +30,6 @@ class Stock(models.Model):
 
 # Object representing the flashcards
 class Card(models.Model):
-    # UUIDs are more secure than the default id
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     word = models.CharField(max_length=50)
     definition = models.TextField()
