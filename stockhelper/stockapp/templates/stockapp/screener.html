@@ -22,23 +22,31 @@
         <h3 class="mb-3">Filter Stock Options</h3>
         <div class="row mb-3">
             {{ form.country.errors }}
-            <label for="{{ form.country.id_for_label }}" class="col-auto form-label m-auto">Country:</label>
+            <label for="{{ form.country.id_for_label }}" class="col-auto form-label m-auto">
+                {{ form.country.label }}:
+            </label>
             {{ form.country }}
         </div>
         <div class="row mb-3">
             {{ form.price_value.errors }}
-            <label for="{{ form.price_value.id_for_label }}" class="col-auto form-label m-auto">Price:</label>
+            <label for="{{ form.price_value.id_for_label }}" class="col-auto form-label m-auto">
+                Price:
+            </label>
             {{ form.price_relation }}
             {{ form.price_value }}
         </div>
         <div class="row mb-3">
             {{ form.sector.errors }}
-            <label for="{{ form.sector.id_for_label }}" class="col-auto form-label m-auto">Sector:</label>
+            <label for="{{ form.sector.id_for_label }}" class="col-auto form-label m-auto">
+                {{ form.sector.label }}:
+            </label>
             {{ form.sector }}
         </div>
         <div class="row mb-3">
             {{ form.exchange.errors }}
-            <label for="{{ form.exchange.id_for_label }}" class="col-auto form-label m-auto">Exchange:</label>
+            <label for="{{ form.exchange.id_for_label }}" class="col-auto form-label m-auto">
+                {{ form.exchange.label }}:
+            </label>
             {{ form.exchange }}
         </div>
         <!-- Alerts that show whenever the appropriate exchange option is selected -->
