@@ -42,7 +42,25 @@
                     <li class="nav-item">
                         <a class="link-portfolio nav-link" href="{% url 'stockapp:portfolio' %}">Portfolio</a>
                     </li>
+                    <!-- <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            admin
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                        </ul>
+                    </li> -->
                 </ul>
+                <span class="nav-item dropdown">
+                    <a class="dropdown-user nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        admin
+                    </a>
+                    <ul class="dropdown-list dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                    </ul>
+                </span>
             </div>
         </div>
     </nav>

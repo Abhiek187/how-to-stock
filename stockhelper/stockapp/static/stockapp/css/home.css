@@ -5,6 +5,19 @@ body {
     flex-direction: column;
 }
 
+/* Match the color of the other nav items */
+.dropdown-user {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.dropdown-user:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+.dropdown-list {
+    min-width: 0; /* don't extend the dropdown menu beyond the right of the screen */
+}
+
 .main-content {
     /* Place the footer at the bottom of the page */
     min-height: calc(100vh - 80px);
