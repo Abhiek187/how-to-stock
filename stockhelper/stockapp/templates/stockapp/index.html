@@ -5,6 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="A stock trading app designed for beginners">
     <!-- Allow the title to be overriden based on the current page -->
     <title>{% block title %}Home{% endblock %} | How to Stock</title>
     <link rel="icon" type="image/png" href="{% static 'stockapp/icon/favicon.ico' %}">
@@ -42,25 +43,23 @@
                     <li class="nav-item">
                         <a class="link-portfolio nav-link" href="{% url 'stockapp:portfolio' %}">Portfolio</a>
                     </li>
-                    <!-- <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            admin
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-                        </ul>
-                    </li> -->
                 </ul>
+                <!-- If the user is logged in, show their username, else show the Login button -->
+                {% if user.is_authenticated %}
                 <span class="nav-item dropdown">
                     <a class="dropdown-user nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        admin
+                        {{ user.username }}
                     </a>
                     <ul class="dropdown-list dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                     </ul>
                 </span>
+                {% else %}
+                <span class="nav-item">
+                    <a class="link-login nav-link" href="{% url 'login' %}">Login</a>
+                </span>
+                {% endif %}
             </div>
         </div>
     </nav>

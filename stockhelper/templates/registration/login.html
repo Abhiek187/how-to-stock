@@ -1,47 +1,46 @@
 {% extends "stockapp/index.html" %}
-{% load static %}
 
 {% block title %}Login{% endblock %}
 
-{% block css %}
-{% endblock %}
-
-{% block js %}
-{% endblock %}
-
 {% block content %}
 
+{# Displays if the form has errors #}
 {% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
+<p class="text-danger mt-3">
+    Please enter a correct username and password. Note that both fields may be case-sensitive.
+</p>
 {% endif %}
 
+{# Displays if the user tries to access a page, but needs to login with the appropriate credentials #}
 {% if next %}
 {% if user.is_authenticated %}
-<p>Your account doesn't have access to this page. To proceed,
+<p class="text-danger mt-3">Your account doesn't have access to this page. To proceed,
     please login with an account that has access.</p>
 {% else %}
-<p>Please login to see this page.</p>
+<p class="text-danger mt-3">Please login to continue.</p>
 {% endif %}
 {% endif %}
 
 <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
-    <table>
-        <tr>
-            <td>{{ form.username.label_tag }}</td>
-            <td>{{ form.username }}</td>
-        </tr>
-        <tr>
-            <td>{{ form.password.label_tag }}</td>
-            <td>{{ form.password }}</td>
-        </tr>
-    </table>
-
-    <input type="submit" value="login">
+    <!-- Hardcoded the username and password form elements to add additional Bootstrap classes -->
+    <div class="my-3">
+        <label for="id_username" class="form-label">Username:</label>
+        <input type="text" class="form-control mx-auto" name="username" autofocus autocapitalize="none"
+            autocomplete="username" maxlength="150" required id="id_username" style="max-width: 300px;">
+        <div class="form-text">{{ form.username.errors }}</div>
+    </div>
+    <div class="mb-3">
+        <label for="id_password" class="form-label">Password:</label>
+        <input type="password" class="form-control mx-auto" name="password" autocomplete="current-password" required
+            id="id_password" style="max-width: 300px;">
+        <div class="form-text">{{ form.password.errors }}</div>
+    </div>
+    <button type="submit" class="btn btn-success">Login</button>
     <input type="hidden" name="next" value="{{ next }}">
 </form>
 
 {# Assumes you setup the password_reset view in your URLconf #}
-<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+<p class="mt-2"><a href="{% url 'password_reset' %}">Lost password?</a></p>
 
 {% endblock %}

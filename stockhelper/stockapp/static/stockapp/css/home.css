@@ -6,11 +6,13 @@ body {
 }
 
 /* Match the color of the other nav items */
-.dropdown-user {
+.dropdown-user,
+.link-login {
     color: rgba(255, 255, 255, 0.8);
 }
 
-.dropdown-user:hover {
+.dropdown-user:hover,
+.link-login:hover {
     color: rgba(255, 255, 255, 1);
 }
 

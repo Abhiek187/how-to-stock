@@ -21,7 +21,10 @@ def get_index(request):
         "equity": Card.objects.get(word="Equity")
     }
 
-    return render(request, "stockapp/index.html", {"terms": terms})
+    return render(request, "stockapp/index.html", {
+        "terms": terms,
+        "user": request.user
+    })
 
 
 # Screener view
