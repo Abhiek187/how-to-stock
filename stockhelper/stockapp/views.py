@@ -183,7 +183,7 @@ def get_portfolio(request):
 
 # A view only meant to retrieve the balance through a GET request
 # https://stackoverflow.com/a/36073883
-class SessionBalanceView(generic.base.TemplateView):
+class SessionBalanceView(LoginRequiredMixin, generic.base.TemplateView):
     def get(self, request):
         return HttpResponse(request.user.balance)
 
