@@ -110,6 +110,11 @@ class DetailViewTests(TestCase):
         return self.client.post(reverse("stockapp:detail", args=("PRU",)),
                                 json.dumps(p_copy), content_type="application/json")
 
+    def test_redirect_without_login(self):
+        # Check that the view redirects to the login screen if the user isn't logged in
+        response = self.client.get(reverse("stockapp:detail", args=("Pru",)))
+        self.assertEqual(response.status_code, 302)
+
     def test_view_renders(self):
         # Check that the view renders properly
         self.client.login(username=USERNAME, password=PASSWORD)
@@ -268,6 +273,11 @@ class PortfolioViewTests(TestCase):
         self.user = get_user_model().objects.create_user(
             username=USERNAME, password=PASSWORD)
 
+    def test_redirect_without_login(self):
+        # Check that the view redirects to the login screen if the user isn't logged in
+        response = self.client.get(reverse("stockapp:portfolio"))
+        self.assertEqual(response.status_code, 302)
+
     def test_view_renders(self):
         # Check that the view renders properly
         self.client.login(username=USERNAME, password=PASSWORD)
@@ -332,6 +342,11 @@ class BalanceViewTests(TestCase):
         self.user = get_user_model().objects.create_user(
             username=USERNAME, password=PASSWORD)
 
+    def test_redirect_without_login(self):
+        # Check that the view redirects to the login screen if the user isn't logged in
+        response = self.client.get(reverse("stockapp:balance"))
+        self.assertEqual(response.status_code, 302)
+
     def test_view_renders(self):
         # Check that the view renders properly
         self.client.login(username=USERNAME, password=PASSWORD)
@@ -346,6 +361,11 @@ class PricesViewTests(TestCase):
         # Initialize the balance to $10,000 before each test
         self.user = get_user_model().objects.create_user(
             username=USERNAME, password=PASSWORD)
+
+    def test_redirect_without_login(self):
+        # Check that the view redirects to the login screen if the user isn't logged in
+        response = self.client.get(reverse("stockapp:prices"))
+        self.assertEqual(response.status_code, 302)
 
     def test_view_renders(self):
         # Check that the view renders properly
