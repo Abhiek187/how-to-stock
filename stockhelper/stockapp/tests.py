@@ -26,6 +26,7 @@ class HomeViewTests(TestCase):
         self.assertContains(response, "navbar")
         self.assertContains(
             response, "<a class=\"link-home nav-link active\" aria-current=\"page\"")
+        self.assertContains(response, "Login")
         # Check that the relevant content on the home page is present
         self.assertContains(response, "Welcome to How to Stock!")
         self.assertContains(response, "<strong>Home</strong>")
@@ -48,6 +49,7 @@ class ScreenerViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         # Check that the title is correct
         self.assertContains(response, "<title>Screener | How to Stock</title>")
+        self.assertContains(response, "Login")
         # Check that the relevant content on the screener page is present
         self.assertContains(response, "</form>")
         self.assertContains(response, "Results will show up here...")
@@ -127,6 +129,7 @@ class DetailViewTests(TestCase):
         # Check that the title is correct
         self.assertContains(
             response, "<title>Details - Prudential Financial, Inc. | How to Stock</title>")
+        self.assertContains(response, USERNAME)
         # Check that the relevant content on the details page is present
         self.assertContains(response, "history-data")
         self.assertContains(response, "PRU")
@@ -261,6 +264,7 @@ class FlashcardsViewTests(TestCase):
         # Check that the title is correct
         self.assertContains(
             response, "<title>Flashcards | How to Stock</title>")
+        self.assertContains(response, "Login")
         # Check that the relevant content on the flashcards page is present
         self.assertContains(response, "description")
         # Check that the correct context data is passed
@@ -305,6 +309,7 @@ class PortfolioViewTests(TestCase):
         # Check that the title is correct
         self.assertContains(
             response, "<title>Portfolio | How to Stock</title>")
+        self.assertContains(response, USERNAME)
         # Check that the relevant content on the portfolio page is present
         self.assertContains(response, "alert-info")
         self.assertContains(response, "Balance")
