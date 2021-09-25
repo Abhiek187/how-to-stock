@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from .forms import ScreenerForm
-from .models import Card, Stock, User
+from .models import Card, Portfolio, Stock, User
 import json
 
 USERNAME = "foo"
@@ -98,11 +98,15 @@ class DetailViewTests(TestCase):
             "change": -1.12
         }
 
-    def create_stock(self):
-        # Don't alter self.stock_purchase
-        p_copy = self.stock_purchase.copy()
-        del p_copy["isBuying"]  # isBuying isn't part of the Stock model
-        return Stock.objects.create(**p_copy)
+        stock_keys = ["ticker", "name", "price", "change"]
+        stock_dict = {k: self.stock_purchase[k]
+                      for k in self.stock_purchase.keys() if k in stock_keys}
+        self.test_stock = Stock.objects.create(**stock_dict)
+
+    def create_portfolio(self):
+        # Only keep the fields in self.stock_purchase that are Portfolio model
+        return Portfolio.objects.create(user=self.stock_purchase["user"], stock=self.test_stock,
+                                        shares=self.stock_purchase["shares"])
 
     def send_post_request(self):
         p_copy = self.stock_purchase.copy()
@@ -158,7 +162,9 @@ class DetailViewTests(TestCase):
         self.assertEqual(User.objects.get(username=USERNAME).balance,
                          self.user.balance - self.stock_purchase["shares"] * self.stock_purchase["price"])
         self.assertQuerysetEqual(Stock.objects.all(), [
-                                 f"<Stock: {USERNAME}: {self.stock_purchase['ticker']} - {self.stock_purchase['name']}>"])
+                                 f"<Stock: {self.stock_purchase['ticker']} - {self.stock_purchase['name']}>"])
+        self.assertQuerysetEqual(Portfolio.objects.all(), [
+                                 f"<Portfolio: {USERNAME}: {self.stock_purchase['shares']} shares of {self.test_stock}>"])
 
     def test_sell_new_stock(self):
         # Check that selling a new stock returns an error
@@ -171,26 +177,31 @@ class DetailViewTests(TestCase):
                              "status": "failure", "maxShares": 0})
         self.assertEqual(User.objects.get(
             username=USERNAME).balance, self.user.balance)
-        self.assertQuerysetEqual(Stock.objects.all(), [])
+        self.assertQuerysetEqual(Stock.objects.all(), [
+                                 f"<Stock: {self.stock_purchase['ticker']} - {self.stock_purchase['name']}>"])
+        self.assertQuerysetEqual(Portfolio.objects.all(), [])
 
     def test_buy_more_stock(self):
         # Check that the number of shares increased after buying more shares of an existing stock
         self.client.login(username=USERNAME, password=PASSWORD)
-        old_stock = self.create_stock()
+        old_portfolio = self.create_portfolio()
         response = self.send_post_request()
 
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, {"status": "success"})
         self.assertEqual(User.objects.get(username=USERNAME).balance, self.user.balance -
                          self.stock_purchase["shares"] * self.stock_purchase["price"])
-        new_stock = Stock.objects.get(user=self.user, ticker="PRU")
-        self.assertEqual(new_stock.shares, old_stock.shares +
+        self.assertQuerysetEqual(Stock.objects.all(), [
+                                 f"<Stock: {self.stock_purchase['ticker']} - {self.stock_purchase['name']}>"])
+        new_portfolio = Portfolio.objects.get(
+            user=self.user, stock=self.test_stock)
+        self.assertEqual(new_portfolio.shares, old_portfolio.shares +
                          self.stock_purchase["shares"])
 
     def test_sell_some_stock(self):
         # Check that the number of shares decreased after selling some shares of an existing stock
         self.client.login(username=USERNAME, password=PASSWORD)
-        old_stock = self.create_stock()
+        old_portfolio = self.create_portfolio()
         self.stock_purchase["isBuying"] = False
         self.stock_purchase["shares"] = 5
         response = self.send_post_request()
@@ -199,14 +210,17 @@ class DetailViewTests(TestCase):
         self.assertJSONEqual(response.content, {"status": "success"})
         self.assertEqual(User.objects.get(username=USERNAME).balance, self.user.balance +
                          self.stock_purchase["shares"] * self.stock_purchase["price"])
-        new_stock = Stock.objects.get(user=self.user, ticker="PRU")
-        self.assertEqual(new_stock.shares, old_stock.shares -
+        self.assertQuerysetEqual(Stock.objects.all(), [
+                                 f"<Stock: {self.stock_purchase['ticker']} - {self.stock_purchase['name']}>"])
+        new_portfolio = Portfolio.objects.get(
+            user=self.user, stock=self.test_stock)
+        self.assertEqual(new_portfolio.shares, old_portfolio.shares -
                          self.stock_purchase["shares"])
 
     def test_sell_all_stock(self):
         # Check that the Stock object is deleted after selling all the shares
         self.client.login(username=USERNAME, password=PASSWORD)
-        self.create_stock()
+        self.create_portfolio()
         self.stock_purchase["isBuying"] = False
         self.stock_purchase["shares"] = 10
         response = self.send_post_request()
@@ -215,23 +229,28 @@ class DetailViewTests(TestCase):
         self.assertJSONEqual(response.content, {"status": "success"})
         self.assertEqual(User.objects.get(username=USERNAME).balance, self.user.balance +
                          self.stock_purchase["shares"] * self.stock_purchase["price"])
-        self.assertQuerysetEqual(Stock.objects.all(), [])
+        self.assertQuerysetEqual(Stock.objects.all(), [
+                                 f"<Stock: {self.stock_purchase['ticker']} - {self.stock_purchase['name']}>"])
+        self.assertQuerysetEqual(Portfolio.objects.all(), [])
 
     def test_sell_too_much_stock(self):
         # Check that selling too many stocks results in an error
         self.client.login(username=USERNAME, password=PASSWORD)
-        old_stock = self.create_stock()
+        old_portfolio = self.create_portfolio()
         self.stock_purchase["isBuying"] = False
         self.stock_purchase["shares"] = 15
         response = self.send_post_request()
 
         self.assertEqual(response.status_code, 400)
         self.assertJSONEqual(response.content, {
-                             "status": "failure", "maxShares": old_stock.shares})
+                             "status": "failure", "maxShares": old_portfolio.shares})
         self.assertEqual(User.objects.get(
             username=USERNAME).balance, self.user.balance)
-        new_stock = Stock.objects.get(user=self.user, ticker="PRU")
-        self.assertEqual(new_stock.shares, old_stock.shares)
+        self.assertQuerysetEqual(Stock.objects.all(), [
+                                 f"<Stock: {self.stock_purchase['ticker']} - {self.stock_purchase['name']}>"])
+        new_portfolio = Portfolio.objects.get(
+            user=self.user, stock=self.test_stock)
+        self.assertEqual(new_portfolio.shares, old_portfolio.shares)
 
 
 class FlashcardsViewTests(TestCase):
@@ -294,18 +313,24 @@ class PortfolioViewTests(TestCase):
         self.assertContains(response, "Nothing yet...start investing!")
         # Check that the correct context data is passed
         self.assertEqual(response.context["balance"], self.user.balance)
-        self.assertQuerysetEqual(response.context["stocks"], [])
+        self.assertQuerysetEqual(response.context["portfolios"], [])
         self.assertEqual({"portfolio", "roi", "sharePrice"},
                          response.context["terms"].keys())
 
     def test_stocks_show(self):
-        # Check that the following Stock objects are rendered as a table
-        stock1 = Stock.objects.create(user=self.user, ticker="FB", name="Facebook Inc", shares=5,
+        # Check that the following Stock and Profile objects are rendered as a table
+        stock1 = Stock.objects.create(ticker="FB", name="Facebook Inc",
                                       price=300.00, change=-3.43)
-        stock2 = Stock.objects.create(user=self.user, ticker="AMZN", name="Amazon.com Inc", shares=1,
+        portfolio1 = Portfolio.objects.create(
+            user=self.user, stock=stock1, shares=5)
+        stock2 = Stock.objects.create(ticker="AMZN", name="Amazon.com Inc",
                                       price=3000.00, change=-35.91)
-        stock3 = Stock.objects.create(user=self.user, ticker="GOOGL", name="Alphabet Inc", shares=2,
+        portfolio2 = Portfolio.objects.create(
+            user=self.user, stock=stock2, shares=1)
+        stock3 = Stock.objects.create(ticker="GOOGL", name="Alphabet Inc",
                                       price=2000.00, change=-3.73)
+        portfolio3 = Portfolio.objects.create(
+            user=self.user, stock=stock3, shares=2)
 
         self.client.login(username=USERNAME, password=PASSWORD)
         response = self.client.get(reverse("stockapp:portfolio"))
@@ -313,27 +338,40 @@ class PortfolioViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, stock1.ticker)
         self.assertContains(response, stock1.name)
-        self.assertContains(response, stock1.shares)
+        self.assertContains(response, portfolio1.shares)
         self.assertContains(response, stock2.ticker)
         self.assertContains(response, stock2.name)
-        self.assertContains(response, stock2.shares)
+        self.assertContains(response, portfolio2.shares)
         self.assertContains(response, stock3.ticker)
         self.assertContains(response, stock3.name)
-        self.assertContains(response, stock3.shares)
+        self.assertContains(response, portfolio3.shares)
         # The price and change should be loading in the background
         self.assertContains(response, "price-spinner")
         self.assertContains(response, "change-spinner")
         self.assertContains(response, "</table>")
 
         self.assertEqual(response.context["balance"], self.user.balance)
-        stock_list = [
-            f"<Stock: {USERNAME}: {stock1.ticker} - {stock1.name}>",
-            f"<Stock: {USERNAME}: {stock2.ticker} - {stock2.name}>",
-            f"<Stock: {USERNAME}: {stock3.ticker} - {stock3.name}>"
+
+        portfolio_list = [
+            str({
+                "stock__ticker": stock1.ticker,
+                "stock__name": stock1.name,
+                "shares": portfolio1.shares
+            }),
+            str({
+                "stock__ticker": stock2.ticker,
+                "stock__name": stock2.name,
+                "shares": portfolio2.shares
+            }),
+            str({
+                "stock__ticker": stock3.ticker,
+                "stock__name": stock3.name,
+                "shares": portfolio3.shares
+            })
         ]
         # Ignore the order of each list
         self.assertQuerysetEqual(
-            response.context["stocks"], stock_list, ordered=False)
+            response.context["portfolios"], portfolio_list, ordered=False)
 
 
 class BalanceViewTests(TestCase):
@@ -378,30 +416,33 @@ class PricesViewTests(TestCase):
 
     def test_stocks_show(self):
         # Check that the stock data defined below is present in the output
-        old_stock1 = Stock.objects.create(user=self.user, ticker="FB", name="Facebook Inc", shares=5,
+        old_stock1 = Stock.objects.create(ticker="FB", name="Facebook Inc",
                                           price=300.00, change=-3.43)
-        old_stock2 = Stock.objects.create(user=self.user, ticker="AMZN", name="Amazon.com Inc", shares=1,
+        portfolio1 = Portfolio.objects.create(
+            user=self.user, stock=old_stock1, shares=5)
+        old_stock2 = Stock.objects.create(ticker="AMZN", name="Amazon.com Inc",
                                           price=3000.00, change=-35.91)
-        old_stock3 = Stock.objects.create(user=self.user, ticker="GOOGL", name="Alphabet Inc", shares=2,
+        portfolio2 = Portfolio.objects.create(
+            user=self.user, stock=old_stock2, shares=1)
+        old_stock3 = Stock.objects.create(ticker="GOOGL", name="Alphabet Inc",
                                           price=2000.00, change=-3.73)
+        portfolio3 = Portfolio.objects.create(
+            user=self.user, stock=old_stock3, shares=2)
 
         self.client.login(username=USERNAME, password=PASSWORD)
         response = self.client.get(reverse("stockapp:prices"))
-        new_stock1 = Stock.objects.get(
-            user=self.user, ticker=old_stock1.ticker)
-        new_stock2 = Stock.objects.get(
-            user=self.user, ticker=old_stock2.ticker)
-        new_stock3 = Stock.objects.get(
-            user=self.user, ticker=old_stock3.ticker)
+        new_stock1 = Stock.objects.get(ticker=old_stock1.ticker)
+        new_stock2 = Stock.objects.get(ticker=old_stock2.ticker)
+        new_stock3 = Stock.objects.get(ticker=old_stock3.ticker)
 
         self.assertEqual(response.status_code, 200)
-        net_worth = (self.user.balance + old_stock1.shares * new_stock1.price
-                     + old_stock2.shares * new_stock2.price + old_stock3.shares * new_stock3.price)
-        # Convert the Decimals to strings
+        net_worth = (self.user.balance + portfolio1.shares * new_stock1.price
+                     + portfolio2.shares * new_stock2.price + portfolio3.shares * new_stock3.price)
+        # Convert the Decimals to floats
         prices = [
-            {"price": str(new_stock1.price), "change": new_stock1.change},
-            {"price": str(new_stock2.price), "change": new_stock2.change},
-            {"price": str(new_stock3.price), "change": new_stock3.change}
+            {"price": float(new_stock1.price), "change": new_stock1.change},
+            {"price": float(new_stock2.price), "change": new_stock2.change},
+            {"price": float(new_stock3.price), "change": new_stock3.change}
         ]
 
         resp = json.loads(response.content)

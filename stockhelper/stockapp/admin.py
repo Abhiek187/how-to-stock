@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Card, Stock, User
+from .models import Card, Portfolio, Stock, User
 
 
 class CustomUserAdmin(admin.ModelAdmin):
@@ -9,6 +9,7 @@ class CustomUserAdmin(admin.ModelAdmin):
                     "first_name", "last_name", "balance", "is_staff"]
 
 
-admin.site.register(User, CustomUserAdmin)
 admin.site.register(Card)
+admin.site.register(Portfolio)
 admin.site.register(Stock)
+admin.site.register(User, CustomUserAdmin)

@@ -45,7 +45,7 @@
 </div>
 <hr>
 <h1>Stocks</h1>
-{% if not stocks %}
+{% if not portfolios %}
 <p class="text-muted">Nothing yet...start investing!</p>
 {% else %}
 <div class="table-responsive">
@@ -64,11 +64,11 @@
             </tr>
         </thead>
         <tbody>
-            {% for stock in stocks %}
+            {% for portfolio in portfolios %}
             <tr class="table-row" role="link" tabindex="0">
-                <td class="stock-ticker">{{ stock.ticker }}</td>
-                <td class="stock-name">{{ stock.name }}</td>
-                <td class="stock-shares">{{ stock.shares }}</td>
+                <td class="stock-ticker">{{ portfolio.stock__ticker }}</td>
+                <td class="stock-name">{{ portfolio.stock__name }}</td>
+                <td class="stock-shares">{{ portfolio.shares }}</td>
                 <td class="stock-price">
                     <div class="price-spinner spinner-border text-primary" role="status">
                         <span class="visually-hidden">Loading...</span>
