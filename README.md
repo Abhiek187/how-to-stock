@@ -1,10 +1,42 @@
 # How to Stock
 
-<img src="graphs.png" alt="stock graphs" width="1000">
+<img src="img/graphs.png" alt="stock graphs" width="1000">
 
 This web service serves as an introduction to the stock market for users new to finance. Users can learn about various financial terms, simulate trading stocks using a virtual balance, and view stock predictions based on probability and statistical data.
 
-## Features
+## Models
+
+4 models are used: User, Stock, Portfolio, and Card. The database was designed to satisfy the three normal forms. The following diagrams summarize each model (using [Chen Notation](https://vertabelo.com/blog/chen-erd-notation/)):
+
+### User
+
+![User Model Diagram](img/user.png)
+
+The User model extends Django's AbstractUser model for authenticating users. The default user model contains fields like username, email, and password (hashed). An additional field—balance—was added to save the user's balance when they log in.
+
+### Stock
+
+![Stock Model Diagram](img/stock.png)
+
+The Stock model contains information about each stock. The ticker uniquely identifies each stock. The price and change fields are updated whenever the user views their portfolio.
+
+### Portfolio
+
+![Portfolio Model Diagram](img/portfolio.png)
+
+The Portfolio model contains the number of shares the user owns of each stock. In addition, it contains two foreign keys referencing the user and stock model. Those models combined form the following diagram:
+
+![Combined Model Diagram](img/all.png)
+
+Portfolio exibits a many-to-one relationship with User and a one-to-many relationship with Stock. This way, one user can own multiple stocks, and multiple users can own the same stock. If the user removes their account, their portfolio goes with them. But if they sell all of a stock, the stock information remains in the Stock object for future trades.
+
+### Card
+
+![Card Model Diagram](img/card.png)
+
+The Card model contains the word and definition for every financial term used throughout the app. Besides displaying them as flashcards, some words are used in other views and their definition can be displayed through a popover.
+
+## Views
 
 The app is split up into 4 sections:
 
