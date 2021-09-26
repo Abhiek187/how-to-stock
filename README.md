@@ -10,29 +10,29 @@ This web service serves as an introduction to the stock market for users new to 
 
 ### User
 
-![User Model Diagram](img/user.png)
+<img src="img/user.png" alt="user model diagram" height="300">
 
 The User model extends Django's AbstractUser model for authenticating users. The default user model contains fields like username, email, and password (hashed). An additional field—balance—was added to save the user's balance when they log in.
 
 ### Stock
 
-![Stock Model Diagram](img/stock.png)
+<img src="img/stock.png" alt="stock model diagram" height="300">
 
 The Stock model contains information about each stock. The ticker uniquely identifies each stock. The price and change fields are updated whenever the user views their portfolio.
 
 ### Portfolio
 
-![Portfolio Model Diagram](img/portfolio.png)
+<img src="img/portfolio.png" alt="portfolio model diagram" height="300">
 
 The Portfolio model contains the number of shares the user owns of each stock. In addition, it contains two foreign keys referencing the user and stock model. Those models combined form the following diagram:
 
-![Combined Model Diagram](img/all.png)
+<img src="img/all.png" alt="combined model diagram" height="300">
 
 Portfolio exibits a many-to-one relationship with User and a one-to-many relationship with Stock. This way, one user can own multiple stocks, and multiple users can own the same stock. If the user removes their account, their portfolio goes with them. But if they sell all of a stock, the stock information remains in the Stock object for future trades.
 
 ### Card
 
-![Card Model Diagram](img/card.png)
+<img src="img/card.png" alt="card model diagram" height="300">
 
 The Card model contains the word and definition for every financial term used throughout the app. Besides displaying them as flashcards, some words are used in other views and their definition can be displayed through a popover.
 
