@@ -1,0 +1,32 @@
+{% extends "stockapp/index.html" %}
+
+{% block title %}Create Account{% endblock %}
+
+{% block content %}
+<h2 class="mt-3">Create Account</h2>
+<form method="post">
+    {% csrf_token %}
+    <div class="my-3">
+        <label for="id_username" class="form-label">{{ form.username.label }}</label>
+        <input type="text" class="form-control mx-auto" name="username" autofocus autocapitalize="none"
+            autocomplete="username" maxlength="150" required id="id_username" style="max-width: 300px;">
+        <div class="form-text">{{ form.username.help_text }}</div>
+        <div class="form-text text-danger">{{ form.username.errors }}</div>
+    </div>
+    <div>
+        <label for="id_password1" class="form-label">{{ form.password1.label }}</label>
+        <input type="password" class="form-control mx-auto" name="password1" autocomplete="new-password" required
+            id="id_password1" style="max-width: 300px;">
+        <div class="form-text">{{ form.password1.help_text }}</div>
+        <div class="form-text text-danger">{{ form.password1.errors }}</div>
+    </div>
+    <div class="mb-3">
+        <label for="id_password2" class="form-label">Confirm Password</label>
+        <input type="password" class="form-control mx-auto" name="password2" autocomplete="new-password" required
+            id="id_password2" style="max-width: 300px;">
+        <div class="form-text">{{ form.password2.help_text }}</div>
+        <div class="form-text text-danger">{{ form.password2.errors }}</div>
+    </div>
+    <button type="submit" class="btn btn-success mb-3">Sign Up</button>
+</form>
+{% endblock %}

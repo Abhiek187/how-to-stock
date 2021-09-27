@@ -1,7 +1,6 @@
 /* Django's form error messages */
 .errorlist {
     color: darkred;
-    list-style-type: none;
 }
 
 .table-row {

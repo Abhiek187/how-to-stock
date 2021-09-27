@@ -5,6 +5,16 @@ body {
     flex-direction: column;
 }
 
+ul {
+    list-style-position: inside; /* place the bullets next to the text */
+    padding-left: 0;
+}
+
+/* Django's form error messages */
+.errorlist {
+    list-style-type: none;
+}
+
 /* Match the color of the other nav items */
 .dropdown-user,
 .link-login {
