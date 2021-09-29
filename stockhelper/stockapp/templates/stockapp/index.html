@@ -51,8 +51,20 @@
                         data-bs-toggle="dropdown" aria-expanded="false">
                         {{ user.username }}
                     </a>
-                    <ul class="dropdown-list dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                    <!-- Don't position the dropdown menu beyond the screen for large displays -->
+                    <ul class="dropdown-list dropdown-menu dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'password_change' %}">Change Password</a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item link-danger" href="{% url 'delete' %}">Delete Account</a>
+                        </li>
                     </ul>
                 </span>
                 {% else %}
