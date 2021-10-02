@@ -30,7 +30,7 @@ def create_account(request):
 @login_required
 def delete_account(request):
     if request.method == "POST":
-        # Safeguard to prevent losing access to the admin page
+        # Safeguard to avoid losing access to the admin page
         if not request.user.is_superuser:
             # Delete the user object and redirect to the login page
             request.user.delete()
