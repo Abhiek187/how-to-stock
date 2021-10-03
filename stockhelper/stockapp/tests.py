@@ -531,7 +531,7 @@ class DeleteAccountView(TestCase):
         self.assertContains(
             response, "Are you sure you want to delete your account?")
         self.assertContains(response, "You'll lose your portfolio as well.")
-        self.assertContains(response, "Yes I'm sure")
+        self.assertContains(response, "Yes I'm Sure")
         # Check that the correct context data is passed
         self.assertNotIn("error", response.context)
 
