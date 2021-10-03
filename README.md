@@ -1,20 +1,54 @@
 # How to Stock
 
-<img src="graphs.png" alt="stock graphs" width="1000">
+<img src="img/graphs.png" alt="stock graphs" width="1000">
 
 This web service serves as an introduction to the stock market for users new to finance. Users can learn about various financial terms, simulate trading stocks using a virtual balance, and view stock predictions based on probability and statistical data.
 
-## Features
+## Models
+
+4 models are used: User, Stock, Portfolio, and Card. The database was designed to satisfy the three normal forms. The following diagrams summarize each model (using [Chen Notation](https://vertabelo.com/blog/chen-erd-notation/)):
+
+### User
+
+<img src="img/user.png" alt="user model diagram" height="300">
+
+The User model extends Django's AbstractUser model for authenticating users. The default user model contains fields like username, email, and password (hashed). An additional field—balance—was added to save the user's balance when they log in.
+
+### Stock
+
+<img src="img/stock.png" alt="stock model diagram" height="300">
+
+The Stock model contains information about each stock. The ticker uniquely identifies each stock. The price and change fields are updated whenever the user views their portfolio.
+
+### Portfolio
+
+<img src="img/portfolio.png" alt="portfolio model diagram" height="300">
+
+The Portfolio model contains the number of shares the user owns of each stock. In addition, it contains two foreign keys referencing the user and stock model. Those models combined form the following diagram:
+
+<img src="img/all.png" alt="combined model diagram" height="300">
+
+Portfolio exibits a many-to-one relationship with User and a one-to-many relationship with Stock. This way, one user can own multiple stocks, and multiple users can own the same stock. If the user removes their account, their portfolio goes with them. But if they sell all of a stock, the stock information remains in the Stock object for future trades.
+
+### Card
+
+<img src="img/card.png" alt="card model diagram" height="300">
+
+The Card model contains the word and definition for every financial term used throughout the app. Besides displaying them as flashcards, some words are used in other views and their definition can be displayed through a popover.
+
+## Views
 
 The app is split up into 4 sections:
 
-- **Screener:** This is where users can filter stocks by country, price, sector, and exchange.
+-   **Screener:** This is where users can filter stocks by country, price, sector, and exchange.
 
-- **Flashcards:** Users can view a list of financial terms used throughout the app.
+-   **Flashcards:** Users can view a list of financial terms used throughout the app.
 
-- **Portfolio:** Users can view a list of stocks they've invested in. They start off with $10,000 and can view how their net worth changes each day.
+-   **Portfolio:** Users can view a list of stocks they've invested in. They start off with $10,000 and can view how their net worth changes each day.
 
-- **Details:** This page shows stock information about a company as well as a detailed analysis of the stock price for short and long-term investments. This is also where users can trade stocks.
+-   **Details:** This page shows stock information about a company as well as a detailed analysis of the stock price for short and long-term investments. This is also where users can trade stocks.
+
+The app also features an authentication system so users can save their portfolio and balance whenever they're logged in. Logging in is required for the Portfolio and Details view. SSO is implemented, so users' sessions can last up to 2 weeks.
 
 ## Dependencies
 

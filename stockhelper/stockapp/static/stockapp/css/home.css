@@ -5,6 +5,31 @@ body {
     flex-direction: column;
 }
 
+ul {
+    list-style-position: inside; /* place the bullets next to the text */
+    padding-left: 0;
+}
+
+/* Django's form error messages */
+.errorlist {
+    list-style-type: none;
+}
+
+/* Match the color of the other nav items */
+.dropdown-user,
+.link-login {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.dropdown-user:hover,
+.link-login:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+.dropdown-list {
+    min-width: 0; /* don't extend the dropdown menu beyond the right of the screen */
+}
+
 .main-content {
     /* Place the footer at the bottom of the page */
     min-height: calc(100vh - 80px);

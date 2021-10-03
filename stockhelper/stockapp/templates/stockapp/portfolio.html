@@ -16,9 +16,14 @@
 <div class="roi-alert alert alert-info alert-dismissible fade show" role="alert">
     <p class="portfolio-info">
         This is your stock
-        <a href="javascript:" class="portfolio help" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="bottom" title="{{ terms.portfolio.word }}" data-bs-content="{{ terms.portfolio.definition }}"> portfolio</a>
-        . Your balance is the amount of cash you have at hand and your net worth is equal to your current balance + the value of each stock (# of shares * share price). Your goal is to gain a net positive
-        <a href="javascript:" class="roi help" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="bottom" title="{{ terms.roi.word }}" data-bs-content="{{ terms.roi.definition }}"> ROI </a>
+        <a href="javascript:" class="portfolio help" data-bs-toggle="popover" data-bs-trigger="focus"
+            data-bs-container="body" data-bs-placement="bottom" title="{{ terms.portfolio.word }}"
+            data-bs-content="{{ terms.portfolio.definition }}"> portfolio</a>
+        . Your balance is the amount of cash you have at hand and your net worth is equal to your current balance + the
+        value of each stock (# of shares * share price). Your goal is to gain a net positive
+        <a href="javascript:" class="roi help" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body"
+            data-bs-placement="bottom" title="{{ terms.roi.word }}" data-bs-content="{{ terms.roi.definition }}"> ROI
+        </a>
         by investing wisely in the right stocks.
     </p>
     <p class="portfolio-status"></p>
@@ -40,7 +45,7 @@
 </div>
 <hr>
 <h1>Stocks</h1>
-{% if not stocks %}
+{% if not portfolios %}
 <p class="text-muted">Nothing yet...start investing!</p>
 {% else %}
 <div class="table-responsive">
@@ -51,17 +56,19 @@
                 <th>Company Name</th>
                 <th>Shares</th>
                 <th>
-                    <a href="javascript:" class="share-price help" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-container="body" data-bs-placement="top" title="{{ terms.sharePrice.word }}" data-bs-content="{{ terms.sharePrice.definition }}">Share Price</a>
+                    <a href="javascript:" class="share-price help" data-bs-toggle="popover" data-bs-trigger="focus"
+                        data-bs-container="body" data-bs-placement="top" title="{{ terms.sharePrice.word }}"
+                        data-bs-content="{{ terms.sharePrice.definition }}">Share Price</a>
                 </th>
                 <th>Price Change</th>
             </tr>
         </thead>
         <tbody>
-            {% for stock in stocks %}
+            {% for portfolio in portfolios %}
             <tr class="table-row" role="link" tabindex="0">
-                <td class="stock-ticker">{{ stock.ticker }}</td>
-                <td class="stock-name">{{ stock.name }}</td>
-                <td class="stock-shares">{{ stock.shares }}</td>
+                <td class="stock-ticker">{{ portfolio.stock__ticker }}</td>
+                <td class="stock-name">{{ portfolio.stock__name }}</td>
+                <td class="stock-shares">{{ portfolio.shares }}</td>
                 <td class="stock-price">
                     <div class="price-spinner spinner-border text-primary" role="status">
                         <span class="visually-hidden">Loading...</span>

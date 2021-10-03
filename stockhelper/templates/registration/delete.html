@@ -1,0 +1,15 @@
+{% extends "stockapp/index.html" %}
+
+{% block title %}Delete Account{% endblock %}
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    <p class="fs-3 mt-3">Are you sure you want to delete your account?</p>
+    <p class="fs-5">You'll lose your portfolio as well.</p>
+    <button type="submit" class="btn btn-danger mb-3" aria-label="Delete Account">Yes I'm Sure</button>
+</form>
+{% if error %}
+<p class="fs-5 text-danger mb-3">{{ error }}</p>
+{% endif %}
+{% endblock %}
