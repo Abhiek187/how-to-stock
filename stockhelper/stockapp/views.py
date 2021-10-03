@@ -32,7 +32,8 @@ def get_stocks(request):
         # Keep the form as is after submitting
         form = ScreenerForm(request.POST)
 
-        if form.is_valid() and form.is_bound:
+        # Check if the form is bound to data and doesn't have any errors
+        if form.is_valid():
             # Query the dataset
             stock_data = api.get_stocks(form.cleaned_data)
             request.session["results"] = stock_data

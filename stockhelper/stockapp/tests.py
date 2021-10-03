@@ -5,9 +5,10 @@ from django.urls import reverse
 from .forms import ScreenerForm
 from .models import Card, Portfolio, Stock, User
 import json
+from stockhelper.forms import CustomUserCreationForm
 
-USERNAME = "foo"
-PASSWORD = "bar"
+USERNAME = "testuser"
+PASSWORD = "howtostock"
 
 
 # Create tests for each view
@@ -54,7 +55,7 @@ class ScreenerViewTests(TestCase):
         self.assertContains(response, "</form>")
         self.assertContains(response, "Results will show up here...")
         # Check that the correct context data is passed
-        self.assertIsNotNone(response.context["form"])
+        self.assertIsInstance(response.context["form"], ScreenerForm)
         self.assertEqual(response.context["results"], None)
         self.assertEqual({
             "beta", "dividendYield", "etf", "index", "indexFund", "marketCap", "marketExchange",
@@ -72,12 +73,12 @@ class ScreenerViewTests(TestCase):
         }
         form = ScreenerForm(form_data)
         self.assertTrue(form.is_valid())
-        self.assertTrue(form.is_bound)
 
-        response = self.client.post(reverse("stockapp:screener"), form_data,
-                                    content_type="application/json")
-        # Check that the POST request redirects to a successful GET request
-        self.assertEqual(response.status_code, 200)
+        response = self.client.post(reverse("stockapp:screener"), form_data)
+        # Check that the POST request redirects to the screener page
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("results", self.client.session)
+        self.assertRedirects(response, reverse("stockapp:screener"))
 
 
 class DetailViewTests(TestCase):
@@ -118,8 +119,10 @@ class DetailViewTests(TestCase):
 
     def test_redirect_without_login(self):
         # Check that the view redirects to the login screen if the user isn't logged in
-        response = self.client.get(reverse("stockapp:detail", args=("Pru",)))
+        response = self.client.get(reverse("stockapp:detail", args=("PRU",)))
         self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response, f"{reverse('login')}?next={reverse('stockapp:detail', args=('PRU',))}")
 
     def test_view_renders(self):
         # Check that the view renders properly
@@ -300,6 +303,8 @@ class PortfolioViewTests(TestCase):
         # Check that the view redirects to the login screen if the user isn't logged in
         response = self.client.get(reverse("stockapp:portfolio"))
         self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response, f"{reverse('login')}?next={reverse('stockapp:portfolio')}")
 
     def test_view_renders(self):
         # Check that the view renders properly
@@ -389,6 +394,8 @@ class BalanceViewTests(TestCase):
         # Check that the view redirects to the login screen if the user isn't logged in
         response = self.client.get(reverse("stockapp:balance"))
         self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response, f"{reverse('login')}?next={reverse('stockapp:balance')}")
 
     def test_view_renders(self):
         # Check that the view renders properly
@@ -409,6 +416,8 @@ class PricesViewTests(TestCase):
         # Check that the view redirects to the login screen if the user isn't logged in
         response = self.client.get(reverse("stockapp:prices"))
         self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response, f"{reverse('login')}?next={reverse('stockapp:prices')}")
 
     def test_view_renders(self):
         # Check that the view renders properly
@@ -454,3 +463,97 @@ class PricesViewTests(TestCase):
         # Account for floating point errors by 7 decimal places
         self.assertAlmostEqual(float(resp["netWorth"]), float(net_worth))
         self.assertEqual(resp["prices"], prices)
+
+
+class CreateAccountView(TestCase):
+    # Load all the card data (to successfully redirect to the home page)
+    fixtures = ["cards.json"]
+
+    def test_view_renders(self):
+        # Check that the view renders properly
+        response = self.client.get(reverse("create"))
+        self.assertEqual(response.status_code, 200)
+        # Check that the title is correct
+        self.assertContains(
+            response, "<title>Create Account | How to Stock</title>")
+        self.assertContains(response, "Login")
+        # Check that the relevant content on the create account page is present
+        self.assertContains(response, "Username")
+        self.assertContains(response, "150 characters or fewer")
+        self.assertContains(response, "Password")
+        self.assertContains(response, "at least 8 characters")
+        self.assertContains(response, "Confirm Password")
+        self.assertContains(response, "for verification")
+        self.assertContains(response, "Sign Up")
+        # Check that the correct context data is passed
+        self.assertIsInstance(response.context["form"], CustomUserCreationForm)
+
+    def test_post_form(self):
+        # Check that submitting the form redirects the user to the home page
+        form_data = {
+            "username": USERNAME,
+            "password1": PASSWORD,
+            "password2": PASSWORD
+        }
+        form = CustomUserCreationForm(form_data)
+        self.assertTrue(form.is_valid())
+
+        response = self.client.post(reverse("create"), form_data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("stockapp:index"))
+        # Check that the new user is created
+        self.assertTrue(User.objects.get(username=USERNAME).is_authenticated)
+
+
+class DeleteAccountView(TestCase):
+    def setUp(self):
+        # Create a user that can login to the view
+        self.user = get_user_model().objects.create_user(
+            username=USERNAME, password=PASSWORD)
+
+    def test_redirect_without_login(self):
+        # Check that the view redirects to the login screen if the user isn't logged in
+        response = self.client.get(reverse("delete"))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response, f"{reverse('login')}?next={reverse('delete')}")
+
+    def test_view_renders(self):
+        # Check that the view renders properly
+        self.client.login(username=USERNAME, password=PASSWORD)
+        response = self.client.get(reverse("delete"))
+        self.assertEqual(response.status_code, 200)
+        # Check that the title is correct
+        self.assertContains(
+            response, "<title>Delete Account | How to Stock</title>")
+        self.assertContains(response, USERNAME)
+        # Check that the relevant content on the delete account page is present
+        self.assertContains(
+            response, "Are you sure you want to delete your account?")
+        self.assertContains(response, "You'll lose your portfolio as well.")
+        self.assertContains(response, "Yes I'm sure")
+        # Check that the correct context data is passed
+        self.assertNotIn("error", response.context)
+
+    def test_post_form(self):
+        # Check that submitting the form redirects the user to the login page
+        self.client.login(username=USERNAME, password=PASSWORD)
+        response = self.client.post(reverse("delete"))
+        # Check that the POST request redirects to a successful GET request
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("login"))
+        # Check that the user no longer exists
+        self.assertQuerysetEqual(User.objects.all(), [])
+
+    def test_delete_superuser(self):
+        # Check that deleting a superuser results in an error
+        superuser = get_user_model().objects.create_superuser(
+            username="superuser", password="superman64")
+        self.client.login(username=superuser.username,
+                          password="superman64")  # Django doesn't store the raw password
+        self.assertTrue(superuser.is_superuser)
+        response = self.client.post(reverse("delete"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.context["error"], f"Delete failed, {superuser} is a superuser")
