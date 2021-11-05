@@ -48,7 +48,7 @@ The app is split up into 4 sections:
 
 -   **Details:** This page shows stock information about a company as well as a detailed analysis of the stock price for short and long-term investments. This is also where users can trade stocks.
 
-The app also features an authentication system so users can save their portfolio and balance whenever they're logged in. Logging in is required for the Portfolio and Details view. SSO is implemented, so users' sessions can last up to 2 weeks.
+The app also features an authentication system so users can save their portfolio and balance whenever they're logged in. Logging in is required for the Portfolio and Details view. Using session cookies, the users' sessions can last up to 2 weeks.
 
 ## Dependencies
 
