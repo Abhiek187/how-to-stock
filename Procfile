@@ -1,1 +1,1 @@
-web: gunicorn stockhelper.wsgi
+web: gunicorn stockapp.wsgi
