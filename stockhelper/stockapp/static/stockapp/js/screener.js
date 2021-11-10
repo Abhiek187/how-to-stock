@@ -12,7 +12,7 @@ const volume = document.querySelector(".volume");
 const marketExchange = document.querySelector(".market-exchange");
 
 // Show the appropriate alert for certain exchange options
-exchangeSelect.addEventListener("change", event => {
+exchangeSelect.addEventListener("change", (event) => {
     switch (event.target.value) {
         case "nasdaq":
             indexAlert.classList.remove("d-none");
@@ -40,8 +40,11 @@ for (const row of tableRows) {
     // Allow each row to be clickable
     const symbol = row.firstElementChild.textContent;
     row.onclick = () =>
-        window.open(`${window.location.origin}/stockapp/details/${symbol}`, "_blank",
-            rel="noopener noreferrer");
+        window.open(
+            `${window.location.origin}/stockapp/details/${symbol}`,
+            "_blank",
+            (rel = "noopener noreferrer")
+        );
 }
 
 // Initialize all the popovers if the table is present
