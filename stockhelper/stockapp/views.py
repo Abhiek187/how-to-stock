@@ -157,8 +157,9 @@ def get_stock_details(request, ticker):
     }
 
     return render(request, "stockapp/detail.html", {
-        "profile": profile[0],
-        "history": history["historical"],
+        # Show an error if the ticker is invalid
+        "profile": None if not profile else profile[0],
+        "history": ticker if not history else history["historical"],
         "balance": request.user.balance,
         "terms": terms
     })

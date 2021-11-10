@@ -16,6 +16,10 @@
 {% endblock %}
 
 {% block content %}
+{% if profile is None %}
+<p class="text-danger my-3">Error: Unknown stock ticker: {{ history }}</p>
+
+{% else %}
 <div class="main-info-container mt-3">
     <div class="left-container">
         <div class="company-container">
@@ -190,4 +194,5 @@
 <hr>
 <!-- Don't escape the content -->
 <p class="description mx-3"><strong>About:</strong> {{ profile.description|safe }}</p>
+{% endif %}
 {% endblock %}
