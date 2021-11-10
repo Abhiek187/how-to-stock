@@ -27,5 +27,17 @@ python3 manage.py migrate
 echo $'\n6. Loading the flashcards data...'
 python3 manage.py loaddata cards.json
 
-echo $'\n7. Running the Django server...'
+if [ ! -e .env ]; then
+  echo $'\n7. Generating a secret key...'
+
+  if type openssl > /dev/null; then
+    echo "SECRET_KEY=$(openssl rand -base64 32)" > .env
+  else
+    echo "SECRET_KEY=$(head -c 32 /dev/urandom | base64)" > .env
+  fi
+else
+  echo $'\n7. The secret key already exists.'
+fi
+
+echo $'\n8. Running the Django server...'
 python3 manage.py runserver
