@@ -29,15 +29,19 @@ if [ ! -e .env ]; then
   else
     echo "SECRET_KEY=$(head -c 32 /dev/urandom | base64)" > .env
   fi
+
+  echo $'\n6. Turning on DEBUG mode...'
+  echo "DEBUG = true" >> .env
 else
   echo $'\n5. The secret key already exists.'
+  echo $'\n6. DEBUG mode is on.'
 fi
 
-echo $'\n6. Creating the SQLite database...'
+echo $'\n7. Creating the SQLite database...'
 python3 manage.py migrate
 
-echo $'\n7. Loading the flashcards data...'
+echo $'\n8. Loading the flashcards data...'
 python3 manage.py loaddata cards.json
 
-echo $'\n8. Running the Django server...'
+echo $'\n9. Running the Django server...'
 python3 manage.py runserver
