@@ -31,7 +31,7 @@ if [ ! -e .env ]; then
   fi
 
   echo $'\n6. Turning on DEBUG mode...'
-  echo "DEBUG = true" >> .env
+  echo "DEBUG=true" >> .env
 else
   echo $'\n5. The secret key already exists.'
   echo $'\n6. DEBUG mode is on.'
