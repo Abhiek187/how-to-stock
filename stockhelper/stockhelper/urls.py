@@ -14,11 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, reverse_lazy
+from django.views.generic.base import RedirectView
 
 from stockhelper import views
 
 urlpatterns = [
+    # Redirect the root path to the home page of stockapp
+    path("", RedirectView.as_view(
+        url=reverse_lazy("stockapp:index"), permanent=True)),
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/create", views.create_account, name="create"),
