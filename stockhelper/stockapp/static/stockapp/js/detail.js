@@ -29,7 +29,10 @@ const balanceDiff = document.querySelector(".balance-diff");
 
 // https://stackoverflow.com/a/11832950 & https://stackoverflow.com/a/6134070
 const round = (number, places) =>
-    (Math.round((number + Number.EPSILON) * (10 ** places)) / (10 ** places)).toFixed(places);
+    (
+        Math.round((number + Number.EPSILON) * 10 ** places) /
+        10 ** places
+    ).toFixed(places);
 
 // Get the session balance from the front-end
 const getBalance = async () => {
@@ -49,18 +52,20 @@ const checkShares = async () => {
         balanceDiff.textContent = `-$${round(diff, 2)}`;
         balanceDiff.classList.remove("text-success");
         balanceDiff.classList.add("text-danger");
-        newBalance = await getBalance() - diff;
+        newBalance = (await getBalance()) - diff;
     } else {
         balanceDiff.textContent = `+$${round(diff, 2)}`;
         balanceDiff.classList.remove("text-danger");
         balanceDiff.classList.add("text-success");
-        newBalance = await getBalance() + diff;
+        newBalance = (await getBalance()) + diff;
     }
 
     balanceResult.textContent = `New Balance: $${round(newBalance, 2)}`;
 
     if (newBalance < 0) {
-        shares.setCustomValidity("You don't have enough money to buy that many shares.");
+        shares.setCustomValidity(
+            "You don't have enough money to buy that many shares."
+        );
     } else {
         shares.setCustomValidity("");
     }
@@ -108,9 +113,11 @@ if (parseFloat(changeDom.textContent) < 0) {
 transaction.onchange = checkShares;
 shares.oninput = checkShares;
 
-stockForm.addEventListener("submit", async event => {
+stockForm.addEventListener("submit", async (event) => {
     event.preventDefault(); // don't reload the page
-    const token = document.querySelector("input[name='csrfmiddlewaretoken']").value;
+    const token = document.querySelector(
+        "input[name='csrfmiddlewaretoken']"
+    ).value;
     // Make sure the form input is valid
     const [isBuying, numShares] = await checkShares();
 
@@ -122,7 +129,7 @@ stockForm.addEventListener("submit", async event => {
         shares: numShares,
         price: sharePrice,
         change,
-        csrfmiddlewaretoken: token
+        csrfmiddlewaretoken: token,
     };
 
     try {
@@ -132,28 +139,38 @@ stockForm.addEventListener("submit", async event => {
             credentials: "same-origin",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRFToken": token
+                "X-CSRFToken": token,
             },
-            body: JSON.stringify(stockData)
+            body: JSON.stringify(stockData),
         });
 
         // Wait for a response, then show a toast that confirms if the stock was added
         const resp = await req.json();
 
         if (resp.status === "success") {
-            showToastMessage(false,
-                `Successfully ${isBuying ? "bought" : "sold"} ${numShares} shares from ${ticker}!`
+            showToastMessage(
+                false,
+                `Successfully ${isBuying ? "bought" : "sold"} ${numShares} ${
+                    numShares === 1 ? "share" : "shares"
+                } from ${ticker}!`
             );
         } else if (resp.maxShares === 0) {
-            showToastMessage(true, `Error: You don't own any stocks from ${ticker}.`);
+            showToastMessage(
+                true,
+                `Error: You don't own any stocks from ${ticker}.`
+            );
         } else {
-            showToastMessage(true,
+            showToastMessage(
+                true,
                 `Error: You can only sell up to ${resp.maxShares} shares from ${ticker}.`
             );
         }
     } catch (error) {
         console.error(`Error: ${error}`);
-        showToastMessage(true, `Server Error: Couldn't ${isBuying ? "buy" : "sell"} shares.`);
+        showToastMessage(
+            true,
+            `Server Error: Couldn't ${isBuying ? "buy" : "sell"} shares.`
+        );
     }
 });
 
@@ -166,17 +183,19 @@ const longStatsDom = document.querySelector(".long-stats-container");
 const longPredictDom = document.querySelector("#long-predict");
 
 // Short and Long-Term stock history data
-const historyData = JSON.parse(document.getElementById("history-data").textContent);
+const historyData = JSON.parse(
+    document.getElementById("history-data").textContent
+);
 
-const shortTermLength = (52 / 12 * 5) >> 0; // average # of weekdays per month
+const shortTermLength = ((52 / 12) * 5) >> 0; // average # of weekdays per month
 const shortTermData = historyData.slice(0, shortTermLength).reverse();
-const shortTermDates = shortTermData.map(data => data.date);
-const shortTermPrices = shortTermData.map(data => data.close);
+const shortTermDates = shortTermData.map((data) => data.date);
+const shortTermPrices = shortTermData.map((data) => data.close);
 
 const longTermLength = 52 * 5; // average # of weekdays per year
 const longTermData = historyData.slice(0, longTermLength).reverse();
-const longTermDates = longTermData.map(data => data.date);
-const longTermPrices = longTermData.map(data => data.close);
+const longTermDates = longTermData.map((data) => data.date);
+const longTermPrices = longTermData.map((data) => data.close);
 
 // Alert elements
 const investAlert = document.querySelector(".invest-alert");
@@ -191,12 +210,13 @@ new bootstrap.Popover(broker);
 new bootstrap.Popover(marketOrder);
 
 // Analytical functions and calculations
-const sum = arr => arr.reduce((e1, e2) => e1 + e2, 0);
+const sum = (arr) => arr.reduce((e1, e2) => e1 + e2, 0);
 
-const getStats = prices => {
+const getStats = (prices) => {
     // Get the statistical properties of the price array
     const mean = sum(prices) / prices.length;
-    const variance = sum(prices.map(price => (price - mean) ** 2)) / (prices.length - 1);
+    const variance =
+        sum(prices.map((price) => (price - mean) ** 2)) / (prices.length - 1);
     const standardDeviation = Math.sqrt(variance);
     const standardError = standardDeviation / Math.sqrt(prices.length);
     // ...prices creates a copy of the array
@@ -206,7 +226,7 @@ const getStats = prices => {
     // (Need to specify the sorting algorithm for numeric sorts)
     const sortedArr = [...prices].sort((p1, p2) => p1 - p2);
     const q1 = sortedArr[Math.floor(sortedArr.length / 4)];
-    const q3 = sortedArr[Math.ceil(sortedArr.length * 3 / 4)];
+    const q3 = sortedArr[Math.ceil((sortedArr.length * 3) / 4)];
     const iqr = q3 - q1;
 
     return {
@@ -216,7 +236,7 @@ const getStats = prices => {
         standardError,
         min,
         max,
-        iqr
+        iqr,
     };
 };
 
@@ -224,9 +244,18 @@ const displayStats = (stats, dom) => {
     // dom[0] is for predictions
     const [_, mean, variance, std, err, min, max, iqr] = dom.children;
     mean.innerHTML = `<strong>Mean:</strong> ${round(stats.mean, 2)}`;
-    variance.innerHTML = `<strong>Variance:</strong> ${round(stats.variance, 2)}`;
-    std.innerHTML = `<strong>Standard Deviation:</strong> ${round(stats.standardDeviation, 2)}`;
-    err.innerHTML = `<strong>Standard Error:</strong> ${round(stats.standardError, 2)}`;
+    variance.innerHTML = `<strong>Variance:</strong> ${round(
+        stats.variance,
+        2
+    )}`;
+    std.innerHTML = `<strong>Standard Deviation:</strong> ${round(
+        stats.standardDeviation,
+        2
+    )}`;
+    err.innerHTML = `<strong>Standard Error:</strong> ${round(
+        stats.standardError,
+        2
+    )}`;
     min.innerHTML = `<strong>Min:</strong> ${round(stats.min, 2)}`;
     max.innerHTML = `<strong>Max:</strong> ${round(stats.max, 2)}`;
     iqr.innerHTML = `<strong>IQR:</strong> ${round(stats.iqr, 2)}`;
@@ -234,7 +263,8 @@ const displayStats = (stats, dom) => {
 
 // Calculate the x value of a normal curve given the mean and standard deviation
 const normalProb = (x, mu, sigma) =>
-    Math.exp(-((x - mu) ** 2) / (2 * sigma ** 2)) / (sigma * Math.sqrt(2 * Math.PI));
+    Math.exp(-((x - mu) ** 2) / (2 * sigma ** 2)) /
+    (sigma * Math.sqrt(2 * Math.PI));
 
 /* p(v|m) = prod(p(mi|v) * p(v), for i in m)
  * p(mi|v): mi is x, v is mu, and se is sigma
@@ -244,8 +274,9 @@ const bayesProb = (predictedPrice, pastPrices, stats) => {
     let total = 1;
 
     for (const price of pastPrices) {
-        total *= normalProb(price, predictedPrice, stats.standardError)
-            * normalProb(predictedPrice, stats.mean, stats.standardDeviation);
+        total *=
+            normalProb(price, predictedPrice, stats.standardError) *
+            normalProb(predictedPrice, stats.mean, stats.standardDeviation);
     }
 
     return total;
@@ -253,25 +284,36 @@ const bayesProb = (predictedPrice, pastPrices, stats) => {
 
 const displayProb = (prob, stats, dom) => {
     if (dom === shortPredictDom) {
-        console.log(`Short-Term Predicted Price: $${round(stats.mean, 2)} (Probability: ${prob})`);
+        console.log(
+            `Short-Term Predicted Price: $${round(
+                stats.mean,
+                2
+            )} (Probability: ${prob})`
+        );
     } else {
-        console.log(`Long-Term Predicted Price: $${round(stats.mean, 2)} (Probability: ${prob})`);
+        console.log(
+            `Long-Term Predicted Price: $${round(
+                stats.mean,
+                2
+            )} (Probability: ${prob})`
+        );
     }
 };
 
-const predictPrice = y => {
+const predictPrice = (y) => {
     // Perform linear regression to find the best line of fit given the data points
     const n = y.length;
     const x = [...Array(n).keys()];
     const xy = x.map((e, i) => e * y[i]);
-    const x2 = x.map(e => e ** 2);
-    const y2 = y.map(e => e ** 2);
+    const x2 = x.map((e) => e ** 2);
+    const y2 = y.map((e) => e ** 2);
     /* Formulas from: https://www.statisticshowto.com/probability-and-statistics/regression-analysis
      * /find-a-linear-regression-equation/#FindaLinear
      */
     const m = (n * sum(xy) - sum(x) * sum(y)) / (n * sum(x2) - sum(x) ** 2);
-    const b = (sum(y) * sum(x2) - sum(x) * sum(xy)) / (n * sum(x2) - sum(x) ** 2);
-    const line = x.map(p => m * p + b);
+    const b =
+        (sum(y) * sum(x2) - sum(x) * sum(xy)) / (n * sum(x2) - sum(x) ** 2);
+    const line = x.map((p) => m * p + b);
     return [m, b, line];
 };
 
@@ -283,12 +325,18 @@ const displayPred = (m, n, b, dom) => {
     if (m < 0) {
         // Initialize the prediction popovers
         new bootstrap.Popover(dom, {
-            content: `On average, the stock price is decreasing by $${round(-m, 2)} each day.`
+            content: `On average, the stock price is decreasing by $${round(
+                -m,
+                2
+            )} each day.`,
         });
         dom.classList.add("text-danger");
     } else {
         new bootstrap.Popover(dom, {
-            content: `On average, the stock price is increasing by $${round(m, 2)} each day.`
+            content: `On average, the stock price is increasing by $${round(
+                m,
+                2
+            )} each day.`,
         });
         dom.classList.add("text-success");
     }
@@ -301,9 +349,17 @@ const longTermStats = getStats(longTermPrices);
 displayStats(longTermStats, longStatsDom);
 
 // Calculate the most likely price the next day
-const shortTermProb = bayesProb(shortTermStats.mean, shortTermPrices, shortTermStats);
+const shortTermProb = bayesProb(
+    shortTermStats.mean,
+    shortTermPrices,
+    shortTermStats
+);
 displayProb(shortTermProb, shortTermStats, shortPredictDom);
-const longTermProb = bayesProb(longTermStats.mean, longTermPrices, longTermStats);
+const longTermProb = bayesProb(
+    longTermStats.mean,
+    longTermPrices,
+    longTermStats
+);
 displayProb(longTermProb, longTermStats, longPredictDom);
 
 const [shortM, shortB, shortLine] = predictPrice(shortTermPrices);
@@ -313,35 +369,55 @@ const [longM, longB, longLine] = predictPrice(longTermPrices);
 displayPred(longM, longTermData.length, longB, longPredictDom);
 
 // Determine the risk based on the standard deviation in the short-term and long-term
-if (shortTermStats.standardDeviation <= 10 && longTermStats.standardDeviation <= 10) {
+if (
+    shortTermStats.standardDeviation <= 10 &&
+    longTermStats.standardDeviation <= 10
+) {
     investAdvice.innerHTML = investAdvice.innerHTML.replace("[level]", "low");
-} else if (shortTermStats.standardDeviation > 10 && longTermStats.standardDeviation > 10) {
+} else if (
+    shortTermStats.standardDeviation > 10 &&
+    longTermStats.standardDeviation > 10
+) {
     investAdvice.innerHTML = investAdvice.innerHTML.replace("[level]", "high");
 } else {
-    investAdvice.innerHTML = investAdvice.innerHTML.replace("[level]", "moderate");
+    investAdvice.innerHTML = investAdvice.innerHTML.replace(
+        "[level]",
+        "moderate"
+    );
 }
 
 // Give a recommendation based on where the stock price is trending (buy low, sell high)
 if (shortM <= 0 && longM > 0) {
     // If the latest stock price is low but the trend line is positive --> buy
-    investAdvice.innerHTML = investAdvice.innerHTML.replace("[advice]", "The price is low now, " +
-        "but the general trend is positive, so I recommend buying these stocks.");
+    investAdvice.innerHTML = investAdvice.innerHTML.replace(
+        "[advice]",
+        "The price is low now, " +
+            "but the general trend is positive, so I recommend buying these stocks."
+    );
     investAlert.classList.add("alert-success");
 } else if (shortM <= 0 && longM <= 0) {
     // If the stock price is low and the trend line is negative --> ignore/sell everything
-    investAdvice.innerHTML = investAdvice.innerHTML.replace("[advice]",
+    investAdvice.innerHTML = investAdvice.innerHTML.replace(
+        "[advice]",
         "This stock is going down in value, so I recommend ignoring this stock or selling " +
-        "everything if you still have shares.");
+            "everything if you still have shares."
+    );
     investAlert.classList.add("alert-danger");
 } else if (shortM > 0 && longM <= 0) {
     // If the stock price is high and the trend line is negative --> sell
-    investAdvice.innerHTML = investAdvice.innerHTML.replace("[advice]", "The price is high now, " +
-        "but the general trend is negative, so I recommend selling these stocks.");
+    investAdvice.innerHTML = investAdvice.innerHTML.replace(
+        "[advice]",
+        "The price is high now, " +
+            "but the general trend is negative, so I recommend selling these stocks."
+    );
     investAlert.classList.add("alert-warning");
 } else {
     // If the stock price is high and the trend line is positive --> buy/hold
-    investAdvice.innerHTML = investAdvice.innerHTML.replace("[advice]", "This stock is rising in " +
-        "value, so I recommend buying this stock or holding if you already own shares.");
+    investAdvice.innerHTML = investAdvice.innerHTML.replace(
+        "[advice]",
+        "This stock is rising in " +
+            "value, so I recommend buying this stock or holding if you already own shares."
+    );
     investAlert.classList.add("alert-success");
 }
 
@@ -364,40 +440,43 @@ const shortChart = new Chart(shortCtx, {
                 backgroundColor: "#000", // black
                 borderColor: "#333",
                 fill: false, // just show a line
-                data: shortLine
+                data: shortLine,
             },
             {
                 label: "Stock Price",
                 backgroundColor: "#00bfff", // deepskyblue
                 borderColor: "#00f",
-                data: shortTermPrices
-            }
-        ]
-
+                data: shortTermPrices,
+            },
+        ],
     },
 
     options: {
         aspectRatio: window.innerWidth < 1200 ? 1.25 : 1.5, // width / height
         scales: {
-            xAxes: [{
-                scaleLabel: {
-                    display: true,
-                    labelString: "Date"
-                }
-            }],
-            yAxes: [{
-                scaleLabel: {
-                    display: true,
-                    labelString: "Price ($)"
-                }
-            }]
+            xAxes: [
+                {
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Date",
+                    },
+                },
+            ],
+            yAxes: [
+                {
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Price ($)",
+                    },
+                },
+            ],
         },
         title: {
             display: true,
             fontSize: 18,
-            text: "Short-Term Historical Data"
-        }
-    }
+            text: "Short-Term Historical Data",
+        },
+    },
 });
 
 // Chart for the long-term data
@@ -413,40 +492,44 @@ const longChart = new Chart(longCtx, {
                 backgroundColor: "#000", // black
                 borderColor: "#333",
                 fill: false, // just show a line
-                data: longLine
+                data: longLine,
             },
             {
                 label: "Stock Price",
                 backgroundColor: "#00bfff", // deepskyblue
                 borderColor: "#00f",
-                data: longTermPrices
-            }
-        ]
+                data: longTermPrices,
+            },
+        ],
     },
 
     options: {
         aspectRatio: window.innerWidth < 1200 ? 1.25 : 1.5, // width / height
         scales: {
-            xAxes: [{
-                scaleLabel: {
-                    display: true,
-                    labelString: "Date"
+            xAxes: [
+                {
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Date",
+                    },
+                    ticks: {
+                        autoSkipPadding: 5,
+                    },
                 },
-                ticks: {
-                    autoSkipPadding: 5
-                }
-            }],
-            yAxes: [{
-                scaleLabel: {
-                    display: true,
-                    labelString: "Price ($)"
-                }
-            }]
+            ],
+            yAxes: [
+                {
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Price ($)",
+                    },
+                },
+            ],
         },
         title: {
             display: true,
             fontSize: 18,
-            text: "Long-Term Historical Data"
-        }
-    }
+            text: "Long-Term Historical Data",
+        },
+    },
 });
