@@ -2,7 +2,13 @@
 {% load static %}
 {% load custom_tags %}
 
-{% block title %}Details - {{ profile.companyName }}{% endblock %}
+{% block title %}
+{% if profile is None %}
+Details - ???
+{% else %}
+Details - {{ profile.companyName }}
+{% endif %}
+{% endblock %}
 
 {% block css %}
 <link rel="stylesheet" href="{% static 'stockapp/css/detail.css' %}">

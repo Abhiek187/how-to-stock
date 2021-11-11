@@ -39,6 +39,13 @@ class HomeViewTests(TestCase):
         # Check that the correct context data is passed
         self.assertIn("equity", response.context["terms"])
 
+    def test_root_view_redirects(self):
+        # Check that the root view redirects to the home view
+        response = self.client.get("/")
+        self.assertEqual(response.status_code, 301)
+        self.assertRedirects(response, reverse(
+            "stockapp:index"), status_code=301)
+
 
 class ScreenerViewTests(TestCase):
     # Load all the card data
@@ -130,8 +137,9 @@ class DetailViewTests(TestCase):
         response = self.client.get(reverse("stockapp:detail", args=("PRU",)))
         self.assertEqual(response.status_code, 200)
         # Check that the title is correct
-        self.assertContains(
-            response, "<title>Details - Prudential Financial, Inc. | How to Stock</title>")
+        # Need to do two separate checks due to the added newlines from jinja tags
+        self.assertContains(response, "Details - Prudential Financial, Inc.")
+        self.assertContains(response, " | How to Stock")
         self.assertContains(response, USERNAME)
         # Check that the relevant content on the details page is present
         self.assertContains(response, "history-data")
@@ -157,6 +165,20 @@ class DetailViewTests(TestCase):
             "beta", "broker", "dividendYield", "marketCap", "marketExchange", "marketOrder", "risk",
             "trader", "volatility", "volume"
         }, response.context["terms"].keys())
+
+    def test_invalid_stock(self):
+        # Check that an error message shows if the ticker is invalid
+        self.client.login(username=USERNAME, password=PASSWORD)
+        bad_ticker = "qjxz"
+        response = self.client.get(
+            reverse("stockapp:detail", args=(bad_ticker,)))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Details - ???")
+        self.assertContains(
+            response, f"Error: Unknown stock ticker: {bad_ticker}")
+        self.assertIsNone(response.context["profile"])
+        self.assertEquals(response.context["history"], bad_ticker)
 
     def test_buy_new_stock(self):
         # Check that buying a stock with 0 shares creates a new Stock object

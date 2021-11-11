@@ -10,10 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-from pathlib import Path
 import django_on_heroku
-import os
 import dotenv
+import os
+from pathlib import Path
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -133,5 +134,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Activate Django-on-Heroku
-django_on_heroku.settings(locals())
+# Activate Django-on-Heroku (breaks if testing)
+if sys.argv[1:2] != ["test"]:
+    django_on_heroku.settings(locals())
