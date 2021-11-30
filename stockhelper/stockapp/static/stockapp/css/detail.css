@@ -23,6 +23,10 @@
     margin: auto; /* center the top containers */
 }
 
+.logo {
+    max-width: 350px; /* ensure the image doesn't go beyond the company-container */
+}
+
 .price-container {
     justify-content: center; /* center horizontally */
     align-items: center; /* center vertically */
