@@ -1,5 +1,6 @@
 from django import forms
 
+
 class ScreenerForm(forms.Form):
     # Constants
     COUNTRIES = [
@@ -106,7 +107,7 @@ class ScreenerForm(forms.Form):
     ]
 
     SECTORS = [
-        ("Any",) * 2, # if the user doesn't want to filter by sector
+        ("Any",) * 2,  # if the user doesn't want to filter by sector
         ("Basic Materials",) * 2,
         ("Communication Services",) * 2,
         ("Conglomerates",) * 2,
@@ -125,7 +126,7 @@ class ScreenerForm(forms.Form):
     ]
 
     EXCHANGES = [
-        ("Any",) * 2, # if the user doesn't want to filter by exchange
+        ("Any",) * 2,  # if the user doesn't want to filter by exchange
         ("nyse", "NYSE"),
         ("nasdaq", "NASDAQ"),
         ("amex", "AMEX"),
@@ -144,7 +145,8 @@ class ScreenerForm(forms.Form):
         attrs={"class": "price-relation-select col form-select me-3"}
     ))
     price_value = forms.DecimalField(min_value=0, decimal_places=2, widget=forms.NumberInput(
-        attrs={"class": "price-num-input col form-control"}
+        attrs={"inputmode": "decimal",
+               "class": "price-num-input col form-control"}
     ))
     sector = forms.ChoiceField(label="Sector", choices=SECTORS, widget=forms.Select(
         attrs={"class": "sector-select col form-select"}
