@@ -16,8 +16,8 @@
 {% for card in cards.all %}
 <div class="flashcard card shadow bg-light" tabindex="0" aria-label="{{ card.word }}">
     <div class="card-body">
-        <h2 class="word card-title fade-in fs-4">{{ card.word }}</h2>
-        <p class="definition card-text fade-out hidden">{{ card.definition }}</p>
+        <h2 class="word card-title fs-4">{{ card.word }}</h2>
+        <p class="definition card-text fade-out hidden" hidden>{{ card.definition }}</p>
     </div>
 </div>
 {% endfor %}

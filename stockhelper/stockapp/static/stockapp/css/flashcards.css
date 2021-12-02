@@ -28,6 +28,7 @@
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    padding: 0;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     -webkit-box-pack: center;
@@ -40,25 +41,33 @@
 
 .card-body > * {
     position: absolute;
-    margin: 0 5%;
+    margin: 0;
+    padding: 0 5%; /* padding works better in Safari than margin */
 }
 
 .word {
     font-weight: bold;
 }
 
+.fade-in,
+.fade-out {
+    -webkit-transition: 500ms;
+    -o-transition: 500ms;
+    transition: 500ms; /* apparently it's that simple! */
+}
+
 .fade-out {
     visibility: hidden;
     opacity: 0;
-    -webkit-transition: visibility 0s linear 500ms, opacity 500ms;
+    /* -webkit-transition: visibility 0s linear 500ms, opacity 500ms;
     -o-transition: visibility 0s linear 500ms, opacity 500ms;
-    transition: visibility 0s linear 500ms, opacity 500ms;
+    transition: visibility 0s linear 500ms, opacity 500ms; */
 }
 
 .fade-in {
     visibility: visible;
     opacity: 1;
-    -webkit-transition: visibility 0s linear 0s, opacity 500ms;
+    /* -webkit-transition: visibility 0s linear 0s, opacity 500ms;
     -o-transition: visibility 0s linear 0s, opacity 500ms;
-    transition: visibility 0s linear 0s, opacity 500ms;
+    transition: visibility 0s linear 0s, opacity 500ms; */
 }

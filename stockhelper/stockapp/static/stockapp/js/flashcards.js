@@ -23,6 +23,8 @@ const flipCard = (card) => {
 
     word.classList.toggle("hidden");
     definition.classList.toggle("hidden");
+    // The definition is hidden at the start to hide the initial transition
+    definition.hidden = false;
 };
 
 for (const card of flashcards) {
