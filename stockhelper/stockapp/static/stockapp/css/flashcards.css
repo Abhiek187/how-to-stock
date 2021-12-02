@@ -1,10 +1,22 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.3.6,
+* Autoprefixer: v10.3.1
+* Browsers: last 4 version
+*/
+
 .description {
     margin-top: 1%;
 }
 
 .flashcard {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
     display: inline-flex;
+    -ms-flex-wrap: wrap;
     flex-wrap: wrap;
+    -webkit-box-align: stretch;
+    -ms-flex-align: stretch;
     align-items: stretch;
     margin: 1%;
     width: 200px;
@@ -13,9 +25,16 @@
 }
 
 .card-body {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -ms-flex-wrap: wrap;
     flex-wrap: wrap;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center; /* center horizontally */
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center; /* center vertically */
 }
 
@@ -31,11 +50,15 @@
 .fade-out {
     visibility: hidden;
     opacity: 0;
+    -webkit-transition: visibility 0s linear 500ms, opacity 500ms;
+    -o-transition: visibility 0s linear 500ms, opacity 500ms;
     transition: visibility 0s linear 500ms, opacity 500ms;
 }
 
 .fade-in {
     visibility: visible;
     opacity: 1;
+    -webkit-transition: visibility 0s linear 0s, opacity 500ms;
+    -o-transition: visibility 0s linear 0s, opacity 500ms;
     transition: visibility 0s linear 0s, opacity 500ms;
 }
