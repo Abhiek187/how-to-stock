@@ -31,4 +31,4 @@ jobs:
         echo "DEBUG=true" >> $GITHUB_ENV
     - name: Run Tests
       run: |
-        python stockhelper/manage.py test
+        python -Wa stockhelper/manage.py test stockhelper/
