@@ -178,7 +178,7 @@ class DetailViewTests(TestCase):
         self.assertContains(
             response, f"Error: Unknown stock ticker: {bad_ticker}")
         self.assertIsNone(response.context["profile"])
-        self.assertEquals(response.context["history"], bad_ticker)
+        self.assertEqual(response.context["history"], bad_ticker)
 
     def test_buy_new_stock(self):
         # Check that buying a stock with 0 shares creates a new Stock object
