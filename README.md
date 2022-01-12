@@ -1,5 +1,7 @@
 # How to Stock
 
+[![Django CI](https://github.com/Abhiek187/how-to-stock/actions/workflows/django.yml/badge.svg)](https://github.com/Abhiek187/how-to-stock/actions/workflows/django.yml)
+
 <img src="img/graphs.png" alt="stock graphs" width="1000">
 
 This web service serves as an introduction to the stock market for users new to finance. Users can learn about various financial terms, simulate trading stocks using a virtual balance, and view stock predictions based on probability and statistical data.
