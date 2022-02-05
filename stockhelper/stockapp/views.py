@@ -139,9 +139,9 @@ def get_stock_details(request, ticker):
         return JsonResponse({"status": "success"})
 
     # Fetch details about a company and display it to the user
-    profile = api.get_company_profile(ticker)  # returns a list of dicts
+    raw_profile = api.get_company_profile(ticker)  # returns a list of dicts
     # returns a dict with symbol and historical list
-    history = api.get_stock_history(ticker)
+    raw_history = api.get_stock_history(ticker)
 
     terms = {
         "beta": Card.objects.get(word="Beta"),
@@ -156,10 +156,25 @@ def get_stock_details(request, ticker):
         "volume": Card.objects.get(word="Volume")
     }
 
+    # profile should be an array with one element, display an error if that's not the case
+    if not raw_profile:
+        profile = None
+    elif isinstance(raw_profile, list) and len(raw_profile) == 1:
+        profile = raw_profile[0]
+    else:
+        profile = raw_profile
+
+    # history should be a dict with a historical key, display an error if that's not the case
+    if isinstance(raw_history, dict) and "historical" in raw_history:
+        history = raw_history["historical"]
+    elif isinstance(raw_history, dict) and "Error Message" in raw_history:
+        history = raw_history
+    else:
+        history = ticker
+
     return render(request, "stockapp/detail.html", {
-        # Show an error if the ticker is invalid
-        "profile": None if not profile else profile[0],
-        "history": ticker if not history else history["historical"],
+        "profile": profile,
+        "history": history,
         "balance": request.user.balance,
         "terms": terms
     })
