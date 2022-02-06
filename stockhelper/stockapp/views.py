@@ -159,7 +159,7 @@ def get_stock_details(request, ticker):
     # profile should be an array with one element, display an error if that's not the case
     if not raw_profile:
         profile = None
-    elif isinstance(raw_profile, list) and len(raw_profile) == 1:
+    elif isinstance(raw_profile, list) and len(raw_profile) >= 1:
         profile = raw_profile[0]
     else:
         profile = raw_profile
@@ -221,26 +221,46 @@ class SessionBalanceView(LoginRequiredMixin, generic.base.TemplateView):
         return HttpResponse(request.user.balance)
 
 
-# Get the price and change of all the stocks in the portfolio
-class PricesView(LoginRequiredMixin, generic.base.TemplateView):
-    def get(self, request):
-        # Add the current balance with the value of each stock to calculate the user's net worth
-        net_worth = request.user.balance
-        # Keep track of the price and change of each stock the user owns
-        prices = []
+class PriceView(LoginRequiredMixin, generic.base.TemplateView):
+    def get(self, request, ticker):
+        # Get the price, change, and shares of the given ticker
+        # Tickers are stored in all caps, but the request should be case insensitive
+        upper_ticker = ticker.upper()
 
-        # Keep each stock price and change up-to-date
-        # Use select_related to cache the stock foreign key to avoid hitting the database twice
-        for portfolio in Portfolio.objects.filter(user=request.user).select_related("stock"):
+        try:
+            # SELECT Stock.price, Stock.change, Porfolio.shares
+            # FROM Stock JOIN Portfolio ON Stock.ticker = Porfolio.stock
+            # WHERE Stock.ticker = <ticker> AND Porfolio.user =
+            # (SELECT username FROM User WHERE username = <request.user>)
+            portfolio = Portfolio.objects.get(
+                user=request.user, stock=upper_ticker)
             stock = portfolio.stock
-            profile = api.get_company_profile(stock.ticker)[0]
+            raw_profile = api.get_company_profile(upper_ticker)
+
+            # profile should be an array with one element, display an error if that's not the case
+            if not raw_profile:
+                return JsonResponse({
+                    "error": f"No stock {upper_ticker} found"
+                }, status=HTTPStatus.BAD_REQUEST)
+            elif isinstance(raw_profile, list) and len(raw_profile) >= 1:
+                profile = raw_profile[0]
+            else:
+                return JsonResponse({
+                    "error": raw_profile.get("Error Message", raw_profile)
+                }, status=HTTPStatus.INTERNAL_SERVER_ERROR)
+
+            # A company could change its name while owning their stock, such as Meta
+            stock.name = profile["companyName"]
             stock.price = profile["price"]
             stock.change = profile["changes"]
             stock.save()
-            net_worth += Decimal(portfolio.shares * stock.price)
-            prices.append({"price": stock.price, "change": stock.change})
 
-        return JsonResponse({
-            "netWorth": net_worth,
-            "prices": prices
-        })
+            return JsonResponse({
+                "price": stock.price,
+                "change": stock.change,
+                "shares": portfolio.shares
+            })
+        except Portfolio.DoesNotExist:
+            return JsonResponse({
+                "error": f"{upper_ticker} doesn't exist in the user's porfolio"
+            }, status=HTTPStatus.BAD_REQUEST)
