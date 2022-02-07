@@ -4,22 +4,22 @@ from time import sleep
 # Data provided by Financial Modeling Prep: https://financialmodelingprep.com/developer/docs/
 API_KEY = "174c8948d0e48bad0418e1fe49d72e15"
 FMP = "https://financialmodelingprep.com"
+RETRY_LIMIT = 3
 
 
-def get_request(req_str):
+def get_request(req_str, retry=0):
     req = requests.get(req_str)
     json = req.json()
 
     # FMP imposes a rate limit, so check to see if an error occurred
-    if isinstance(json, dict) and "X-Rate-Limit-Retry-After-Milliseconds" in json:
+    # Give up after RETRY_LIMIT attempts
+    if retry < RETRY_LIMIT and isinstance(json, dict) and "X-Rate-Limit-Retry-After-Milliseconds" in json:
         # Use X-Rate-Limit-Retry-After-Seconds and X-Rate-Limit-Retry-After-Milliseconds to
         # determine how long to sleep for before retrying
         secs = json.get("X-Rate-Limit-Retry-After-Seconds", 0)
         msecs = json["X-Rate-Limit-Retry-After-Milliseconds"]
         sleep(secs + msecs / 1000)
-
-        req = requests.get(req_str)
-        json = req.json()
+        return get_request(req_str, retry + 1)
 
     return json
 
