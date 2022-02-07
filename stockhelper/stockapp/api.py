@@ -4,7 +4,7 @@ from time import sleep
 # Data provided by Financial Modeling Prep: https://financialmodelingprep.com/developer/docs/
 API_KEY = "174c8948d0e48bad0418e1fe49d72e15"
 FMP = "https://financialmodelingprep.com"
-RETRY_LIMIT = 3
+RETRY_LIMIT = 5
 
 
 def get_request(req_str, retry=0):
