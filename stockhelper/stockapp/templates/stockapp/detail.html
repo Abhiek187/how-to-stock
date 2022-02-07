@@ -3,7 +3,7 @@
 {% load custom_tags %}
 
 {% block title %}
-{% if profile is None %}
+{% if profile is None or 'companyName' not in profile %}
 Details - ???
 {% else %}
 Details - {{ profile.companyName }}
@@ -24,6 +24,12 @@ Details - {{ profile.companyName }}
 {% block content %}
 {% if profile is None %}
 <p class="text-danger my-3">Error: Unknown stock ticker: {{ history }}</p>
+
+{% elif 'companyName' not in profile or 'Error Message' in history %}
+<!-- The FMP API gave an error response -->
+<p class="text-danger my-3">The server reported an error:</p>
+<p>Profile: {{ profile }}</p>
+<p>History: {{ history }}</p>
 
 {% else %}
 <div class="main-info-container mt-3">

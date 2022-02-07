@@ -428,7 +428,7 @@ class BalanceViewTests(TestCase):
         self.assertContains(response, self.user.balance)
 
 
-class PricesViewTests(TestCase):
+class PriceViewTests(TestCase):
     def setUp(self):
         # Initialize the balance to $10,000 before each test
         self.user = get_user_model().objects.create_user(
@@ -436,58 +436,81 @@ class PricesViewTests(TestCase):
 
     def test_redirect_without_login(self):
         # Check that the view redirects to the login screen if the user isn't logged in
-        response = self.client.get(reverse("stockapp:prices"))
+        response = self.client.get(reverse("stockapp:price", args=("PRU",)))
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(
-            response, f"{reverse('login')}?next={reverse('stockapp:prices')}")
+            response, f"{reverse('login')}?next={reverse('stockapp:price', args=('PRU',))}")
 
     def test_view_renders(self):
-        # Check that the view renders properly
+        # Check that the JSON is populated with the correct information
+        ticker = "PRU"
+        old_stock = Stock.objects.create(ticker=ticker, name="Prudential Financial, Inc.",
+                                         price=25.00, change=-1.12)
+        old_portfolio = Portfolio.objects.create(
+            user=self.user, stock=old_stock, shares=10)
+
         self.client.login(username=USERNAME, password=PASSWORD)
-        response = self.client.get(reverse("stockapp:prices"))
+        response = self.client.get(reverse("stockapp:price", args=(ticker,)))
+
         self.assertEqual(response.status_code, 200)
-        # Check that the relevant content on the prices page is present
+
+        # Fetch the current stock price and change since they were updated in the GET request
+        new_stock = Stock.objects.get(ticker=ticker)
         self.assertJSONEqual(response.content, {
-                             "netWorth": f"{self.user.balance:.2f}", "prices": []})
+            "price": float(new_stock.price),  # convert from Decimal to float
+            "change": new_stock.change,
+            "shares": old_portfolio.shares  # the porfolio shouldn't have changed
+        })
 
-    def test_stocks_show(self):
-        # Check that the stock data defined below is present in the output
-        old_stock1 = Stock.objects.create(ticker="FB", name="Facebook Inc",
-                                          price=300.00, change=-3.43)
-        portfolio1 = Portfolio.objects.create(
-            user=self.user, stock=old_stock1, shares=5)
-        old_stock2 = Stock.objects.create(ticker="AMZN", name="Amazon.com Inc",
-                                          price=3000.00, change=-35.91)
-        portfolio2 = Portfolio.objects.create(
-            user=self.user, stock=old_stock2, shares=1)
-        old_stock3 = Stock.objects.create(ticker="GOOGL", name="Alphabet Inc",
-                                          price=2000.00, change=-3.73)
-        portfolio3 = Portfolio.objects.create(
-            user=self.user, stock=old_stock3, shares=2)
+    def test_is_case_insensitive(self):
+        # Check that JSON is correct even if the ticker isn't in all caps
+        ticker = "pRu"
+        old_stock = Stock.objects.create(ticker=ticker.upper(), name="Prudential Financial, Inc.",
+                                         price=25.00, change=-1.12)
+        old_portfolio = Portfolio.objects.create(
+            user=self.user, stock=old_stock, shares=10)
 
         self.client.login(username=USERNAME, password=PASSWORD)
-        response = self.client.get(reverse("stockapp:prices"))
-        new_stock1 = Stock.objects.get(ticker=old_stock1.ticker)
-        new_stock2 = Stock.objects.get(ticker=old_stock2.ticker)
-        new_stock3 = Stock.objects.get(ticker=old_stock3.ticker)
+        response = self.client.get(reverse("stockapp:price", args=(ticker,)))
 
         self.assertEqual(response.status_code, 200)
-        net_worth = (self.user.balance + portfolio1.shares * new_stock1.price
-                     + portfolio2.shares * new_stock2.price + portfolio3.shares * new_stock3.price)
-        # Convert the Decimals to floats
-        prices = [
-            {"price": float(new_stock1.price), "change": new_stock1.change},
-            {"price": float(new_stock2.price), "change": new_stock2.change},
-            {"price": float(new_stock3.price), "change": new_stock3.change}
-        ]
 
-        resp = json.loads(response.content)
-        # Account for floating point errors by 7 decimal places
-        self.assertAlmostEqual(float(resp["netWorth"]), float(net_worth))
-        self.assertEqual(resp["prices"], prices)
+        # Fetch the current stock price and change since they were updated in the GET request
+        new_stock = Stock.objects.get(ticker=ticker.upper())
+        self.assertJSONEqual(response.content, {
+            "price": float(new_stock.price),
+            "change": new_stock.change,
+            "shares": old_portfolio.shares  # the porfolio shouldn't have changed
+        })
+
+    def test_nonexistent_stock(self):
+        # Check that the correct error shows when a stock isn't present in the user's porfolio
+        self.client.login(username=USERNAME, password=PASSWORD)
+        ticker = "PRU"
+        response = self.client.get(reverse("stockapp:price", args=(ticker,)))
+
+        self.assertEqual(response.status_code, 400)
+        self.assertJSONEqual(response.content, {
+            "error": f"{ticker} doesn't exist in the user's porfolio"
+        })
+
+    def test_invalid_stock(self):
+        # Check that the correct error shows if an invalid stock ticker is in the user's porfolio
+        ticker = "qjxz"
+        old_stock = Stock.objects.create(ticker=ticker.upper(), name="Blah Blah Inc.",
+                                         price=0.00, change=0)
+        Portfolio.objects.create(user=self.user, stock=old_stock, shares=100)
+
+        self.client.login(username=USERNAME, password=PASSWORD)
+        response = self.client.get(reverse("stockapp:price", args=(ticker,)))
+
+        self.assertEqual(response.status_code, 400)
+        self.assertJSONEqual(response.content, {
+            "error": f"No stock {ticker.upper()} found"
+        })
 
 
-class CreateAccountView(TestCase):
+class CreateAccountViewTests(TestCase):
     # Load all the card data (to successfully redirect to the home page)
     fixtures = ["cards.json"]
 
@@ -527,7 +550,7 @@ class CreateAccountView(TestCase):
         self.assertTrue(User.objects.get(username=USERNAME).is_authenticated)
 
 
-class DeleteAccountView(TestCase):
+class DeleteAccountViewTests(TestCase):
     def setUp(self):
         # Create a user that can login to the view
         self.user = get_user_model().objects.create_user(

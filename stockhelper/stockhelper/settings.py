@@ -161,4 +161,5 @@ LOGGING = {
 
 # Activate Django-on-Heroku (breaks if testing)
 if sys.argv[1:2] != ["test"]:
-    django_on_heroku.settings(locals(), logging=False)  # logging=False prevents LOGGING from being overwritten
+    # logging=False prevents LOGGING from being overwritten
+    django_on_heroku.settings(locals(), logging=False)

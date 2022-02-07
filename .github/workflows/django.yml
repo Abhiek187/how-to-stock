@@ -2,13 +2,12 @@ name: Django CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -16,19 +15,19 @@ jobs:
         python-version: [3.7, 3.8, 3.9]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Set Environment
-      run: |
-        echo "SECRET_KEY=$(openssl rand -base64 32)" >> $GITHUB_ENV
-        echo "DEBUG=true" >> $GITHUB_ENV
-    - name: Run Tests
-      run: |
-        python -Wa stockhelper/manage.py test stockhelper/
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Set Environment
+        run: |
+          echo "SECRET_KEY=$(openssl rand -base64 32)" >> $GITHUB_ENV
+          echo "DEBUG=true" >> $GITHUB_ENV
+      - name: Run Tests
+        run: |
+          python -Wa stockhelper/manage.py test stockhelper/ -v 2
