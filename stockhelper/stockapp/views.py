@@ -36,7 +36,11 @@ def get_stocks(request):
         if form.is_valid():
             # Query the dataset
             stock_data = api.get_stocks(form.cleaned_data)
-            request.session["results"] = stock_data
+
+            # If stock_data isn't a list (due to an API error), treat it like there are no results
+            if isinstance(stock_data, list):
+                request.session["results"] = stock_data
+
             # Return an HttpResponseRedirect to prevent the data from being posted twice
             return HttpResponseRedirect(reverse("stockapp:screener"))
 
