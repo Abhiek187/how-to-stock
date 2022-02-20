@@ -58,10 +58,10 @@ const getPriceAndChange = async () => {
 
                 // Make the change text green or red depending on its sign
                 if (change < 0) {
-                    stockChange.innerHTML = `&#x25bc; ${-change}`;
+                    stockChange.innerHTML = `▼ ${-change}`;
                     stockChange.classList.add("text-danger");
                 } else {
-                    stockChange.innerHTML = `&#x25b2; ${change}`;
+                    stockChange.innerHTML = `▲ ${change}`;
                     stockChange.classList.add("text-success");
                 }
             }
@@ -86,7 +86,7 @@ const getPriceAndChange = async () => {
 
         // Show how much the net worth has changed (25b2 for up arrow and 25bc for down arrow)
         netWorthDom.classList.add("text-success");
-        netWorthDom.innerHTML += ` &#x25b2; ${toMoney(netWorthChange)}`;
+        netWorthDom.innerHTML += ` ▲ ${toMoney(netWorthChange)}`;
     } else if (netWorthChange < 0) {
         portfolioStatus.textContent =
             "Right now, you have a net loss. Consider selling stocks " +
@@ -95,7 +95,7 @@ const getPriceAndChange = async () => {
         roiAlert.classList.add("alert-danger");
 
         netWorthDom.classList.add("text-danger");
-        netWorthDom.innerHTML += ` &#x25bc; ${toMoney(-netWorthChange)}`;
+        netWorthDom.innerHTML += ` ▼ ${toMoney(-netWorthChange)}`;
     }
 };
 

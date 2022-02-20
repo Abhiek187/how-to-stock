@@ -1,6 +1,7 @@
 # How to Stock
 
 [![Django CI](https://github.com/Abhiek187/how-to-stock/actions/workflows/django.yml/badge.svg)](https://github.com/Abhiek187/how-to-stock/actions/workflows/django.yml)
+[![CodeQL](https://github.com/Abhiek187/how-to-stock/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Abhiek187/how-to-stock/actions/workflows/codeql-analysis.yml)
 
 <img src="img/graphs.png" alt="stock graphs" width="1000">
 

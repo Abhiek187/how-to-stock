@@ -102,10 +102,10 @@ const showToastMessage = (isError, message) => {
 
 // Make the change text green or red depending on its sign
 if (parseFloat(changeDom.textContent) < 0) {
-    changeDom.innerHTML = `&#x25bc; ${changeDom.textContent}`;
+    changeDom.innerHTML = `▼ ${changeDom.innerHTML}`;
     changeDom.classList.add("text-danger");
 } else {
-    changeDom.innerHTML = `&#x25b2; ${changeDom.textContent}`;
+    changeDom.innerHTML = `▲ ${changeDom.innerHTML}`;
     changeDom.classList.add("text-success");
 }
 
