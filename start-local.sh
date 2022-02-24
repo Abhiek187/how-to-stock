@@ -22,6 +22,12 @@ echo $'\n4. Heading into the stockhelper directory...'
 cd stockhelper
 
 if [ ! -e .env ]; then
+    # Throw an error if the user didn't pass in their API key
+    if [ $# == 0 ]; then
+        echo "Error: No API key provided"
+        exit 1
+    fi
+    
     echo $'\n5. Generating a secret key...'
 
     if type openssl > /dev/null; then
@@ -32,16 +38,20 @@ if [ ! -e .env ]; then
 
     echo $'\n6. Turning on DEBUG mode...'
     echo "DEBUG=true" >> .env
+
+    echo $'\n7. Saving the API key...'
+    echo "FMP_API_KEY=$1" >> .env
 else
     echo $'\n5. The secret key already exists.'
     echo $'\n6. DEBUG mode is on.'
+    echo $'\n7. The API key is already stored.'
 fi
 
-echo $'\n7. Creating the SQLite database...'
+echo $'\n8. Creating the SQLite database...'
 python3 manage.py migrate
 
-echo $'\n8. Loading the flashcards data...'
+echo $'\n9. Loading the flashcards data...'
 python3 manage.py loaddata cards.json
 
-echo $'\n9. Running the Django server...'
+echo $'\n10. Running the Django server...'
 python3 manage.py runserver

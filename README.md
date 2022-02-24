@@ -66,18 +66,14 @@ This project is hosted live at Heroku and can be accessed directly at [https://h
 
 Before cloning this repo, you will need to obtain an API key from [Financial Modeling Prep](https://financialmodelingprep.com/developer/docs/). Then do the following:
 
-1. Create a virtual environment, install all dependencies, and run the Django server: `./start-local.sh` or `source start-local.sh` (See step 3 for the differences.)
-2. Running the shell script will generate a file at `stockhelper/.env`. Add the API key from Financial Modeling Prep to this file and assign it to a variable called `FMP_API_KEY` like so:
-
-   `FMP_API_KEY=<YOUR-API-KEY>`
-
-3. Open `localhost:8000` in your browser.
-4. When done, press `CTRL/CMD-C` to stop the Django server. If you used `./start-local.sh`, you will return to your current shell. But if you used `source start-local.sh`, you will need to deactivate the virtual environment: `deactivate`
+1. Create a virtual environment, install all dependencies, save the API key, and run the Django server: `./start-local.sh YOUR_API_KEY` or `source start-local.sh YOUR_API_KEY` (See step 3 for the differences.) ON future visits, the API key doesn't need to be provided.
+2. Open `localhost:8000` in your browser.
+3. When done, press `CTRL/CMD-C` to stop the Django server. If you used `./start-local.sh`, you will return to your current shell. But if you used `source start-local.sh`, you will need to deactivate the virtual environment: `deactivate`
 
 ### Docker
 
 Make sure [Docker](https://www.docker.com/products/docker-desktop) and [Docker Compose](https://docs.docker.com/compose/install/) are installed. And make sure to obtain an API key from [Financial Modeling Prep](https://financialmodelingprep.com/developer/docs/). Then do the following:
 
-1. Pass in the API key and start up a container for this app: `./start-docker.sh YOUR_API_KEY`. On subsequent visits, the container can be spun up directly using `./start-docker.sh` or `docker-compose up -d`.
+1. Pass in the API key and start up a container for this app: `./start-docker.sh YOUR_API_KEY`. On future visits, the container can be spun up directly using `./start-docker.sh` or `docker-compose up -d`.
 2. Once everything's installed, open `localhost:8000` in your browser.
 3. When done, shut down and clean up the container: `docker-compose down`
