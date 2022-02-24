@@ -9,17 +9,20 @@ if [ ! -e "$ENV" ]; then
         exit 1
     fi
 
-    # Generate a random secret key
+    echo $'Generating a secret key...'
     if type openssl > /dev/null; then
         echo "SECRET_KEY=$(openssl rand -base64 32)" > "$ENV"
     else
         echo "SECRET_KEY=$(head -c 32 /dev/urandom | base64)" > "$ENV"
     fi
 
-    # Enable debug mode
+    echo $'\nTurning on DEBUG mode...'
     echo "DEBUG=true" >> "$ENV"
-    # Save the API key passed as an argument
+    
+    echo $'\nSaving the API key...'
     echo "FMP_API_KEY=$1" >> "$ENV"
+else
+    echo "The .env file is already created."
 fi
 
 # Spin up a docker container
