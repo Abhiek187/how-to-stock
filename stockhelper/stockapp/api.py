@@ -1,8 +1,16 @@
+import dotenv
+import os
+from pathlib import Path
 import requests
 from time import sleep
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+dotenv_file = os.path.join(BASE_DIR, ".env")
+if os.path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
+
 # Data provided by Financial Modeling Prep: https://financialmodelingprep.com/developer/docs/
-API_KEY = "174c8948d0e48bad0418e1fe49d72e15"
+API_KEY = os.environ["FMP_API_KEY"]
 FMP = "https://financialmodelingprep.com"
 RETRY_LIMIT = 5
 

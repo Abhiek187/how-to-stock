@@ -4,10 +4,15 @@ FROM python:3-alpine
 # Send python output in real-time without needing to be buffered
 ENV PYTHONUNBUFFERED=1
 WORKDIR /code
-
 COPY requirements.txt /code
-# Install all python dependencies
-RUN pip install -r requirements.txt
+
+# Install the packages needed to install psycopg2-binary: https://stackoverflow.com/a/47871121
+RUN \
+    apk add --no-cache postgresql-libs && \
+    apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && \
+    # Install all python dependencies
+    pip install -r requirements.txt --no-cache-dir && \
+    apk --purge del .build-deps
 
 COPY . /code
 WORKDIR /code/stockhelper
