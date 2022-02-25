@@ -27,9 +27,9 @@ jobs:
       - name: Set Environment
         run: |
           echo "SECRET_KEY=$(openssl rand -base64 32)" >> $GITHUB_ENV
+      - name: Run Tests
         env:
           DEBUG: true
           FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
-      - name: Run Tests
         run: |
           python -Wa stockhelper/manage.py test stockhelper/ -v 2
