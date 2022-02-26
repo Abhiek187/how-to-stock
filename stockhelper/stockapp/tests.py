@@ -183,16 +183,15 @@ class DetailViewTests(TestCase):
     def test_buy_new_stock(self):
         # Check that buying a stock with 0 shares creates a new Stock object
         self.client.login(username=USERNAME, password=PASSWORD)
+        porfolio = self.create_portfolio()
         response = self.send_post_request()
 
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, {"status": "success"})
         self.assertEqual(User.objects.get(username=USERNAME).balance,
                          self.user.balance - self.stock_purchase["shares"] * self.stock_purchase["price"])
-        self.assertQuerysetEqual(Stock.objects.all(), [
-                                 f"<Stock: {self.stock_purchase['ticker']} - {self.stock_purchase['name']}>"])
-        self.assertQuerysetEqual(Portfolio.objects.all(), [
-                                 f"<Portfolio: {USERNAME}: {self.stock_purchase['shares']} shares of {self.test_stock}>"])
+        self.assertQuerysetEqual(Stock.objects.all(), [self.test_stock])
+        self.assertQuerysetEqual(Portfolio.objects.all(), [porfolio])
 
     def test_sell_new_stock(self):
         # Check that selling a new stock returns an error
@@ -205,8 +204,7 @@ class DetailViewTests(TestCase):
                              "status": "failure", "maxShares": 0})
         self.assertEqual(User.objects.get(
             username=USERNAME).balance, self.user.balance)
-        self.assertQuerysetEqual(Stock.objects.all(), [
-                                 f"<Stock: {self.stock_purchase['ticker']} - {self.stock_purchase['name']}>"])
+        self.assertQuerysetEqual(Stock.objects.all(), [self.test_stock])
         self.assertQuerysetEqual(Portfolio.objects.all(), [])
 
     def test_buy_more_stock(self):
@@ -219,8 +217,7 @@ class DetailViewTests(TestCase):
         self.assertJSONEqual(response.content, {"status": "success"})
         self.assertEqual(User.objects.get(username=USERNAME).balance, self.user.balance -
                          self.stock_purchase["shares"] * self.stock_purchase["price"])
-        self.assertQuerysetEqual(Stock.objects.all(), [
-                                 f"<Stock: {self.stock_purchase['ticker']} - {self.stock_purchase['name']}>"])
+        self.assertQuerysetEqual(Stock.objects.all(), [self.test_stock])
         new_portfolio = Portfolio.objects.get(
             user=self.user, stock=self.test_stock)
         self.assertEqual(new_portfolio.shares, old_portfolio.shares +
@@ -238,8 +235,7 @@ class DetailViewTests(TestCase):
         self.assertJSONEqual(response.content, {"status": "success"})
         self.assertEqual(User.objects.get(username=USERNAME).balance, self.user.balance +
                          self.stock_purchase["shares"] * self.stock_purchase["price"])
-        self.assertQuerysetEqual(Stock.objects.all(), [
-                                 f"<Stock: {self.stock_purchase['ticker']} - {self.stock_purchase['name']}>"])
+        self.assertQuerysetEqual(Stock.objects.all(), [self.test_stock])
         new_portfolio = Portfolio.objects.get(
             user=self.user, stock=self.test_stock)
         self.assertEqual(new_portfolio.shares, old_portfolio.shares -
@@ -257,8 +253,7 @@ class DetailViewTests(TestCase):
         self.assertJSONEqual(response.content, {"status": "success"})
         self.assertEqual(User.objects.get(username=USERNAME).balance, self.user.balance +
                          self.stock_purchase["shares"] * self.stock_purchase["price"])
-        self.assertQuerysetEqual(Stock.objects.all(), [
-                                 f"<Stock: {self.stock_purchase['ticker']} - {self.stock_purchase['name']}>"])
+        self.assertQuerysetEqual(Stock.objects.all(), [self.test_stock])
         self.assertQuerysetEqual(Portfolio.objects.all(), [])
 
     def test_sell_too_much_stock(self):
@@ -274,8 +269,7 @@ class DetailViewTests(TestCase):
                              "status": "failure", "maxShares": old_portfolio.shares})
         self.assertEqual(User.objects.get(
             username=USERNAME).balance, self.user.balance)
-        self.assertQuerysetEqual(Stock.objects.all(), [
-                                 f"<Stock: {self.stock_purchase['ticker']} - {self.stock_purchase['name']}>"])
+        self.assertQuerysetEqual(Stock.objects.all(), [self.test_stock])
         new_portfolio = Portfolio.objects.get(
             user=self.user, stock=self.test_stock)
         self.assertEqual(new_portfolio.shares, old_portfolio.shares)
@@ -403,7 +397,7 @@ class PortfolioViewTests(TestCase):
         ]
         # Ignore the order of each list
         self.assertQuerysetEqual(
-            response.context["portfolios"], portfolio_list, ordered=False)
+            response.context["portfolios"], portfolio_list, transform=repr, ordered=False)
 
 
 class BalanceViewTests(TestCase):
