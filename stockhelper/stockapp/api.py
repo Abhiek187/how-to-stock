@@ -17,7 +17,11 @@ RETRY_LIMIT = 5
 
 def get_request(req_str, retry=0):
     req = requests.get(req_str)
-    json = req.json()
+
+    try:
+        json = req.json()
+    except requests.exceptions.JSONDecodeError:
+        return req.text
 
     # FMP imposes a rate limit, so check to see if an error occurred
     # Give up after RETRY_LIMIT attempts

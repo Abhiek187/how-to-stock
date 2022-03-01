@@ -249,8 +249,10 @@ class PriceView(LoginRequiredMixin, generic.base.TemplateView):
             elif isinstance(raw_profile, list) and len(raw_profile) >= 1:
                 profile = raw_profile[0]
             else:
+                error = raw_profile.get("Error Message", raw_profile) if hasattr(
+                    raw_profile, "get") else raw_profile
                 return JsonResponse({
-                    "error": raw_profile.get("Error Message", raw_profile)
+                    "error": error
                 }, status=HTTPStatus.INTERNAL_SERVER_ERROR)
 
             # A company could change its name while owning their stock, such as Meta
