@@ -12,7 +12,7 @@ if os.path.isfile(dotenv_file):
 # Data provided by Financial Modeling Prep: https://financialmodelingprep.com/developer/docs/
 API_KEY = os.environ["FMP_API_KEY"]
 FMP = "https://financialmodelingprep.com"
-RETRY_LIMIT = 5
+RETRY_LIMIT = 100
 
 
 def get_request(req_str, retry=0):
