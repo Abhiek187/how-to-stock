@@ -171,8 +171,8 @@ def get_stock_details(request, ticker):
     else:
         profile = raw_profile
 
-    # history should be a list, display an error if that's not the case
-    if isinstance(raw_history, list) or (
+    # history should be a list with at least one element, display an error if that's not the case
+    if (isinstance(raw_history, list) and raw_history) or (
             isinstance(raw_history, dict) and "Error Message" in raw_history):
         history = raw_history
     else:
