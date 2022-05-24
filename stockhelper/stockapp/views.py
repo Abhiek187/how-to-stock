@@ -36,6 +36,7 @@ def get_stocks(request):
         if form.is_valid():
             # Query the dataset
             stock_data = api.get_stocks(form.cleaned_data)
+            print(f"{stock_data=}")
 
             # If stock_data isn't a list (due to an API error), treat it like there are no results
             if isinstance(stock_data, list):
@@ -146,6 +147,8 @@ def get_stock_details(request, ticker):
     raw_profile = api.get_company_profile(ticker)  # returns a list of dicts
     # returns a dict with symbol and historical list
     raw_history = api.get_stock_history(ticker)
+    print(f"{raw_profile=}")
+    print(f"{raw_history=}")
 
     terms = {
         "beta": Card.objects.get(word="Beta"),
@@ -240,6 +243,7 @@ class PriceView(LoginRequiredMixin, generic.base.TemplateView):
                 user=request.user, stock=upper_ticker)
             stock = portfolio.stock
             raw_profile = api.get_company_profile(upper_ticker)
+            print(f"{raw_profile=}")
 
             # profile should be an array with one element, display an error if that's not the case
             if not raw_profile:
