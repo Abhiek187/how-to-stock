@@ -78,3 +78,19 @@ Make sure [Docker](https://www.docker.com/products/docker-desktop) and [Docker C
 1. Pass in the API key and start up a container for this app: `./start-docker.sh YOUR_API_KEY`. On future visits, the container can be spun up directly using `./start-docker.sh` or `docker-compose up -d`.
 2. Once everything's installed, open `localhost:8000` in your browser.
 3. When done, shut down and clean up the container: `docker-compose down`
+
+## Troubleshooting
+
+When making a request to FMP for the first time in GitHub Actions, the requests may fail with the following response:
+
+```html
+<html>
+<head><title>403 Forbidden</title></head>
+<body bgcolor="white">
+<center><h1>403 Forbidden</h1></center>
+<hr><center>nginx/1.14.0 (Ubuntu)</center>
+</body>
+</html>
+```
+
+This error goes away after retrying the requests.
