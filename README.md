@@ -93,4 +93,4 @@ When making a request to FMP for the first time in GitHub Actions, the requests 
 </html>
 ```
 
-This error goes away after retrying the requests.
+This error goes away after re-running the jobs.
