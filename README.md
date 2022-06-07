@@ -85,11 +85,11 @@ When making a request to FMP for the first time in GitHub Actions, the requests 
 
 ```html
 <html>
-<head><title>403 Forbidden</title></head>
-<body bgcolor="white">
-<center><h1>403 Forbidden</h1></center>
-<hr><center>nginx/1.14.0 (Ubuntu)</center>
-</body>
+  <head><title>403 Forbidden</title></head>
+  <body bgcolor="white">
+    <center><h1>403 Forbidden</h1></center>
+    <hr><center>nginx/1.14.0 (Ubuntu)</center>
+  </body>
 </html>
 ```
 
