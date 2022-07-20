@@ -67,7 +67,7 @@ This project is hosted live at Heroku and can be accessed directly at [https://h
 
 Before cloning this repo, you will need to obtain an API key from [Financial Modeling Prep](https://financialmodelingprep.com/developer/docs/). Then do the following:
 
-1. Create a virtual environment, install all dependencies, save the API key, and run the Django server: `./start-local.sh YOUR_API_KEY` or `source start-local.sh YOUR_API_KEY` (See step 3 for the differences.) ON future visits, the API key doesn't need to be provided.
+1. Create a virtual environment, install all dependencies, save the API key, and run the Django server: `./start-local.sh YOUR_API_KEY` or `source start-local.sh YOUR_API_KEY` (See step 3 for the differences.) On future visits, the API key doesn't need to be provided.
 2. Open `localhost:8000` in your browser.
 3. When done, press `CTRL/CMD-C` to stop the Django server. If you used `./start-local.sh`, you will return to your current shell. But if you used `source start-local.sh`, you will need to deactivate the virtual environment: `deactivate`
 
