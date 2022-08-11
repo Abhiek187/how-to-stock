@@ -115,6 +115,9 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_USER_MODEL = 'stockapp.User'
 LOGIN_REDIRECT_URL = '/stockapp'  # go to the home page after logging in
 
+# For development purposes, send emails to the console
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
