@@ -115,6 +115,9 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_USER_MODEL = 'stockapp.User'
 LOGIN_REDIRECT_URL = '/stockapp'  # go to the home page after logging in
 
+# For development purposes, send emails to the console
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -132,6 +135,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Add the project-level static files
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "stockhelper/static")
+]
 
 # Get emails from logs of class AdminEmailHandler
 ADMINS = [("Abhishek Chaudhuri", "achaudhuri2011@yahoo.com")]
