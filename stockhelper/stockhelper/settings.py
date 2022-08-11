@@ -133,6 +133,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Add the project-level static files
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "stockhelper/static")
+]
+
 # Get emails from logs of class AdminEmailHandler
 ADMINS = [("Abhishek Chaudhuri", "achaudhuri2011@yahoo.com")]
 

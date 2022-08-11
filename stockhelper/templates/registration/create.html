@@ -1,6 +1,15 @@
 {% extends "stockapp/index.html" %}
+{% load static %}
 
 {% block title %}Create Account{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'registration/css/create.css' %}">
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'registration/js/create.js' %}"></script>
+{% endblock %}
 
 {% block content %}
 <h2 class="mt-3">Create Account</h2>
@@ -24,6 +33,12 @@
         <label for="id_password2" class="form-label">Confirm Password</label>
         <input type="password" class="form-control mx-auto" name="password2" autocomplete="new-password" required
             id="id_password2" style="max-width: 300px;">
+        <div class="show-password-container form-check fs-6 mt-1 d-flex justify-content-center gap-2">
+            <input class="form-check-input" type="checkbox" value="" id="showPassword">
+            <label class="show-password-label form-check-label" for="showPassword">
+                Show Password
+            </label>
+        </div>
         <div class="form-text">{{ form.password2.help_text }}</div>
         <div class="form-text text-danger">{{ form.password2.errors }}</div>
     </div>
