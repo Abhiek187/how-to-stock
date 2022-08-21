@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, DeleteUserForm
 
 
 # Create Account view
@@ -30,14 +30,24 @@ def create_account(request):
 @login_required
 def delete_account(request):
     if request.method == "POST":
-        # Safeguard to avoid losing access to the admin page
-        if not request.user.is_superuser:
-            # Delete the user object and redirect to the login page
-            request.user.delete()
-            return redirect(reverse("login"))
-        else:
-            return render(request, "registration/delete.html", {
-                "error": f"Delete failed, {request.user} is a superuser"
-            })
+        form = DeleteUserForm(request.POST)
+
+        if form.is_valid():
+            # Check if the username field is correct
+            username = form.cleaned_data.get("username")
+
+            if username != request.user.username:
+                return render(request, "registration/delete.html", {
+                    "error": f"Incorrect username: {username}"
+                })
+            # Safeguard to avoid losing access to the admin page
+            elif request.user.is_superuser:
+                return render(request, "registration/delete.html", {
+                    "error": f"Delete failed, {request.user} is a superuser"
+                })
+            else:
+                # Delete the user object and redirect to the login page
+                request.user.delete()
+                return redirect(reverse("login"))
 
     return render(request, "registration/delete.html")
