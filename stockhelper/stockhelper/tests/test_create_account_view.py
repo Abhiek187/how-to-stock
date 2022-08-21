@@ -3,7 +3,7 @@ from django.urls import reverse
 
 from stockapp.models import User
 from stockhelper.forms import CustomUserCreationForm
-from .utils import USERNAME, PASSWORD
+from utils_test import USERNAME, PASSWORD
 
 
 class CreateAccountViewTests(TestCase):
@@ -44,3 +44,18 @@ class CreateAccountViewTests(TestCase):
         self.assertRedirects(response, reverse("stockapp:index"))
         # Check that the new user is created
         self.assertTrue(User.objects.get(username=USERNAME).is_authenticated)
+    
+    def test_invalid_user(self):
+        # Check that entering an invalid user doesn't create a new user
+        bad_username = "~!@#$%^&*()_+"
+        form_data = {
+            "username": bad_username,
+            "password1": "1234",
+            "password2": "1234"
+        }
+        form = CustomUserCreationForm(form_data)
+        self.assertFalse(form.is_valid())
+
+        response = self.client.post(reverse("create"), form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertQuerysetEqual(User.objects.all(), [])

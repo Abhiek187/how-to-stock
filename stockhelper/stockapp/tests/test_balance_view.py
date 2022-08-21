@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from .utils import USERNAME, PASSWORD
+from utils_test import USERNAME, PASSWORD
 
 
 class BalanceViewTests(TestCase):

@@ -8,6 +8,8 @@ from .forms import CustomUserCreationForm, DeleteUserForm
 
 # Create Account view
 def create_account(request):
+    status = 200
+
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
 
@@ -20,10 +22,12 @@ def create_account(request):
             login(request, user)
             # Upon successful creation of the account, redirect the user to the home page
             return redirect(reverse("stockapp:index"))
+        else:
+            status = 400
     else:
         form = CustomUserCreationForm()
 
-    return render(request, "registration/create.html", {"form": form})
+    return render(request, "registration/create.html", {"form": form}, status=status)
 
 
 # Delete Account view
@@ -39,12 +43,12 @@ def delete_account(request):
             if username != request.user.username:
                 return render(request, "registration/delete.html", {
                     "error": f"Incorrect username: {username}"
-                })
+                }, status=400)
             # Safeguard to avoid losing access to the admin page
             elif request.user.is_superuser:
                 return render(request, "registration/delete.html", {
                     "error": f"Delete failed, {request.user} is a superuser"
-                })
+                }, status=400)
             else:
                 # Delete the user object and redirect to the login page
                 request.user.delete()
