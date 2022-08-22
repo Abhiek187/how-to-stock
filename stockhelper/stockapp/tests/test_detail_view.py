@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from stockapp.models import Portfolio, Stock, User
 import json
-from .utils import USERNAME, PASSWORD
+from utils_test import USERNAME, PASSWORD
 
 
 class DetailViewTests(TestCase):
@@ -92,10 +92,10 @@ class DetailViewTests(TestCase):
         response = self.client.get(
             reverse("stockapp:detail", args=(bad_ticker,)))
 
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Details - ???")
+        self.assertEqual(response.status_code, 400)
+        self.assertContains(response, "Details - ???", status_code=400)
         self.assertContains(
-            response, f"Error: Unknown stock ticker: {bad_ticker}")
+            response, f"Error: Unknown stock ticker: {bad_ticker}", status_code=400)
         self.assertIsNone(response.context["profile"])
         self.assertEqual(response.context["history"], bad_ticker)
 

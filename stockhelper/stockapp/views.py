@@ -162,14 +162,17 @@ def get_stock_details(request, ticker):
         "volatility": Card.objects.get(word="Volatility"),
         "volume": Card.objects.get(word="Volume")
     }
+    status = 200
 
     # profile should be an array with one element, display an error if that's not the case
     if not raw_profile:
         profile = None
+        status = 400
     elif isinstance(raw_profile, list) and len(raw_profile) >= 1:
         profile = raw_profile[0]
     else:
         profile = raw_profile
+        status = 400
 
     # history should be a list with at least one element, display an error if that's not the case
     if (isinstance(raw_history, list) and raw_history) or (
@@ -177,13 +180,14 @@ def get_stock_details(request, ticker):
         history = raw_history
     else:
         history = ticker
+        status = 400
 
     return render(request, "stockapp/detail.html", {
         "profile": profile,
         "history": history,
         "balance": request.user.balance,
         "terms": terms
-    })
+    }, status=status)
 
 
 # Flashcards view

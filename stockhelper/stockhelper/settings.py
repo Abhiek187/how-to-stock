@@ -20,7 +20,7 @@ import sys
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load the secret key as an environment variable from .env
-dotenv_file = os.path.join(BASE_DIR, ".env")
+dotenv_file = BASE_DIR / ".env"
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
 
@@ -66,7 +66,7 @@ ROOT_URLCONF = 'stockhelper.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR / 'stockhelper/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -138,7 +138,7 @@ STATIC_URL = '/static/'
 
 # Add the project-level static files
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "stockhelper/static")
+    BASE_DIR / "stockhelper/static"
 ]
 
 # Get emails from logs of class AdminEmailHandler

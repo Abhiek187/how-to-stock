@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from stockapp.models import Portfolio, Stock
-from .utils import USERNAME, PASSWORD
+from utils_test import USERNAME, PASSWORD
 
 
 class PriceViewTests(TestCase):

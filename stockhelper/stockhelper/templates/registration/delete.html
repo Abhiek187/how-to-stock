@@ -1,0 +1,20 @@
+{% extends "stockapp/index.html" %}
+
+{% block title %}Delete Account{% endblock %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    <p class="fs-3 mt-3">Are you sure you want to delete your account?</p>
+    <p class="fs-5">You'll lose your portfolio as well.</p>
+    <!-- Have the user type their username so they're aware that they're deleting their account -->
+    <!-- See https://ux.stackexchange.com/questions/130147/why-would-one-use-enter-the-name-of-the-project-to-confirm -->
+    <p class="fs-6">Please type your username to confirm.</p>
+    <input type="text" class="form-control mx-auto mb-3" name="username" placeholder="my-username" autocapitalize="none"
+        maxlength="150" required style="max-width: 300px;">
+    <button type="submit" class="btn btn-danger mb-3">Delete Account</button>
+</form>
+{% if error %}
+<p class="fs-5 text-danger mb-3">{{ error }}</p>
+{% endif %}
+{% endblock %}
