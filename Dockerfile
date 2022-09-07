@@ -3,6 +3,8 @@ FROM python:3-alpine
 
 # Send python output in real-time without needing to be buffered
 ENV PYTHONUNBUFFERED=1
+# Don't write .pyc files when importing source modules
+ENV PYTHONDONTWRITEBYTECODE=1
 WORKDIR /code
 COPY requirements.txt /code
 
