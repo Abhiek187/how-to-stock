@@ -61,7 +61,7 @@ The front-end is created in HTML, CSS, & JS and the back-end is created in [Djan
 
 ### Fly.io
 
-This project is hosted live at Fly.io and can be accessed directly at [https://how-to-stock-2.fly.dev](https://how-to-stock-2.fly.dev). No installation required.
+This project is hosted live at Fly.io and can be accessed directly at [https://how-to-stock-3.fly.dev](https://how-to-stock-3.fly.dev). No installation required.
 
 ### Manual
 
