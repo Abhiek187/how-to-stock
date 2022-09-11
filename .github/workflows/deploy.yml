@@ -26,4 +26,4 @@ jobs:
         uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: Deploy to Fly.io
-        run: fly deploy --remote-only
+        run: flyctl deploy --remote-only
