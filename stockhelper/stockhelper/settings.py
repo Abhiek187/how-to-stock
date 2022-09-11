@@ -39,6 +39,9 @@ DEBUG = os.environ.get("DEBUG", "false").lower() == "true"
 
 ALLOWED_HOSTS = []
 
+# Trust Fly.io when deployed
+CSRF_TRUSTED_ORIGINS = ['https://how-to-stock-3.fly.dev']
+
 
 # Application definition
 
@@ -98,7 +101,7 @@ if "DATABASE_URL" in os.environ:
     # Don't require SSL connections for Fly Postgres
     DATABASES["default"] = dj_database_url.config(
         conn_max_age=600, ssl_require=False)
-    
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
