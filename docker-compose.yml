@@ -1,8 +1,11 @@
+# Docker Compose for dev builds only
 version: "3.9"
 
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     command: >
       sh -c "python manage.py migrate &&
              python manage.py loaddata cards.json &&

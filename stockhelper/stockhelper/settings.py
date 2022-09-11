@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import dj_database_url
 import django_on_heroku
 import dotenv
 import os
@@ -18,10 +19,12 @@ import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+IS_PROD = "DATABASE_URL" in os.environ
 
 # Load the secret key as an environment variable from .env
+# .env should be ignored in Docker containers, but make sure it's ignored in prod
 dotenv_file = BASE_DIR / ".env"
-if os.path.isfile(dotenv_file):
+if os.path.isfile(dotenv_file) and not IS_PROD:
     dotenv.load_dotenv(dotenv_file)
 
 
@@ -37,6 +40,9 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 DEBUG = os.environ.get("DEBUG", "false").lower() == "true"
 
 ALLOWED_HOSTS = []
+
+# Trust Fly.io when deployed
+CSRF_TRUSTED_ORIGINS = ['https://how-to-stock-3.fly.dev']
 
 
 # Application definition
@@ -91,6 +97,13 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+if IS_PROD:
+    # Use the DATABASE_URL environment variable in prod
+    # Don't require SSL connections for Fly Postgres
+    DATABASES["default"] = dj_database_url.config(
+        conn_max_age=600, ssl_require=False)
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -169,4 +182,5 @@ LOGGING = {
 # Activate Django-on-Heroku (breaks if testing)
 if sys.argv[1:2] != ["test"]:
     # logging=False prevents LOGGING from being overwritten
-    django_on_heroku.settings(locals(), logging=False)
+    # databases=False prevents DATABASES from being overwritten
+    django_on_heroku.settings(locals(), logging=False, databases=False)

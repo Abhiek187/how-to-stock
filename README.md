@@ -59,9 +59,9 @@ The front-end is created in HTML, CSS, & JS and the back-end is created in [Djan
 
 ## How to Run
 
-### Heroku
+### Fly.io
 
-This project is hosted live at Heroku and can be accessed directly at [https://how-to-stock.herokuapp.com](https://how-to-stock.herokuapp.com). No installation required.
+This project is hosted live at Fly.io and can be accessed directly at [https://how-to-stock-3.fly.dev](https://how-to-stock-3.fly.dev). No installation required.
 
 ### Manual
 
@@ -85,10 +85,13 @@ When making a request to FMP for the first time in GitHub Actions, the requests 
 
 ```html
 <html>
-  <head><title>403 Forbidden</title></head>
+  <head>
+    <title>403 Forbidden</title>
+  </head>
   <body bgcolor="white">
     <center><h1>403 Forbidden</h1></center>
-    <hr><center>nginx/1.14.0 (Ubuntu)</center>
+    <hr />
+    <center>nginx/1.14.0 (Ubuntu)</center>
   </body>
 </html>
 ```
