@@ -1,14 +1,25 @@
-FROM heroku/heroku:20
-RUN useradd -m heroku
-RUN mkdir /app
+ARG PYTHON_VERSION=3-alpine
+
+FROM python:${PYTHON_VERSION}
+
+RUN \
+    apk add --no-cache postgresql-libs && \
+    apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev
+
+RUN mkdir -p /app
 WORKDIR /app
-ENV HOME /app
-ENV PORT 8080
-COPY Procfile /app
-COPY entrypoint.sh /app
-ENTRYPOINT ["/bin/bash", "/app/entrypoint.sh"]
 
-RUN curl "https://s3-external-1.amazonaws.com/heroku-slugs-us/fda3/fda362e1-cb9e-46ab-88c5-9e5aa8e28214.tar.gz?AWSAccessKeyId=AKIAZSXS6CXK4G6YZGNK&Signature=hRC6TzJasvDGk4ikeR8L4vt9vOc%3D&Expires=1662839888" | tar xzf - --strip 2 -C /app
-RUN chown -R heroku:heroku /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+RUN apk --purge del .build-deps
 
-USER heroku
+COPY . .
+
+RUN \
+    python stockhelper/manage.py migrate && \
+    python stockhelper/manage.py loaddata cards.json && \
+    python stockhelper/manage.py collectstatic --noinput
+
+EXPOSE 8080
+
+CMD ["gunicorn", "--bind", ":8080", "--workers", "2", "--chdir", "stockhelper", "stockhelper.wsgi"]

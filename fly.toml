@@ -1,20 +1,15 @@
-# fly.toml file generated for how-to-stock-2 on 2022-09-10T14:58:08-04:00
+# fly.toml file generated for how-to-stock-3 on 2022-09-11T09:19:04-04:00
 
-app = "how-to-stock-2"
+app = "how-to-stock-3"
 kill_signal = "SIGINT"
 kill_timeout = 5
-
-[deploy]
-  release_command = "python3 stockhelper/manage.py migrate; python3 stockhelper/manage.py loaddata cards.json"
+processes = []
 
 [env]
 
 [experimental]
   allowed_public_ports = []
   auto_rollback = true
-
-[processes]
-  app = "gunicorn --chdir stockhelper stockhelper.wsgi"
 
 [[services]]
   http_checks = []
