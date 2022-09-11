@@ -13,12 +13,17 @@ env:
 
 jobs:
   deploy:
-    name: Deploy app
+    name: Deploy App
     runs-on: ubuntu-latest
     # Deploy to Fly.io if the workflow was successful
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: superfly/flyctl-actions/setup-flyctl@v2
-      - run: fly deploy --remote-only
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@v2
+
+      - name: Deploy to Fly.io
+        run: fly deploy --remote-only
