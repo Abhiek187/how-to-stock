@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import dj_database_url
 import django_on_heroku
 import dotenv
 import os
@@ -92,6 +93,13 @@ DATABASES = {
     }
 }
 
+if "DATABASE_URL" in os.environ:
+    # Use the DATABASE_URL environment variable in prod
+    # Don't require SSL connections for Fly Postgres
+    DATABASES["default"] = dj_database_url.config(
+        conn_max_age=60, ssl_require=False)
+    
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Password validation
@@ -169,4 +177,5 @@ LOGGING = {
 # Activate Django-on-Heroku (breaks if testing)
 if sys.argv[1:2] != ["test"]:
     # logging=False prevents LOGGING from being overwritten
-    django_on_heroku.settings(locals(), logging=False)
+    # databases=False prevents DATABASES from being overwritten
+    django_on_heroku.settings(locals(), logging=False, databases=False)
