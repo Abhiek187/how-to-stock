@@ -97,7 +97,7 @@ if "DATABASE_URL" in os.environ:
     # Use the DATABASE_URL environment variable in prod
     # Don't require SSL connections for Fly Postgres
     DATABASES["default"] = dj_database_url.config(
-        conn_max_age=60, ssl_require=False)
+        conn_max_age=600, ssl_require=False)
     
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
