@@ -1,9 +1,9 @@
 name: Fly Deploy
 
-# Wait until one of the CI workflows completes (can't wait for both at the moment)
+# Wait until the CI tests complete
 on:
   workflow_run:
-    workflows: ["Django CI", "CodeQL"]
+    workflows: ["Django CI"]
     branches: [main]
     types:
       - completed
@@ -15,7 +15,7 @@ jobs:
   deploy:
     name: Deploy App
     runs-on: ubuntu-latest
-    # Deploy to Fly.io if the workflow was successful
+    # Deploy to Fly.io if the CI workflow was successful
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
