@@ -33,7 +33,7 @@ if os.path.isfile(dotenv_file) and not IS_PROD:
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'e*z=5=4f+f4oeqx1mnm(t(vf%6j1q)@v#%zs+)0k4!nq*r$or-'
-SECRET_KEY = os.environ.get("SECRET_KEY", "")
+SECRET_KEY = os.environ["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Set DEBUG to false by default unless explicitly stated

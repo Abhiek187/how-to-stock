@@ -13,6 +13,7 @@ on:
 
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+  FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
 
 jobs:
   deploy:
@@ -28,5 +29,8 @@ jobs:
       - name: Setup flyctl
         uses: superfly/flyctl-actions/setup-flyctl@master
 
+      - name: Set Environment
+        run: echo "SECRET_KEY=$(openssl rand -base64 32)" >> $GITHUB_ENV
+
       - name: Deploy to Fly.io
-        run: flyctl deploy --remote-only
+        run: flyctl deploy --remote-only --env SECRET_KEY=$SECRET_KEY --env FMP_API_KEY=$FMP_API_KEY
