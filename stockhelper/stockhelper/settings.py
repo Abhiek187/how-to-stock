@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 IS_PROD = "DATABASE_URL" in os.environ
 
 # Load the secret key as an environment variable from .env
-# .env should be ignored in Docker containers, but make sure it's ignored in prod
+# Ignore .env in prod (since environment variables should be set separately)
 dotenv_file = BASE_DIR / ".env"
 if os.path.isfile(dotenv_file) and not IS_PROD:
     dotenv.load_dotenv(dotenv_file)
