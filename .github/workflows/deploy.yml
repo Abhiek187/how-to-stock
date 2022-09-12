@@ -33,4 +33,4 @@ jobs:
         run: echo "SECRET_KEY=$(openssl rand -base64 32)" >> $GITHUB_ENV
 
       - name: Deploy to Fly.io
-        run: flyctl deploy --remote-only --build-arg SECRET_KEY=$SECRET_KEY --build-arg FMP_API_KEY=$FMP_API_KEY
+        run: flyctl deploy --remote-only

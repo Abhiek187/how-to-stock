@@ -14,6 +14,7 @@ RUN pip install -r requirements.txt
 RUN apk --purge del .build-deps
 
 COPY . .
+ENV SECRET_KEY=$SECRET_KEY FMP_API_KEY=$FMP_API_KEY
 
 RUN \
     python stockhelper/manage.py migrate && \
