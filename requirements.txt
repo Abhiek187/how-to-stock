@@ -1,6 +1,6 @@
 asgiref==3.5.2
 backports.zoneinfo==0.2.1; python_version < "3.9"
-certifi==2022.6.15
+certifi==2022.6.15.1
 chardet==5.0.0
 charset-normalizer==2.1.1
 dj-database-url==1.0.0
