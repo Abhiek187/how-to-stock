@@ -39,7 +39,7 @@ if "SECRET_KEY" in os.environ:
 # Set DEBUG to false by default unless explicitly stated
 DEBUG = os.environ.get("DEBUG", "false").lower() == "true"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["how-to-stock-3.fly.dev"]
 
 # Trust Fly.io when deployed
 CSRF_TRUSTED_ORIGINS = ['https://how-to-stock-3.fly.dev']
