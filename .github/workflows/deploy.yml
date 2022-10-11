@@ -31,3 +31,4 @@ jobs:
 
       - name: Deploy to Fly.io
         run: flyctl deploy --remote-only
+        timeout-minutes: 10 # default: 6 hours

@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 import dj_database_url
-import django_on_heroku
 import dotenv
 import os
 from pathlib import Path
@@ -33,7 +32,8 @@ if os.path.isfile(dotenv_file) and not IS_PROD:
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'e*z=5=4f+f4oeqx1mnm(t(vf%6j1q)@v#%zs+)0k4!nq*r$or-'
-SECRET_KEY = os.environ["SECRET_KEY"]
+if "SECRET_KEY" in os.environ:
+    SECRET_KEY = os.environ["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Set DEBUG to false by default unless explicitly stated
@@ -65,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = 'stockhelper.urls'
@@ -147,12 +148,22 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = '/static/'
 
 # Add the project-level static files
 STATICFILES_DIRS = [
     BASE_DIR / "stockhelper/static"
 ]
+
+TESTING = len(sys.argv) > 1 and sys.argv[1] == "test"
+
+if TESTING:
+    # No need to run collectstatic while testing
+    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+else:
+    # Enable WhiteNoise's Gzip compression of static assets
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Get emails from logs of class AdminEmailHandler
 ADMINS = [("Abhishek Chaudhuri", "achaudhuri2011@yahoo.com")]
@@ -178,9 +189,3 @@ LOGGING = {
         },
     },
 }
-
-# Activate Django-on-Heroku (breaks if testing)
-if sys.argv[1:2] != ["test"]:
-    # logging=False prevents LOGGING from being overwritten
-    # databases=False prevents DATABASES from being overwritten
-    django_on_heroku.settings(locals(), logging=False, databases=False)
