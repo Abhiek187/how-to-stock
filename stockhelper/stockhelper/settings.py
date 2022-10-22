@@ -39,10 +39,10 @@ if "SECRET_KEY" in os.environ:
 # Set DEBUG to false by default unless explicitly stated
 DEBUG = os.environ.get("DEBUG", "false").lower() == "true"
 
-ALLOWED_HOSTS = ["how-to-stock-3.fly.dev"]
-
-# Trust Fly.io when deployed
-CSRF_TRUSTED_ORIGINS = ['https://how-to-stock-3.fly.dev']
+# Trust localhost during development and Fly.io when deployed
+ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]", "how-to-stock-3.fly.dev"]
+SESSION_COOKIE_SAMESITE = "Strict"
+SESSION_COOKIE_SECURE = True
 
 
 # Application definition
