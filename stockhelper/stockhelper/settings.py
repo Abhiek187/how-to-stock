@@ -41,6 +41,8 @@ DEBUG = os.environ.get("DEBUG", "false").lower() == "true"
 
 # Trust localhost during development and Fly.io when deployed
 ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]", "how-to-stock-3.fly.dev"]
+
+CSRF_TRUSTED_ORIGINS = ["https://how-to-stock-3.fly.dev"]
 SESSION_COOKIE_SAMESITE = "Strict"
 SESSION_COOKIE_SECURE = True
 
