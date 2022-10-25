@@ -159,7 +159,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "stockhelper/static"
 ]
 
-TESTING = len(sys.argv) > 1 and sys.argv[1] == "test"
+TESTING = "test" in sys.argv
 
 if TESTING:
     # No need to run collectstatic while testing
