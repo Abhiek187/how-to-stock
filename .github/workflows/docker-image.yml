@@ -1,0 +1,18 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: ./start-docker.sh ${{ secrets.FMP_API_KEY }}
+      - name: Run tests inside the container
+        run: docker exec how-to-stock-web sh -c "python -Wa stockhelper/manage.py test stockhelper/ -v 2"
