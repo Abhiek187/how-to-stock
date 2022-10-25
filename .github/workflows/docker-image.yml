@@ -13,6 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build the Docker image
-        run: ./start-docker.sh ${{ secrets.FMP_API_KEY }}
+        env:
+          FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
+        run: |
+          chmod u+x start-docker.sh
+          ./start-docker.sh $FMP_API_KEY
       - name: Run tests inside the container
         run: docker exec how-to-stock-web sh -c "python -Wa stockhelper/manage.py test stockhelper/ -v 2"
