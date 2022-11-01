@@ -168,7 +168,7 @@ print(f"{sys.argv=}")
     STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 else:
     # Enable WhiteNoise's Gzip compression of static assets
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage""""
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"""
 
 # Get emails from logs of class AdminEmailHandler
 ADMINS = [("Abhishek Chaudhuri", "achaudhuri2011@yahoo.com")]
