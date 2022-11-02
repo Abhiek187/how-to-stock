@@ -151,7 +151,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = '/static/'
 
 # Add the project-level static files
@@ -167,6 +166,7 @@ if TESTING:
 else:
     # Enable WhiteNoise's Gzip compression of static assets
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Get emails from logs of class AdminEmailHandler
 ADMINS = [("Abhishek Chaudhuri", "achaudhuri2011@yahoo.com")]
