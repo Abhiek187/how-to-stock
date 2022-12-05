@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
+import json
 from stockapp.models import Portfolio, Stock
 from utils_test import USERNAME, PASSWORD
 
@@ -32,6 +33,11 @@ class PriceViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
+        # Parse the response content and round the price to 2 decimal places
+        response_obj = json.loads(response.content)
+        response_obj["price"] = round(response_obj["price"], 2)
+        response.content = json.dumps(response_obj)
+
         # Fetch the current stock price and change since they were updated in the GET request
         new_stock = Stock.objects.get(ticker=ticker)
         self.assertJSONEqual(response.content, {
@@ -52,6 +58,10 @@ class PriceViewTests(TestCase):
         response = self.client.get(reverse("stockapp:price", args=(ticker,)))
 
         self.assertEqual(response.status_code, 200)
+
+        response_obj = json.loads(response.content)
+        response_obj["price"] = round(response_obj["price"], 2)
+        response.content = json.dumps(response_obj)
 
         # Fetch the current stock price and change since they were updated in the GET request
         new_stock = Stock.objects.get(ticker=ticker.upper())
