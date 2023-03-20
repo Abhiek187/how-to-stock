@@ -174,10 +174,12 @@ def get_stock_details(request, ticker):
         profile = raw_profile
         status = 400
 
-    # history should be a list with at least one element, display an error if that's not the case
-    if (isinstance(raw_history, list) and raw_history) or (
-            isinstance(raw_history, dict) and "Error Message" in raw_history):
+    # history should be a dict with a historical key, display an error if that's not the case
+    if isinstance(raw_history, dict) and "historical" in raw_history:
+        history = raw_history["historical"]
+    elif isinstance(raw_history, dict) and "Error Message" in raw_history:
         history = raw_history
+        status = 400
     else:
         history = ticker
         status = 400

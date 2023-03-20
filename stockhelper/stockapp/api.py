@@ -65,4 +65,4 @@ def get_company_profile(ticker):
 
 
 def get_stock_history(ticker):
-    return get_request(f"{FMP}/api/v3/technical_indicator/daily/{ticker}?apikey={API_KEY}")
+    return get_request(f"{FMP}/api/v3/historical-price-full/{ticker}?apikey={API_KEY}&serietype=line")
