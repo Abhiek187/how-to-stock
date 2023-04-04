@@ -58,4 +58,4 @@ class CreateAccountViewTests(TestCase):
 
         response = self.client.post(reverse("create"), form_data)
         self.assertEqual(response.status_code, 400)
-        self.assertQuerysetEqual(User.objects.all(), [])
+        self.assertQuerySetEqual(User.objects.all(), [])

@@ -1,14 +1,14 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import BaseUserCreationForm
 
 from stockapp.models import User
 
 
-class CustomUserCreationForm(UserCreationForm):
+class CustomUserCreationForm(BaseUserCreationForm):
     # Required to create a new custom user
-    class Meta(UserCreationForm.Meta):
+    class Meta(BaseUserCreationForm.Meta):
         model = User
-        fields = UserCreationForm.Meta.fields
+        fields = BaseUserCreationForm.Meta.fields
 
 
 class DeleteUserForm(forms.Form):

@@ -161,10 +161,18 @@ TESTING = len(sys.argv) > 1 and sys.argv[1] == "test"
 
 if TESTING:
     # No need to run collectstatic while testing
-    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+    STORAGES = {
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"
+        }
+    }
 else:
     # Enable WhiteNoise's Gzip compression of static assets
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    STORAGES = {
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"
+        }
+    }
     STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Get emails from logs of class AdminEmailHandler

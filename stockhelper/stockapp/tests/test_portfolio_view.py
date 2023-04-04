@@ -39,7 +39,7 @@ class PortfolioViewTests(TestCase):
         self.assertContains(response, "Nothing yet...start investing!")
         # Check that the correct context data is passed
         self.assertEqual(response.context["balance"], self.user.balance)
-        self.assertQuerysetEqual(response.context["portfolios"], [])
+        self.assertQuerySetEqual(response.context["portfolios"], [])
         self.assertEqual({"portfolio", "roi", "sharePrice"},
                          response.context["terms"].keys())
 
@@ -96,5 +96,5 @@ class PortfolioViewTests(TestCase):
             })
         ]
         # Ignore the order of each list
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             response.context["portfolios"], portfolio_list, transform=repr, ordered=False)

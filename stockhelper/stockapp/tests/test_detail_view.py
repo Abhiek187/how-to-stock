@@ -109,8 +109,8 @@ class DetailViewTests(TestCase):
         self.assertJSONEqual(response.content, {"status": "success"})
         self.assertEqual(User.objects.get(username=USERNAME).balance,
                          self.user.balance - self.stock_purchase["shares"] * self.stock_purchase["price"])
-        self.assertQuerysetEqual(Stock.objects.all(), [self.test_stock])
-        self.assertQuerysetEqual(Portfolio.objects.all(), [porfolio])
+        self.assertQuerySetEqual(Stock.objects.all(), [self.test_stock])
+        self.assertQuerySetEqual(Portfolio.objects.all(), [porfolio])
 
     def test_sell_new_stock(self):
         # Check that selling a new stock returns an error
@@ -123,8 +123,8 @@ class DetailViewTests(TestCase):
                              "status": "failure", "maxShares": 0})
         self.assertEqual(User.objects.get(
             username=USERNAME).balance, self.user.balance)
-        self.assertQuerysetEqual(Stock.objects.all(), [self.test_stock])
-        self.assertQuerysetEqual(Portfolio.objects.all(), [])
+        self.assertQuerySetEqual(Stock.objects.all(), [self.test_stock])
+        self.assertQuerySetEqual(Portfolio.objects.all(), [])
 
     def test_buy_more_stock(self):
         # Check that the number of shares increased after buying more shares of an existing stock
@@ -136,7 +136,7 @@ class DetailViewTests(TestCase):
         self.assertJSONEqual(response.content, {"status": "success"})
         self.assertEqual(User.objects.get(username=USERNAME).balance, self.user.balance -
                          self.stock_purchase["shares"] * self.stock_purchase["price"])
-        self.assertQuerysetEqual(Stock.objects.all(), [self.test_stock])
+        self.assertQuerySetEqual(Stock.objects.all(), [self.test_stock])
         new_portfolio = Portfolio.objects.get(
             user=self.user, stock=self.test_stock)
         self.assertEqual(new_portfolio.shares, old_portfolio.shares +
@@ -154,7 +154,7 @@ class DetailViewTests(TestCase):
         self.assertJSONEqual(response.content, {"status": "success"})
         self.assertEqual(User.objects.get(username=USERNAME).balance, self.user.balance +
                          self.stock_purchase["shares"] * self.stock_purchase["price"])
-        self.assertQuerysetEqual(Stock.objects.all(), [self.test_stock])
+        self.assertQuerySetEqual(Stock.objects.all(), [self.test_stock])
         new_portfolio = Portfolio.objects.get(
             user=self.user, stock=self.test_stock)
         self.assertEqual(new_portfolio.shares, old_portfolio.shares -
@@ -172,8 +172,8 @@ class DetailViewTests(TestCase):
         self.assertJSONEqual(response.content, {"status": "success"})
         self.assertEqual(User.objects.get(username=USERNAME).balance, self.user.balance +
                          self.stock_purchase["shares"] * self.stock_purchase["price"])
-        self.assertQuerysetEqual(Stock.objects.all(), [self.test_stock])
-        self.assertQuerysetEqual(Portfolio.objects.all(), [])
+        self.assertQuerySetEqual(Stock.objects.all(), [self.test_stock])
+        self.assertQuerySetEqual(Portfolio.objects.all(), [])
 
     def test_sell_too_much_stock(self):
         # Check that selling too many stocks results in an error
@@ -188,7 +188,7 @@ class DetailViewTests(TestCase):
                              "status": "failure", "maxShares": old_portfolio.shares})
         self.assertEqual(User.objects.get(
             username=USERNAME).balance, self.user.balance)
-        self.assertQuerysetEqual(Stock.objects.all(), [self.test_stock])
+        self.assertQuerySetEqual(Stock.objects.all(), [self.test_stock])
         new_portfolio = Portfolio.objects.get(
             user=self.user, stock=self.test_stock)
         self.assertEqual(new_portfolio.shares, old_portfolio.shares)
