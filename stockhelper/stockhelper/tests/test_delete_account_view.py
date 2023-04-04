@@ -53,7 +53,7 @@ class DeleteAccountViewTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse("login"))
         # Check that the user no longer exists
-        self.assertQuerysetEqual(User.objects.all(), [])
+        self.assertQuerySetEqual(User.objects.all(), [])
     
     def test_invalid_username(self):
         # Check that entering the wrong username prevents the user from being deleted

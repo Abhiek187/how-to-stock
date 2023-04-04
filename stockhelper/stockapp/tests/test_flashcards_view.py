@@ -16,7 +16,7 @@ class FlashcardsViewTests(TestCase):
         # Check that the relevant content on the flashcards page is present
         self.assertContains(response, "description")
         # Check that the correct context data is passed
-        self.assertQuerysetEqual(response.context["cards"], [])
+        self.assertQuerySetEqual(response.context["cards"], [])
 
     def test_sample_cards(self):
         # Check that the following Card objects are rendered
