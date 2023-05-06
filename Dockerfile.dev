@@ -18,7 +18,3 @@ RUN \
 
 COPY . /code
 WORKDIR /code/stockhelper
-# Initialize the SQLite databases
-RUN python manage.py migrate
-# Load the flashcards data
-RUN python manage.py loaddata cards.json
