@@ -17,5 +17,5 @@ requests==2.31.0
 sqlparse==0.4.4
 tomli==2.0.1
 typing-extensions==4.7.1
-urllib3==2.0.3
+urllib3==2.0.4
 whitenoise==6.5.0
