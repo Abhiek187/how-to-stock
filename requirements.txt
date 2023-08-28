@@ -1,5 +1,5 @@
 asgiref==3.7.2
-autopep8==2.0.2
+autopep8==2.0.4
 backports.zoneinfo==0.2.1; python_version < "3.9"
 certifi==2023.7.22
 chardet==5.2.0
