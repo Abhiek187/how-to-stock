@@ -81,6 +81,8 @@ Make sure [Docker](https://www.docker.com/products/docker-desktop) and [Docker C
 
 ## Troubleshooting
 
+### GitHub Actions
+
 When making a request to FMP for the first time in GitHub Actions, the requests may fail with the following response:
 
 ```html
@@ -97,3 +99,12 @@ When making a request to FMP for the first time in GitHub Actions, the requests 
 ```
 
 This error goes away after re-running the jobs.
+
+### Fly.io
+
+If the Postgres database is down, run the following commands to restart the machine:
+
+```bash
+fly machines list -a how-to-stock-3-db
+fly machines start MACHINE_ID -a how-to-stock-3-db
+```
