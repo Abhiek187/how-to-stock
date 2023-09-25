@@ -8,8 +8,8 @@ dj-database-url==2.1.0
 Django==4.2.5
 gunicorn==21.2.0
 idna==3.4
-psycopg==3.1.10
-psycopg-binary==3.1.10
+psycopg==3.1.11
+psycopg-binary==3.1.11
 pycodestyle==2.11.0
 python-dotenv==1.0.0
 pytz==2023.3.post1
