@@ -21,11 +21,15 @@ from stockhelper import views
 
 urlpatterns = [
     # Redirect the root path to the home page of stockapp
-    path("", RedirectView.as_view(
-        url=reverse_lazy("stockapp:index"), permanent=True)),
+    path("", RedirectView.as_view(url=reverse_lazy("stockapp:index"), permanent=True)),
+    # Redirect .well-known/change-password to the change password screen
+    path(
+        ".well-known/change-password",
+        RedirectView.as_view(url=reverse_lazy("password_change"), permanent=True),
+    ),
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/create", views.create_account, name="create"),
     path("accounts/delete", views.delete_account, name="delete"),
-    path("stockapp/", include("stockapp.urls"))
+    path("stockapp/", include("stockapp.urls")),
 ]
