@@ -108,3 +108,18 @@ If the Postgres database is down, run the following commands to restart the mach
 fly machines list -a how-to-stock-3-db
 fly machines start MACHINE_ID -a how-to-stock-3-db
 ```
+
+If the remote builder fails:
+
+```
+WARN Failed to start remote builder heartbeat: server returned a non-200 status code: 500
+
+Error: failed to fetch an image or build from source: error connecting to docker: server returned a non-200 status code: 500
+```
+
+Destroy the builder app and redeploy:
+
+```bash
+fly apps destroy APP_NAME
+fly deploy
+```
