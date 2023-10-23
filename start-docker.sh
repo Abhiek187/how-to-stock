@@ -18,7 +18,7 @@ if [ ! -e "$ENV" ]; then
 
     echo $'\nTurning on DEBUG mode...'
     echo "DEBUG=true" >> "$ENV"
-    
+
     echo $'\nSaving the API key...'
     echo "FMP_API_KEY=$1" >> "$ENV"
 else
@@ -26,4 +26,4 @@ else
 fi
 
 # Spin up a docker container
-docker-compose up -d
+docker compose up -d

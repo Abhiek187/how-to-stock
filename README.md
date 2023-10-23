@@ -75,9 +75,9 @@ Before cloning this repo, you will need to obtain an API key from [Financial Mod
 
 Make sure [Docker](https://www.docker.com/products/docker-desktop) and [Docker Compose](https://docs.docker.com/compose/install/) are installed. And make sure to obtain an API key from [Financial Modeling Prep](https://financialmodelingprep.com/developer/docs/). Then do the following:
 
-1. Pass in the API key and start up a container for this app: `./start-docker.sh YOUR_API_KEY`. On future visits, the container can be spun up directly using `./start-docker.sh` or `docker-compose up -d`.
+1. Pass in the API key and start up a container for this app: `./start-docker.sh YOUR_API_KEY`. On future visits, the container can be spun up directly using `./start-docker.sh` or `docker compose up -d`.
 2. Once everything's installed, open `localhost:8000` in your browser.
-3. When done, shut down and clean up the container: `docker-compose down`
+3. When done, shut down and clean up the container: `docker compose down`
 
 ## Troubleshooting
 
