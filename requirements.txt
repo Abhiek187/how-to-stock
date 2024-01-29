@@ -12,7 +12,7 @@ psycopg==3.1.17
 psycopg-binary==3.1.17
 pycodestyle==2.11.1
 python-dotenv==1.0.0
-pytz==2023.3.post1
+pytz==2023.4
 requests==2.31.0
 sqlparse==0.4.4
 tomli==2.0.1
