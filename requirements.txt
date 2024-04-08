@@ -16,6 +16,6 @@ pytz==2024.1
 requests==2.31.0
 sqlparse==0.4.4
 tomli==2.0.1
-typing-extensions==4.10.0
+typing-extensions==4.11.0
 urllib3==2.2.1
 whitenoise==6.6.0
