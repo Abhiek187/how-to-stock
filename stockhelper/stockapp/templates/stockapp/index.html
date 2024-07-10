@@ -54,7 +54,10 @@
                     <!-- Don't position the dropdown menu beyond the screen for large displays -->
                     <ul class="dropdown-list dropdown-menu dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
                         <li>
-                            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                            <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item">Logout</button>
+                            </form>
                         </li>
                         <li>
                             <a class="dropdown-item" href="{% url 'password_change' %}">Change Password</a>
