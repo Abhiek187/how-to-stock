@@ -13,6 +13,7 @@ RUN \
     apk --purge del .build-deps
 
 COPY . .
+ENV SECRET_KEY=$SECRET_KEY FMP_API_KEY=$FMP_API_KEY
 
 # Initialize the Postgres database, load the flashcards data, and collect all static files
 RUN \
