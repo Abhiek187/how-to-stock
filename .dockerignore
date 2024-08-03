@@ -73,7 +73,7 @@ docs/_build/
 target/
 
 # Virtual environment
-.env
+**/.env
 .venv/
 venv/
 
@@ -95,5 +95,5 @@ venv/
 # Django stuff
 *.log
 local_settings.py
-db.sqlite3
-db.sqlite3-journal
+**/db.sqlite3
+**/db.sqlite3-journal
