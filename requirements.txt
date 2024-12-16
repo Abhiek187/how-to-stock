@@ -14,7 +14,7 @@ pycodestyle==2.12.1
 python-dotenv==1.0.1
 pytz==2024.2
 requests==2.32.3
-sqlparse==0.5.2
+sqlparse==0.5.3
 tomli==2.2.1
 typing_extensions==4.12.2
 urllib3==2.2.3
