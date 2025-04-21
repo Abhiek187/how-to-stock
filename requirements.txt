@@ -7,7 +7,7 @@ dj-database-url==2.3.0
 Django==5.2
 gunicorn==23.0.0
 idna==3.10
-packaging==24.2
+packaging==25.0
 psycopg==3.2.6
 psycopg-binary==3.2.6
 pycodestyle==2.13.0
