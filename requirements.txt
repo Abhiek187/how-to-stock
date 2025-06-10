@@ -13,7 +13,7 @@ psycopg-binary==3.2.9
 pycodestyle==2.13.0
 python-dotenv==1.1.0
 pytz==2025.2
-requests==2.32.3
+requests==2.32.4
 sqlparse==0.5.3
 tomli==2.2.1
 typing_extensions==4.13.2
