@@ -10,7 +10,7 @@ idna==3.10
 packaging==25.0
 psycopg==3.2.9
 psycopg-binary==3.2.9
-pycodestyle==2.13.0
+pycodestyle==2.14.0
 python-dotenv==1.1.0
 pytz==2025.2
 requests==2.32.4
