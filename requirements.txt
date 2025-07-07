@@ -3,7 +3,7 @@ autopep8==2.3.2
 certifi==2025.6.15
 chardet==5.2.0
 charset-normalizer==3.4.2
-dj-database-url==3.0.0
+dj-database-url==3.0.1
 Django==5.2.3
 gunicorn==23.0.0
 idna==3.10
