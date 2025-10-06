@@ -1,6 +1,6 @@
 asgiref==3.10.0
 autopep8==2.3.2
-certifi==2025.8.3
+certifi==2025.10.5
 chardet==5.2.0
 charset-normalizer==3.4.3
 dj-database-url==3.0.1
