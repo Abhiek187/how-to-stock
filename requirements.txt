@@ -6,7 +6,7 @@ charset-normalizer==3.4.3
 dj-database-url==3.0.1
 Django==5.2.7
 gunicorn==23.0.0
-idna==3.10
+idna==3.11
 packaging==25.0
 psycopg==3.2.10
 psycopg-binary==3.2.10
