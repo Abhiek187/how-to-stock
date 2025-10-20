@@ -8,8 +8,8 @@ Django==5.2.7
 gunicorn==23.0.0
 idna==3.11
 packaging==25.0
-psycopg==3.2.10
-psycopg-binary==3.2.10
+psycopg==3.2.11
+psycopg-binary==3.2.11
 pycodestyle==2.14.0
 python-dotenv==1.1.1
 pytz==2025.2
