@@ -2,7 +2,7 @@ asgiref==3.10.0
 autopep8==2.3.2
 certifi==2025.10.5
 chardet==5.2.0
-charset-normalizer==3.4.3
+charset-normalizer==3.4.4
 dj-database-url==3.0.1
 Django==5.2.7
 gunicorn==23.0.0
