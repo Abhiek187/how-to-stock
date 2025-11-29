@@ -1,24 +1,10 @@
 #!/bin/bash
 # Execute all the necessary steps to run the project
-
-# Check if the virtual environment exists
-VENV="venv"
-
-if [ ! -d "$VENV" ]; then
-    echo "1. Creating a folder for the virtual environment..."
-    python3 -m venv "$VENV"
-else
-    echo "1. The virtual environment already exists."
-fi
+echo $'1. Installing all python dependencies...'
+uv sync
 
 # $'strings' allow for escaped characters
-echo $'\n2. Activating the virtual environment...'
-source "$VENV"/bin/activate
-
-echo $'\n3. Installing all python dependencies...'
-pip3 install -r requirements.txt
-
-echo $'\n4. Heading into the stockhelper directory...'
+echo $'\n2. Heading into the stockhelper directory...'
 cd stockhelper
 
 if [ ! -e .env ]; then
@@ -28,7 +14,7 @@ if [ ! -e .env ]; then
         exit 1
     fi
     
-    echo $'\n5. Generating a secret key...'
+    echo $'\n3. Generating a secret key...'
 
     if type openssl > /dev/null; then
         echo "SECRET_KEY=$(openssl rand -base64 32)" > .env
@@ -36,22 +22,22 @@ if [ ! -e .env ]; then
         echo "SECRET_KEY=$(head -c 32 /dev/urandom | base64)" > .env
     fi
 
-    echo $'\n6. Turning on DEBUG mode...'
+    echo $'\n4. Turning on DEBUG mode...'
     echo "DEBUG=true" >> .env
 
-    echo $'\n7. Saving the API key...'
+    echo $'\n5. Saving the API key...'
     echo "FMP_API_KEY=$1" >> .env
 else
-    echo $'\n5. The secret key already exists.'
-    echo $'\n6. DEBUG mode is on.'
-    echo $'\n7. The API key is already stored.'
+    echo $'\n3. The secret key already exists.'
+    echo $'\n4. DEBUG mode is on.'
+    echo $'\n5. The API key is already stored.'
 fi
 
-echo $'\n8. Creating the SQLite database...'
-python3 manage.py migrate
+echo $'\n6. Creating the SQLite database...'
+uv run manage.py migrate
 
-echo $'\n9. Loading the flashcards data...'
-python3 manage.py loaddata cards.json
+echo $'\n7. Loading the flashcards data...'
+uv run manage.py loaddata cards.json
 
-echo $'\n10. Running the Django server...'
-python3 manage.py runserver
+echo $'\n8. Running the Django server...'
+uv run manage.py runserver

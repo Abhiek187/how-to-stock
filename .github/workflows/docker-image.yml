@@ -19,4 +19,4 @@ jobs:
           chmod u+x start-docker.sh
           ./start-docker.sh $FMP_API_KEY
       - name: Run tests inside the container
-        run: docker exec "${PWD##*/}-web-1" sh -c "python -Wa manage.py test -v 2"
+        run: docker exec "${PWD##*/}-web-1" sh -c "uv run -- python -Wa manage.py test -v 2"

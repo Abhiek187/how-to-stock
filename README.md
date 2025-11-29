@@ -55,17 +55,17 @@ The app also features an authentication system so users can save their portfolio
 
 ## Dependencies
 
-The front-end is created in HTML, CSS, & JS and the back-end is created in [Django](https://docs.djangoproject.com/en/3.1/) and utilizes an SQLite database. [Bootstrap](https://getbootstrap.com/) was used to enhance the site's design and implement UI elements such as alerts and popovers. [Chart.js](https://www.chartjs.org/) was used to visualize the stock trends on the details page. And [Financial Modeling Prep](https://financialmodelingprep.com/developer/docs/) was the API used to implement the screener functionality and obtain detailed profiles and stock history from all the companies. Above everything else, this web app is designed to be responsive, accessible, and thoroughly tested.
+The front-end is created in HTML, CSS, & JS and the back-end is created in [Django](https://docs.djangoproject.com/en/) and utilizes an SQLite database. [Bootstrap](https://getbootstrap.com/) was used to enhance the site's design and implement UI elements such as alerts and popovers. [Chart.js](https://www.chartjs.org/) was used to visualize the stock trends on the details page. And [Financial Modeling Prep](https://site.financialmodelingprep.com/developer/docs) was the API used to implement the screener functionality and obtain detailed profiles and stock history from all the companies. Above everything else, this web app is designed to be responsive, accessible, and thoroughly tested.
 
 ## How to Run
 
 ### Fly.io
 
-This project is hosted live at Fly.io and can be accessed directly at [https://how-to-stock-3.fly.dev](https://how-to-stock-3.fly.dev). No installation required.
+This project is hosted live at Fly.io and can be accessed directly at https://how-to-stock-3.fly.dev. No installation required.
 
 ### Manual
 
-Before cloning this repo, you will need to obtain an API key from [Financial Modeling Prep](https://financialmodelingprep.com/developer/docs/). Then do the following:
+Before cloning this repo, you will need to install [uv](https://docs.astral.sh/uv/getting-started/installation/) and obtain an API key from [Financial Modeling Prep](https://site.financialmodelingprep.com/developer/docs). Then do the following:
 
 1. Create a virtual environment, install all dependencies, save the API key, and run the Django server: `./start-local.sh YOUR_API_KEY` or `source start-local.sh YOUR_API_KEY` (See step 3 for the differences.) On future visits, the API key doesn't need to be provided.
 2. Open `localhost:8000` in your browser.
@@ -73,7 +73,7 @@ Before cloning this repo, you will need to obtain an API key from [Financial Mod
 
 ### Docker
 
-Make sure [Docker](https://www.docker.com/products/docker-desktop) and [Docker Compose](https://docs.docker.com/compose/install/) are installed. And make sure to obtain an API key from [Financial Modeling Prep](https://financialmodelingprep.com/developer/docs/). Then do the following:
+Make sure [Docker](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/) are installed. And make sure to obtain an API key from [Financial Modeling Prep](https://site.financialmodelingprep.com/developer/docs). Then do the following:
 
 1. Pass in the API key and start up a container for this app: `./start-docker.sh YOUR_API_KEY`. On future visits, the container can be spun up directly using `./start-docker.sh` or `docker compose up -d`.
 2. Once everything's installed, open `localhost:8000` in your browser.
