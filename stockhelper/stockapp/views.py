@@ -174,9 +174,9 @@ def get_stock_details(request, ticker):
         profile = raw_profile
         status = 400
 
-    # history should be a dict with a historical key, display an error if that's not the case
-    if isinstance(raw_history, dict) and "historical" in raw_history:
-        history = raw_history["historical"]
+    # history should be an array of dicts, display an error if that's not the case
+    if isinstance(raw_history, list):
+        history = raw_history
     elif isinstance(raw_history, dict) and "Error Message" in raw_history:
         history = raw_history
         status = 400
@@ -267,7 +267,7 @@ class PriceView(LoginRequiredMixin, generic.base.TemplateView):
             # A company could change its name while owning their stock, such as Meta
             stock.name = profile["companyName"]
             stock.price = profile["price"]
-            stock.change = profile["changes"]
+            stock.change = profile["change"]
             stock.save()
 
             return JsonResponse({

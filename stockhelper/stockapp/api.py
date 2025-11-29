@@ -9,9 +9,9 @@ dotenv_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
 
-# Data provided by Financial Modeling Prep: https://financialmodelingprep.com/developer/docs/
+# Data provided by Financial Modeling Prep: https://site.financialmodelingprep.com/developer/docs
 API_KEY = os.environ["FMP_API_KEY"]
-FMP = "https://financialmodelingprep.com"
+FMP = "https://financialmodelingprep.com/stable"
 RETRY_LIMIT = 100
 
 
@@ -45,7 +45,7 @@ def get_stocks(form_data):
     exchange = form_data["exchange"]
 
     # Prepare the API call
-    search_str = (f"{FMP}/api/v3/stock-screener?apikey={API_KEY}&{price_relation}={price_value}"
+    search_str = (f"{FMP}/company-screener?apikey={API_KEY}&{price_relation}={price_value}"
                   f"&isActivelyTrading=true&country={country}&limit=10")
 
     # Add any optional filters
@@ -61,8 +61,8 @@ def get_stocks(form_data):
 
 
 def get_company_profile(ticker):
-    return get_request(f"{FMP}/api/v3/profile/{ticker}?apikey={API_KEY}")
+    return get_request(f"{FMP}/profile?apikey={API_KEY}&symbol={ticker}")
 
 
 def get_stock_history(ticker):
-    return get_request(f"{FMP}/api/v3/historical-price-full/{ticker}?apikey={API_KEY}&serietype=line")
+    return get_request(f"{FMP}/historical-price-eod/full?apikey={API_KEY}&symbol={ticker}")
