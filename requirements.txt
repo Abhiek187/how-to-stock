@@ -1,6 +1,6 @@
-asgiref==3.10.0
+asgiref==3.11.0
 autopep8==2.3.2
-certifi==2025.10.5
+certifi==2025.11.12
 chardet==5.2.0
 charset-normalizer==3.4.4
 dj-database-url==3.0.1
@@ -8,8 +8,8 @@ Django==5.2.8
 gunicorn==23.0.0
 idna==3.11
 packaging==25.0
-psycopg==3.2.12
-psycopg-binary==3.2.12
+psycopg==3.2.13
+psycopg-binary==3.2.13
 pycodestyle==2.14.0
 python-dotenv==1.2.1
 pytz==2025.2
