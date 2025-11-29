@@ -41,5 +41,5 @@ class ScreenerViewTests(TestCase):
         response = self.client.post(reverse("stockapp:screener"), form_data)
         # Check that the POST request redirects to the screener page
         self.assertEqual(response.status_code, 302)
-        self.assertIn("results", self.client.session)
+        self.assertNotIn("results", self.client.session)  # no longer free tier :(
         self.assertRedirects(response, reverse("stockapp:screener"))

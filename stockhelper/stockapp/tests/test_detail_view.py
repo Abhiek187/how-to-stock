@@ -53,16 +53,16 @@ class DetailViewTests(TestCase):
     def test_view_renders(self):
         # Check that the view renders properly
         self.client.login(username=USERNAME, password=PASSWORD)
-        response = self.client.get(reverse("stockapp:detail", args=("PRU",)))
+        response = self.client.get(reverse("stockapp:detail", args=("JPM",)))
         self.assertEqual(response.status_code, 200)
         # Check that the title is correct
         # Need to do two separate checks due to the added newlines from jinja tags
-        self.assertContains(response, "Details - Prudential Financial, Inc.")
+        self.assertContains(response, "Details - JPMorgan Chase &amp; Co.")
         self.assertContains(response, " | How to Stock")
         self.assertContains(response, USERNAME)
         # Check that the relevant content on the details page is present
         self.assertContains(response, "history-data")
-        self.assertContains(response, "PRU")
+        self.assertContains(response, "JPM")
         self.assertContains(response, "short-chart")
         self.assertContains(response, "short-predict")
         self.assertContains(response, "short-mean")
