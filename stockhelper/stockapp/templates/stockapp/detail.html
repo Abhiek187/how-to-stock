@@ -17,7 +17,7 @@ Details - {{ profile.companyName }}
 {% block js %}
 <!-- Safely output the history data as JSON so it can be processed by JS -->
 {{ history|json_script:"history-data" }}
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
 <script src="{% static 'stockapp/js/detail.js' %}"></script>
 {% endblock %}
 
