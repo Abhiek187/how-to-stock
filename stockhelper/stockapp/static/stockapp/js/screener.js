@@ -3,6 +3,8 @@ const indexAlert = document.querySelector(".index-alert");
 const mutualAlert = document.querySelector(".mutual-alert");
 const etfAlert = document.querySelector(".etf-alert");
 
+const symbolSelect = document.querySelector(".symbol-select");
+
 const tableRows = document.querySelectorAll(".table-row");
 const marketCap = document.querySelector(".market-cap");
 const beta = document.querySelector(".beta");
@@ -34,6 +36,16 @@ exchangeSelect.addEventListener("change", (event) => {
             mutualAlert.classList.add("d-none");
             etfAlert.classList.add("d-none");
     }
+});
+
+symbolSelect.addEventListener("change", (event) => {
+    const symbol = event.target.value;
+    if (symbol.length === 0) return;
+    window.open(
+        `${window.location.origin}/stockapp/details/${symbol}`,
+        "_blank",
+        (rel = "noopener noreferrer")
+    );
 });
 
 for (const row of tableRows) {
