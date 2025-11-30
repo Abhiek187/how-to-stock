@@ -15,7 +15,8 @@ FMP = "https://financialmodelingprep.com/stable"
 RETRY_LIMIT = 100
 
 # Source: https://site.financialmodelingprep.com/developer/docs#historical-price-eod-full
-# Excluded delisted symbols: VIAC (Viacom), TWTR (Twitter)
+# Excluded delisted symbols, see comment:
+# https://github.com/Abhiek187/how-to-stock/issues/280#issuecomment-3592129560
 FREE_TIER_SYMBOLS = {
     "AAPL": "Apple Inc.",
     "TSLA": "Tesla, Inc.",
@@ -49,7 +50,6 @@ FREE_TIER_SYMBOLS = {
     "JNJ": "Johnson & Johnson",
     "CVX": "Chevron Corporation",
     "PLTR": "Palantir Technologies Inc.",
-    "SQ": "Block, Inc.",
     "SHOP": "Shopify Inc.",
     "SBUX": "Starbucks Corporation",
     "SOFI": "SoFi Technologies, Inc.",
@@ -74,7 +74,6 @@ FREE_TIER_SYMBOLS = {
     "SONY": "Sony Group Corporation",
     "ET": "Energy Transfer LP",
     "NOK": "Nokia Corporation",
-    "MRO": "Marathon Oil Corporation",
     "COIN": "Coinbase Global, Inc.",
     "SIRI": "Sirius XM Holdings Inc.",
     "RIOT": "Riot Platforms, Inc.",
@@ -82,13 +81,11 @@ FREE_TIER_SYMBOLS = {
     "VWO": "Vanguard FTSE Emerging Markets ETF",
     "SPYG": "SPDR Portfolio S&P 500 Growth ETF",
     "ROKU": "Roku, Inc.",
-    "ATVI": "Activision Blizzard, Inc.",
     "BIDU": "Baidu, Inc.",
     "DOCU": "DocuSign, Inc.",
     "ZM": "Zoom Video Communications, Inc.",
     "PINS": "Pinterest, Inc.",
     "TLRY": "Tilray Brands, Inc.",
-    "WBA": "Walgreens Boots Alliance, Inc.",
     "MGM": "MGM Resorts International",
     "NIO": "NIO Inc.",
     "C": "Citigroup Inc.",
