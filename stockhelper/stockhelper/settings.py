@@ -17,6 +17,7 @@ import sys
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 IS_PROD = "DATABASE_URL" in os.environ
+TESTING = len(sys.argv) > 1 and sys.argv[1] == "test"
 
 # Load the secret key as an environment variable from .env
 # Ignore .env in prod (since environment variables should be set separately)
@@ -36,6 +37,10 @@ if "SECRET_KEY" in os.environ:
 # SECURITY WARNING: don't run with debug turned on in production!
 # Set DEBUG to false by default unless explicitly stated
 DEBUG = os.environ.get("DEBUG", "false").lower() == "true"
+
+# Environment variables differ at build time and run-time
+# Some settings like STATIC_ROOT must be configured at build time to run collectstatic
+IS_PROD_BUILD = not DEBUG and not TESTING
 
 # Trust localhost during development and Fly.io when deployed
 ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]", "how-to-stock-3.fly.dev"]
@@ -68,8 +73,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-if IS_PROD:
-    MIDDLEWARE += 'whitenoise.middleware.WhiteNoiseMiddleware'
+if IS_PROD_BUILD:
+    MIDDLEWARE += [
+        'whitenoise.middleware.WhiteNoiseMiddleware'
+    ]
 
 ROOT_URLCONF = 'stockhelper.urls'
 
@@ -89,7 +96,7 @@ TEMPLATES = [
     },
 ]
 
-if IS_PROD:
+if IS_PROD_BUILD:
     WSGI_APPLICATION = 'stockhelper.wsgi.application'
 
 
@@ -160,9 +167,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "stockhelper/static"
 ]
 
-TESTING = len(sys.argv) > 1 and sys.argv[1] == "test"
-
-if IS_PROD:
+if IS_PROD_BUILD:
     # Enable WhiteNoise's Gzip compression of static assets
     # No need to run collectstatic while testing
     STORAGES = {
