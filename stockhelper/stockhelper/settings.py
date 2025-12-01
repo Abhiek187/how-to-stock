@@ -10,8 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-import dj_database_url
-import dotenv
 import os
 from pathlib import Path
 import sys
@@ -24,6 +22,7 @@ IS_PROD = "DATABASE_URL" in os.environ
 # Ignore .env in prod (since environment variables should be set separately)
 dotenv_file = BASE_DIR / ".env"
 if os.path.isfile(dotenv_file) and not IS_PROD:
+    import dotenv
     dotenv.load_dotenv(dotenv_file)
 
 
@@ -67,8 +66,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
+
+if IS_PROD:
+    MIDDLEWARE += 'whitenoise.middleware.WhiteNoiseMiddleware'
 
 ROOT_URLCONF = 'stockhelper.urls'
 
@@ -88,7 +89,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'stockhelper.wsgi.application'
+if IS_PROD:
+    WSGI_APPLICATION = 'stockhelper.wsgi.application'
 
 
 # Database
@@ -102,6 +104,7 @@ DATABASES = {
 }
 
 if IS_PROD:
+    import dj_database_url
     # Use the DATABASE_URL environment variable in prod
     # Don't require SSL connections for Fly Postgres
     DATABASES["default"] = dj_database_url.config(
@@ -159,15 +162,9 @@ STATICFILES_DIRS = [
 
 TESTING = len(sys.argv) > 1 and sys.argv[1] == "test"
 
-if TESTING:
-    # No need to run collectstatic while testing
-    STORAGES = {
-        "staticfiles": {
-            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"
-        }
-    }
-else:
+if IS_PROD:
     # Enable WhiteNoise's Gzip compression of static assets
+    # No need to run collectstatic while testing
     STORAGES = {
         "staticfiles": {
             "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"

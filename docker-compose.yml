@@ -6,9 +6,9 @@ services:
       dockerfile: Dockerfile.dev
     # Initialize the SQLite database, load the flashcards data, and start the server
     command: >
-      sh -c "python manage.py migrate &&
-             python manage.py loaddata cards.json &&
-             python manage.py runserver 0.0.0.0:8000"
+      sh -c "uv run manage.py migrate &&
+             uv run manage.py loaddata cards.json &&
+             uv run manage.py runserver 0.0.0.0:8000"
     env_file:
       - ./stockhelper/.env
     ports:

@@ -65,11 +65,13 @@ def get_stocks(request):
         "sharePrice": Card.objects.get(word="Share Price"),
         "volume": Card.objects.get(word="Volume")
     }
+    sorted_symbols = list(sorted(api.FREE_TIER_SYMBOLS.items(), key=lambda symbol: symbol[0]))
 
     return render(request, "stockapp/screener.html", {
         "form": form,
         "results": results,
-        "terms": terms
+        "terms": terms,
+        "freeTierSymbols": sorted_symbols
     })
 
 

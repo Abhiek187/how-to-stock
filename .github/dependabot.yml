@@ -3,9 +3,9 @@
 
 version: 2
 updates:
-  # Enable version updates for pip
-  - package-ecosystem: "pip"
-    # Look for a `requirements.txt` file in the `root` directory
+  # Enable version updates for uv
+  - package-ecosystem: "uv"
+    # Look for a `pyproject.toml` file in the `root` directory
     directory: "/"
     # Check PyPI for updates once a week
     schedule:
@@ -14,10 +14,6 @@ updates:
       psycopg:
         patterns:
           - "psycopg*"
-      pep:
-        patterns:
-          - "autopep8"
-          - "pycodestyle"
 
   # Enable version updates for Docker
   - package-ecosystem: "docker"

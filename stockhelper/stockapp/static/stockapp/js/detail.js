@@ -446,6 +446,7 @@ const shortChart = new Chart(shortCtx, {
                 label: "Stock Price",
                 backgroundColor: "#00bfff", // deepskyblue
                 borderColor: "#00f",
+                fill: true,
                 data: shortTermPrices,
             },
         ],
@@ -453,28 +454,28 @@ const shortChart = new Chart(shortCtx, {
 
     options: {
         aspectRatio: window.innerWidth < 1200 ? 1.25 : 1.5, // width / height
-        scales: {
-            xAxes: [
-                {
-                    scaleLabel: {
-                        display: true,
-                        labelString: "Date",
-                    },
+        plugins: {
+            title: {
+                display: true,
+                font: {
+                    size: 18,
                 },
-            ],
-            yAxes: [
-                {
-                    scaleLabel: {
-                        display: true,
-                        labelString: "Price ($)",
-                    },
-                },
-            ],
+                text: "Short-Term Historical Data",
+            },
         },
-        title: {
-            display: true,
-            fontSize: 18,
-            text: "Short-Term Historical Data",
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: "Date",
+                },
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: "Price ($)",
+                },
+            },
         },
     },
 });
@@ -498,6 +499,7 @@ const longChart = new Chart(longCtx, {
                 label: "Stock Price",
                 backgroundColor: "#00bfff", // deepskyblue
                 borderColor: "#00f",
+                fill: true,
                 data: longTermPrices,
             },
         ],
@@ -505,31 +507,31 @@ const longChart = new Chart(longCtx, {
 
     options: {
         aspectRatio: window.innerWidth < 1200 ? 1.25 : 1.5, // width / height
-        scales: {
-            xAxes: [
-                {
-                    scaleLabel: {
-                        display: true,
-                        labelString: "Date",
-                    },
-                    ticks: {
-                        autoSkipPadding: 5,
-                    },
+        plugins: {
+            title: {
+                display: true,
+                font: {
+                    size: 18,
                 },
-            ],
-            yAxes: [
-                {
-                    scaleLabel: {
-                        display: true,
-                        labelString: "Price ($)",
-                    },
-                },
-            ],
+                text: "Long-Term Historical Data",
+            },
         },
-        title: {
-            display: true,
-            fontSize: 18,
-            text: "Long-Term Historical Data",
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: "Date",
+                },
+                ticks: {
+                    autoSkipPadding: 5,
+                },
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: "Price ($)",
+                },
+            },
         },
     },
 });
