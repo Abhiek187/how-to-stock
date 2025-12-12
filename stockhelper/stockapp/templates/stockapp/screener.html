@@ -71,12 +71,17 @@
     <label for="id_symbol" class="col-auto form-label m-auto">
         Or select any of the following companies:
     </label>
-    <select name="symbol" class="symbol-select col form-select" id="id_symbol">
-        <option value=""></option>
-        {% for symbol, name in freeTierSymbols %}
-        <option value="{{ symbol }}">{{ symbol }}: {{ name }}</option>
-        {% endfor %}
-    </select>
+    <div class="d-flex flex-row gap-3">
+        <select name="symbol" class="symbol-select col form-select" id="id_symbol">
+            <option value=""></option>
+            {% for symbol, name in freeTierSymbols %}
+            <option value="{{ symbol }}">{{ symbol }}: {{ name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="symbol-submit btn btn-info" disabled>
+            <strong class="fs-4">→</strong>
+        </button>
+    </div>
 </div>
 <!-- Results -->
 <div class="results table-responsive">

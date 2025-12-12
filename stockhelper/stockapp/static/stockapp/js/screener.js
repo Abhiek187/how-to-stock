@@ -4,6 +4,7 @@ const mutualAlert = document.querySelector(".mutual-alert");
 const etfAlert = document.querySelector(".etf-alert");
 
 const symbolSelect = document.querySelector(".symbol-select");
+const symbolSubmit = document.querySelector(".symbol-submit");
 
 const tableRows = document.querySelectorAll(".table-row");
 const marketCap = document.querySelector(".market-cap");
@@ -40,6 +41,12 @@ exchangeSelect.addEventListener("change", (event) => {
 
 symbolSelect.addEventListener("change", (event) => {
     const symbol = event.target.value;
+    symbolSubmit.disabled = symbol.length === 0;
+});
+
+symbolSubmit.addEventListener("click", (event) => {
+    event.preventDefault();
+    const symbol = symbolSelect.value;
     if (symbol.length === 0) return;
     window.open(
         `${window.location.origin}/stockapp/details/${symbol}`,
