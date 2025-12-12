@@ -42,6 +42,7 @@ exchangeSelect.addEventListener("change", (event) => {
 symbolSelect.addEventListener("change", (event) => {
     const symbol = event.target.value;
     symbolSubmit.disabled = symbol.length === 0;
+    symbolSubmit.ariaLabel = `View more details about ${symbol}`;
 });
 
 symbolSubmit.addEventListener("click", (event) => {
